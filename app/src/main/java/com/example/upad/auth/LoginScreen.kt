@@ -22,8 +22,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.upad.R
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.utils.CredentialValidator
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -38,7 +40,8 @@ fun LoginScreen(
     val context = LocalContext.current
     val msgCamposVacios = stringResource(id = R.string.error_fill_all_fields)
     val msgEmailInvalido = stringResource(id = R.string.error_invalid_email)
-    val auth = FirebaseAuth.getInstance()
+    val session = LocalAppContainer.current.sessionRepository
+    val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
@@ -151,21 +154,23 @@ fun LoginScreen(
                     } else {
                         isLoading = true
                         // La contraseña se envía tal cual: recortarla la haría distinta de la que escribió el usuario.
-                        auth.signInWithEmailAndPassword(email.trim(), password)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    // 🔥 CORREGIDO: Guardamos el nombre en SharedPreferences antes de disparar la navegación
-                                    val prefs = context.getSharedPreferences("UPAD_PREFS", android.content.Context.MODE_PRIVATE)
-                                    val emailName = email.substringBefore("@").uppercase()
-                                    prefs.edit().putString("PARENT_NAME", emailName).apply()
+                        scope.launch {
+                            try {
+                                session.signIn(email.trim(), password)
 
-                                    onLoginClick(email, password)
-                                } else {
-                                    isLoading = false
-                                    val errorMsg = task.exception?.message ?: "Error desconocido"
-                                    Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
-                                }
+                                // Guardamos el nombre antes de disparar la navegación
+                                val prefs = context.getSharedPreferences("UPAD_PREFS", android.content.Context.MODE_PRIVATE)
+                                val emailName = email.substringBefore("@").uppercase()
+                                prefs.edit().putString("PARENT_NAME", emailName).apply()
+
+                                onLoginClick(email, password)
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                isLoading = false
+                                Toast.makeText(context, e.message ?: "Error desconocido", Toast.LENGTH_LONG).show()
                             }
+                        }
                     }
                 },
                 modifier = Modifier
