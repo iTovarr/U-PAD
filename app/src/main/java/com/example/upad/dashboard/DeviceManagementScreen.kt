@@ -27,7 +27,7 @@ import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.utils.BiometricHelper
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CancellationException
 
 // Usamos un modelo consistente con los datos reales guardados en Firebase
 data class DispositivoNiño(
@@ -86,38 +86,26 @@ fun DeviceManagementScreen(
     var listaDispositivos by remember { mutableStateOf(listOf<DispositivoNiño>()) }
     var cargando by remember { mutableStateOf(true) }
 
-    val firestore = remember { FirebaseFirestore.getInstance() }
+    val deviceRepository = LocalAppContainer.current.deviceRepository
     val idPadre = remember { session.currentUserId }
 
     // 📡 ESCUCHA EN ESPEJO
-    DisposableEffect(idPadre) {
-        val listener = firestore.collection("dispositivos_niños")
-            .whereEqualTo("padreId", idPadre)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    cargando = false
-                    return@addSnapshotListener
+    LaunchedEffect(idPadre) {
+        try {
+            deviceRepository.observeDevicesOf(idPadre).collect { dispositivos ->
+                listaDispositivos = dispositivos.map {
+                    DispositivoNiño(
+                        id = it.id,
+                        nombreDispositivo = it.nombreDispositivo ?: it.modelo ?: "Tablet/Celular Niño",
+                        kioscoActivo = it.kioscoActivo
+                    )
                 }
-
-                val listaTemporal = mutableListOf<DispositivoNiño>()
-                if (snapshot != null) {
-                    for (dispositivo in snapshot.documents) {
-                        val id = dispositivo.id
-                        val nombre = dispositivo.getString("nombreDispositivo")
-                            ?: dispositivo.getString("modelo")
-                            ?: "Tablet/Celular Niño"
-                        val activo = dispositivo.getBoolean("kioscoActivo") ?: false
-
-                        listaTemporal.add(DispositivoNiño(id, nombre, activo))
-                    }
-                }
-
-                listaDispositivos = listaTemporal
                 cargando = false
             }
-
-        onDispose {
-            listener.remove()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            cargando = false
         }
     }
 
@@ -203,7 +191,8 @@ fun DeviceManagementScreen(
                                         BiometricHelper.cambiarEstadoKioscoConHuella(
                                             activity = activity,
                                             idDispositivoNiño = dispositivo.id,
-                                            debeBloquear = nuevoEstado
+                                            debeBloquear = nuevoEstado,
+                                            deviceRepository = deviceRepository
                                         )
                                     },
                                     colors = ButtonDefaults.buttonColors(

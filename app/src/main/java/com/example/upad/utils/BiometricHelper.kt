@@ -6,8 +6,10 @@ import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
+import androidx.lifecycle.lifecycleScope
+import com.example.upad.data.DeviceRepository
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 object BiometricHelper {
 
@@ -55,6 +57,7 @@ object BiometricHelper {
         activity: FragmentActivity,
         idDispositivoNiño: String,
         debeBloquear: Boolean, // true = Bloquear, false = Desbloquear
+        deviceRepository: DeviceRepository,
         onResultado: (Boolean) -> Unit = {}
     ) {
         val executor = ContextCompat.getMainExecutor(activity)
@@ -63,20 +66,20 @@ object BiometricHelper {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
 
-                // 🔓/🔒 Huella correcta -> Cambiamos el valor en Firebase Firestore
-                val firestore = FirebaseFirestore.getInstance()
-                firestore.collection("dispositivos_niños")
-                    .document(idDispositivoNiño)
-                    .set(mapOf("kioscoActivo" to debeBloquear), SetOptions.merge())
-                    .addOnSuccessListener {
+                // 🔓/🔒 Huella correcta -> se cambia el bloqueo remoto del dispositivo
+                activity.lifecycleScope.launch {
+                    try {
+                        deviceRepository.setKioskActive(idDispositivoNiño, debeBloquear)
                         val mensaje = if (debeBloquear) "¡Dispositivo infantil Bloqueado! 🔒" else "¡Dispositivo infantil Liberado! 🔓"
                         Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show()
                         onResultado(true)
-                    }
-                    .addOnFailureListener {
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
                         Toast.makeText(activity, "Error de conexión con Firebase", Toast.LENGTH_SHORT).show()
                         onResultado(false)
                     }
+                }
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
