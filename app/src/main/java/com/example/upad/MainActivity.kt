@@ -118,8 +118,10 @@ class MainActivity : AppCompatActivity() {
                 factory = com.example.upad.viewmodel.RoutineViewModelFactory(repository)
             )
 
-            LaunchedEffect(routineViewModel) {
-                FirebaseAuth.getInstance().addAuthStateListener { auth ->
+            // El listener se registra una sola vez y se retira al salir de la composición;
+            // antes se añadía uno nuevo en cada recreación de la Activity y nunca se quitaba.
+            DisposableEffect(routineViewModel) {
+                val authListener = FirebaseAuth.AuthStateListener { auth ->
                     val user = auth.currentUser
                     if (user != null) {
                         val sharedPrefs = getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE)
@@ -132,6 +134,10 @@ class MainActivity : AppCompatActivity() {
                         notificationsListener?.remove()
                         parentPremiumListener?.remove()
                     }
+                }
+                FirebaseAuth.getInstance().addAuthStateListener(authListener)
+                onDispose {
+                    FirebaseAuth.getInstance().removeAuthStateListener(authListener)
                 }
             }
 
