@@ -26,6 +26,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+private const val TAG = "PremiumProgressWidgetPr"
+
 class PremiumProgressWidgetProvider : AppWidgetProvider() {
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -228,7 +230,7 @@ class PremiumProgressWidgetProvider : AppWidgetProvider() {
                                 )
                             )
                         } catch (e: Exception) {
-                            e.printStackTrace()
+                            Log.e(TAG, "Error en obtenerTareasDeTurno", e)
                         }
                     }
                 }
