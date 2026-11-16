@@ -2,6 +2,7 @@ package com.example.upad.data
 
 import android.net.Uri
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -77,6 +78,52 @@ class ParentProfileRepository(
             ),
             SetOptions.merge()
         ).await()
+    }
+
+    /** Emite el estado premium del tutor cada vez que cambia su documento en `users`. */
+    fun observePremium(padreId: String): Flow<Boolean> = callbackFlow {
+        val listener = firestore.collection("users").document(padreId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    trySend(snapshot.getBoolean("isPremium") ?: false)
+                }
+            }
+        awaitClose { listener.remove() }
+    }
+
+    /**
+     * Emite cada aviso que se añade a la colección del tutor, uno a uno. La primera
+     * emisión incluye los avisos que ya existían: quien lo recoge decide cuáles son nuevos.
+     */
+    fun observeAddedNotifications(padreId: String): Flow<ParentNotification> = callbackFlow {
+        val listener = firestore.collection("users")
+            .document(padreId)
+            .collection("notifications")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                snapshot?.documentChanges.orEmpty()
+                    .filter { it.type == DocumentChange.Type.ADDED }
+                    .forEach { cambio ->
+                        val doc = cambio.document
+                        trySend(
+                            ParentNotification(
+                                id = doc.id,
+                                title = doc.getString("title") ?: "U-Pad Alerta",
+                                description = doc.getString("description") ?: "",
+                                type = doc.getString("type") ?: "INFO",
+                                timestamp = doc.getTimestamp("timestamp")?.toDate()
+                            )
+                        )
+                    }
+            }
+        awaitClose { listener.remove() }
     }
 
     /**

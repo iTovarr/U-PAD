@@ -77,6 +77,23 @@ class DeviceRepository(private val firestore: FirebaseFirestore = FirebaseFirest
     }
 
     /**
+     * Emite si el tutor tiene activado el bloqueo remoto (modo kiosco) de este
+     * dispositivo. Un dispositivo sin documento se considera desbloqueado.
+     */
+    fun observeKioskActive(deviceId: String): Flow<Boolean> = callbackFlow {
+        val listener = dispositivos.document(deviceId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val activo = snapshot != null && snapshot.exists() && (snapshot.getBoolean("kioscoActivo") ?: false)
+                trySend(activo)
+            }
+        awaitClose { listener.remove() }
+    }
+
+    /**
      * Canjea el código que muestra el dispositivo del niño a nombre del tutor.
      * Solo se acepta un código que siga en espera y no haya expirado.
      * Lanza una excepción si falla la conexión con Firestore.
