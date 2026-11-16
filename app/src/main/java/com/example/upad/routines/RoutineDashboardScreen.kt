@@ -140,7 +140,7 @@ fun RoutineDashboardScreen(
     }
 
     // ── INFO DEL MES ACTUAL ──────────────────────────────────────────────────
-    val currentLocale = context.resources.configuration.locales[0]
+    val currentLocale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     val infoMesActual = remember(currentLocale) {
         val cal = Calendar.getInstance()
         val nombreMes = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, currentLocale)?.uppercase() ?: ""
@@ -465,7 +465,7 @@ fun RoutineDashboardScreen(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween
                                     ) {
-                                        val localeActual = java.util.Locale.getDefault()
+                                        val localeActual = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
                                         val initialsCal = Calendar.getInstance()
                                         val inicialesDias = (Calendar.SUNDAY..Calendar.SATURDAY).map { dayOfWeek ->
                                             initialsCal.set(Calendar.DAY_OF_WEEK, dayOfWeek)
