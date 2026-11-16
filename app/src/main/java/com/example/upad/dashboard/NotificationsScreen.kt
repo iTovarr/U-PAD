@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import android.util.Log
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -30,6 +31,8 @@ import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+
+private const val TAG = "NotificationsScreen"
 
 data class NotificationItem(
     val id: String = "",
@@ -114,7 +117,7 @@ fun NotificationsScreen(
                 .addSnapshotListener { snapshot, error ->
                     loadingNotifications = false
                     if (error != null) {
-                        error.printStackTrace()
+                        Log.e(TAG, "Error en NotificationsScreen", error)
                         return@addSnapshotListener
                     }
                     if (snapshot != null) {
