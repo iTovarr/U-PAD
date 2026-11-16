@@ -72,6 +72,7 @@ import android.content.Context
 import android.content.Intent
 import com.example.upad.components.UPADBottomBar
 import com.example.upad.navigation.Routes
+import com.example.upad.notifications.NotificationHelper
 import com.example.upad.dashboard.EmotionsTrackScreen
 import com.example.upad.dashboard.HelpTutorialScreen
 import com.example.upad.dashboard.TodayCalendarScreen
@@ -90,12 +91,13 @@ class MainActivity : AppCompatActivity() {
     private var notificationsListener: ListenerRegistration? = null
     private var parentPremiumListener: ListenerRegistration? = null
     private val listenerStartTime = System.currentTimeMillis()
+    private val notificationHelper by lazy { NotificationHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        createNotificationChannel()
+        notificationHelper.crearCanal()
         requestNotificationPermission()
 
         val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
@@ -248,20 +250,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Notificaciones de Rutina"
-            val descriptionText = "Alertas sobre el estado de las rutinas del niño"
-            val importance = android.app.NotificationManager.IMPORTANCE_HIGH
-            val channel = android.app.NotificationChannel("upad_notifications_channel", name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: android.app.NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-    }
-
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (androidx.core.content.ContextCompat.checkSelfPermission(
@@ -296,53 +284,12 @@ class MainActivity : AppCompatActivity() {
                             if (tMillis > listenerStartTime - 5000) {
                                 val title = doc.getString("title") ?: "U-Pad Alerta"
                                 val description = doc.getString("description") ?: ""
-                                mostrarNotificacionLocal(title, description)
+                                notificationHelper.mostrar(title, description)
                             }
                         }
                     }
                 }
             }
-    }
-
-    private fun mostrarNotificacionLocal(title: String, description: String) {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = android.app.PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                android.app.PendingIntent.FLAG_IMMUTABLE or android.app.PendingIntent.FLAG_UPDATE_CURRENT
-            } else {
-                android.app.PendingIntent.FLAG_UPDATE_CURRENT
-            }
-        )
-
-        val builder = androidx.core.app.NotificationCompat.Builder(this, "upad_notifications_channel")
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(title)
-            .setContentText(description)
-            .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-
-        // Desde Android 13 hace falta el permiso POST_NOTIFICATIONS concedido por el usuario.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            androidx.core.content.ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.POST_NOTIFICATIONS
-            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        try {
-            androidx.core.app.NotificationManagerCompat.from(this)
-                .notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
-        } catch (e: SecurityException) {
-            Log.e(TAG, "Error en mostrarNotificacionLocal", e)
-        }
     }
 
     private fun iniciarEscuchaPremiumPadre(userId: String, routineViewModel: RoutineViewModel) {
