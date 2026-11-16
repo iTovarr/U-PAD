@@ -64,6 +64,8 @@ import com.example.upad.setup.TutorialsScreen
 import com.example.upad.setup.ChangePlanScreen
 import com.example.upad.dashboard.ProfileScreen
 import com.example.upad.dashboard.SettingsScreen
+import com.example.upad.viewmodel.AiViewModel
+import com.example.upad.viewmodel.AppViewModelFactory
 import com.example.upad.viewmodel.RoutineViewModel
 import com.example.upad.dashboard.ConnectionScreen
 import com.example.upad.dashboard.AnalyticsScreen
@@ -115,9 +117,11 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val container = (application as UPadApplication).container
-            val routineViewModel: RoutineViewModel = viewModel(
-                factory = com.example.upad.viewmodel.RoutineViewModelFactory(container)
-            )
+            val viewModelFactory = remember { AppViewModelFactory(container) }
+            val routineViewModel: RoutineViewModel = viewModel(factory = viewModelFactory)
+            // Con ámbito de Activity, igual que routineViewModel: el estado de la IA
+            // se conserva al navegar entre pantallas.
+            val aiViewModel: AiViewModel = viewModel(factory = viewModelFactory)
 
             // El listener se registra una sola vez y se retira al salir de la composición;
             // antes se añadía uno nuevo en cada recreación de la Activity y nunca se quitaba.
@@ -166,6 +170,7 @@ class MainActivity : AppCompatActivity() {
                 UPadNavigation(
                     bloqueoActivo = ordenBloqueoPadreActiva,
                     routineViewModel = routineViewModel,
+                    aiViewModel = aiViewModel,
                     isPremiumListo = isPremiumUser != null,
                     onCambiarEstadoSistema = ::gestionarRestriccionesSistema,
                     onRouteChanged = { route ->
@@ -334,6 +339,7 @@ private fun obtenerDestinoInicial(context: android.content.Context): String {
 fun UPadNavigation(
     bloqueoActivo: Boolean,
     routineViewModel: RoutineViewModel,
+    aiViewModel: AiViewModel,
     isPremiumListo: Boolean,
     onCambiarEstadoSistema: (Boolean) -> Unit,
     onRouteChanged: (String) -> Unit
@@ -637,6 +643,7 @@ fun UPadNavigation(
                 composable(Routes.ANALYTICS) {
                     AnalyticsScreen(
                         routineViewModel = routineViewModel,
+                        aiViewModel = aiViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToPremium = { navController.navigate(Routes.SUBSCRIPTION_PLANS) },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
@@ -703,6 +710,7 @@ fun UPadNavigation(
                             navController.navigate(Routes.PARENT_DASHBOARD)
                         },
                         viewModel = routineViewModel,
+                        aiViewModel = aiViewModel,
                         drawableId = android.R.drawable.ic_menu_manage,
                         diaInicial = diaNormalizado,
                         // ✅ FIX: conectado

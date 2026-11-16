@@ -35,6 +35,7 @@ import com.example.upad.R
 import coil.request.ImageRequest
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
+import com.example.upad.viewmodel.AiViewModel
 import com.example.upad.viewmodel.RoutineViewModel
 import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
@@ -42,6 +43,7 @@ import java.util.Calendar
 @Composable
 fun AnalyticsScreen(
     routineViewModel: RoutineViewModel,
+    aiViewModel: AiViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToPremium: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
@@ -50,8 +52,8 @@ fun AnalyticsScreen(
     // 📨 1. ESTADOS LOCALES Y CONFIGURACIÓN EN LA CABECERA
     val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
     val isDarkMode by routineViewModel.isDarkMode.collectAsState()
-    val aiAnalysis by routineViewModel.aiAnalysis.collectAsState()
-    val isAnalyzing by routineViewModel.isAnalyzing.collectAsState()
+    val aiAnalysis by aiViewModel.aiAnalysis.collectAsState()
+    val isAnalyzing by aiViewModel.isAnalyzing.collectAsState()
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current
@@ -349,7 +351,7 @@ fun AnalyticsScreen(
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Button(
                                         onClick = {
-                                            routineViewModel.obtenerAnalisisPersonalizado(tasksManana, tasksTarde, tasksNoche)
+                                            aiViewModel.obtenerAnalisisPersonalizado(tasksManana, tasksTarde, tasksNoche)
                                         },
                                         colors = ButtonDefaults.buttonColors(containerColor = colorTextoIAActiva),
                                         shape = RoundedCornerShape(12.dp),
@@ -369,7 +371,7 @@ fun AnalyticsScreen(
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Button(
                                         onClick = {
-                                            routineViewModel.obtenerAnalisisPersonalizado(tasksManana, tasksTarde, tasksNoche)
+                                            aiViewModel.obtenerAnalisisPersonalizado(tasksManana, tasksTarde, tasksNoche)
                                         },
                                         colors = ButtonDefaults.buttonColors(containerColor = colorTextoIAActiva),
                                         shape = RoundedCornerShape(12.dp)

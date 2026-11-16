@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.upad.viewmodel.TaskItem
+import com.example.upad.viewmodel.AiViewModel
 import com.example.upad.viewmodel.RoutineViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
@@ -53,19 +54,20 @@ fun CreateRoutineScreen(
     onSendRoutine: () -> Unit,
     onRemoveTaskClick: (Int) -> Unit,
     viewModel: RoutineViewModel,
+    aiViewModel: AiViewModel,
     drawableId: Int,
     diaInicial: String = "LUNES"
 ) {
     val isPremiumUser by viewModel.isUserPremium.collectAsState(initial = false)
     val isDarkMode by viewModel.isDarkMode.collectAsState()
 
-    val isAiLoading by viewModel.isAiLoading.collectAsState()
-    val aiSuggestions by viewModel.aiSuggestions.collectAsState()
-    val aiError by viewModel.aiError.collectAsState()
+    val isAiLoading by aiViewModel.isAiLoading.collectAsState()
+    val aiSuggestions by aiViewModel.aiSuggestions.collectAsState()
+    val aiError by aiViewModel.aiError.collectAsState()
 
-    val aiCustomRoutine by viewModel.aiCustomRoutine.collectAsState()
-    val aiRefuerzos by viewModel.aiRefuerzos.collectAsState()
-    val isCustomRoutineLoading by viewModel.isCustomRoutineLoading.collectAsState()
+    val aiCustomRoutine by aiViewModel.aiCustomRoutine.collectAsState()
+    val aiRefuerzos by aiViewModel.aiRefuerzos.collectAsState()
+    val isCustomRoutineLoading by aiViewModel.isCustomRoutineLoading.collectAsState()
 
     var customNeedText by remember { mutableStateOf("") }
 
@@ -98,17 +100,17 @@ fun CreateRoutineScreen(
             sugerenciasIAByMenu.clear()
             sugerenciasIAByMenu.addAll(aiSuggestions)
             mostrarPopUpSugerencias = true
-            viewModel.clearAiSuggestions()
+            aiViewModel.clearAiSuggestions()
         }
     }
 
     if (aiError != null) {
         AlertDialog(
-            onDismissRequest = { viewModel.clearAiError() },
+            onDismissRequest = { aiViewModel.clearAiError() },
             title = { Text("Error de la IA") },
             text = { Text(aiError ?: "") },
             confirmButton = {
-                TextButton(onClick = { viewModel.clearAiError() }) {
+                TextButton(onClick = { aiViewModel.clearAiError() }) {
                     Text("Aceptar")
                 }
             }
@@ -513,7 +515,7 @@ fun CreateRoutineScreen(
 
                                     Button(
                                         onClick = {
-                                            viewModel.obtenerSugerenciasIA(routineTurn)
+                                            aiViewModel.obtenerSugerenciasIA(routineTurn)
                                         },
                                         enabled = !isAiLoading,
                                         modifier = Modifier.fillMaxWidth().height(48.dp),
@@ -584,7 +586,7 @@ fun CreateRoutineScreen(
 
                                     Button(
                                         onClick = {
-                                            viewModel.obtenerRutinaYRefuerzosPersonalizados(customNeedText)
+                                            aiViewModel.obtenerRutinaYRefuerzosPersonalizados(customNeedText)
                                         },
                                         enabled = customNeedText.isNotEmpty() && !isCustomRoutineLoading,
                                         modifier = Modifier.fillMaxWidth().height(40.dp),
@@ -632,7 +634,7 @@ fun CreateRoutineScreen(
                                                             turn = routineTurn,
                                                             mensajes = aiRefuerzos
                                                         )
-                                                        viewModel.clearCustomRoutine()
+                                                        aiViewModel.clearCustomRoutine()
                                                         customNeedText = ""
                                                     },
                                                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),

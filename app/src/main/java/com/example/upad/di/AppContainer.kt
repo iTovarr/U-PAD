@@ -3,6 +3,7 @@ package com.example.upad.di
 import android.content.Context
 import android.provider.Settings
 import com.example.upad.data.AiRepository
+import com.example.upad.data.AiService
 import com.example.upad.data.ArasaacRepository
 import com.example.upad.data.DataStoreManager
 import com.example.upad.data.FirebaseRepository
@@ -23,7 +24,7 @@ class AppContainer(context: Context) {
 
     val firebaseRepository: FirebaseRepository by lazy { FirebaseRepository() }
     val arasaacRepository: ArasaacRepository by lazy { ArasaacRepository() }
-    val aiRepository: AiRepository by lazy { AiRepository() }
+    val aiRepository: AiService by lazy { AiRepository() }
 
     val dataStoreManager: DataStoreManager by lazy { DataStoreManager(appContext) }
     val languageDataStore: LanguageDataStore by lazy { LanguageDataStore(appContext) }
