@@ -66,7 +66,7 @@ U-Pad integra de forma segura la API de **Groq AI** mediante el uso del modelo d
 
 Para compilar y desplegar el proyecto con éxito, se requieren las siguientes API Keys y configuraciones de servicios:
 
-1. **Archivo `local.properties`**: créalo en la raíz del proyecto (está ignorado por git) con las llaves que `app/build.gradle.kts` inyecta en el build:
+1. **Archivo `local.properties`**: créalo en la raíz del proyecto a partir de `local.properties.example` (está ignorado por git) con las llaves que `app/build.gradle.kts` inyecta en el build:
    ```properties
    GOOGLE_CLIENT_ID=tu_client_id_de_google_sign_in_aqui
    MAPS_API_KEY=tu_clave_del_sdk_de_google_maps_aqui
@@ -96,6 +96,16 @@ firebase deploy --only functions
 ```
 
 > Las reglas actuales documentan una limitación: el dispositivo del niño todavía no inicia sesión en Firebase, por lo que sus documentos se protegen prohibiendo listados y validando lo que se escribe. Ver los comentarios de `firestore.rules`.
+
+---
+
+### Build de release
+
+```bash
+./gradlew assembleRelease
+```
+
+El build de release usa R8 (código reducido y ofuscado). Para que salga firmado, copia `keystore.properties.example` como `keystore.properties` y completa los datos de tu keystore; sin ese archivo se genera `app-release-unsigned.apk`.
 
 ---
 
