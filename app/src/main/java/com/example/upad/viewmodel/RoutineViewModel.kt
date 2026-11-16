@@ -12,7 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.example.upad.data.ArasaacPictogram
 import com.example.upad.data.DataStoreManager
+import com.example.upad.data.DeviceRepository
 import com.example.upad.data.LanguageDataStore
+import com.example.upad.data.ParentProfileRepository
+import com.example.upad.data.SessionRepository
 import com.example.upad.data.ThemePreferences
 import com.example.upad.widget.WidgetProgress
 import com.example.upad.widget.WidgetUpdater
@@ -22,7 +25,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import com.google.firebase.firestore.ListenerRegistration
 import com.example.upad.utils.PairingCode
 import com.example.upad.utils.RoutineProgressCalculator
-import kotlinx.coroutines.tasks.await
 
 private const val TAG = "RoutineViewModel"
 
@@ -53,7 +55,10 @@ class RoutineViewModel(
     private val themePreferences: ThemePreferences,
     private val widgetUpdater: WidgetUpdater,
     private val deviceIdProvider: () -> String,
-    private val arasaacRepository: ArasaacRepository
+    private val arasaacRepository: ArasaacRepository,
+    private val sessionRepository: SessionRepository,
+    private val deviceRepository: DeviceRepository,
+    private val parentProfileRepository: ParentProfileRepository
 ) : ViewModel() {
 
     private var listenerManana: ListenerRegistration? = null
@@ -247,35 +252,38 @@ class RoutineViewModel(
         }
         _cargandoDesvinculacion.value = true
         _errorDesvinculacion.value = ""
-        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
-        auth.signInWithEmailAndPassword(email.trim(), pass.trim())
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val padreIdLogueado = task.result?.user?.uid
-                    if (padreIdLogueado == _padreIdAsociado.value) {
-                        viewModelScope.launch {
-                            try {
-                                repository.deleteDeviceDoc(deviceId)
-                                auth.signOut()
-                                _cargandoDesvinculacion.value = false
-                                _errorDesvinculacion.value = ""
-                                onSuccess()
-                            } catch (e: Exception) {
-                                auth.signOut()
-                                _cargandoDesvinculacion.value = false
-                                _errorDesvinculacion.value = e.localizedMessage ?: "Error al desvincular"
-                            }
-                        }
-                    } else {
-                        auth.signOut()
-                        _cargandoDesvinculacion.value = false
-                        _errorDesvinculacion.value = "El correo no coincide con el padre enlazado a este dispositivo."
-                    }
-                } else {
-                    _cargandoDesvinculacion.value = false
-                    _errorDesvinculacion.value = task.exception?.localizedMessage ?: "Credenciales incorrectas"
-                }
+
+        // El tutor confirma con sus credenciales en el dispositivo del niño. La sesión
+        // se cierra siempre al terminar para no dejar su cuenta abierta ahí.
+        viewModelScope.launch {
+            try {
+                // La contraseña se envía tal cual, igual que en el inicio de sesión.
+                sessionRepository.signIn(email.trim(), pass)
+            } catch (e: Exception) {
+                _cargandoDesvinculacion.value = false
+                _errorDesvinculacion.value = e.localizedMessage ?: "Credenciales incorrectas"
+                return@launch
             }
+
+            if (sessionRepository.currentUserId != _padreIdAsociado.value) {
+                sessionRepository.signOut()
+                _cargandoDesvinculacion.value = false
+                _errorDesvinculacion.value = "El correo no coincide con el padre enlazado a este dispositivo."
+                return@launch
+            }
+
+            try {
+                repository.deleteDeviceDoc(deviceId)
+                sessionRepository.signOut()
+                _cargandoDesvinculacion.value = false
+                _errorDesvinculacion.value = ""
+                onSuccess()
+            } catch (e: Exception) {
+                sessionRepository.signOut()
+                _cargandoDesvinculacion.value = false
+                _errorDesvinculacion.value = e.localizedMessage ?: "Error al desvincular"
+            }
+        }
     }
 
     fun clearUnlinkError() {
@@ -438,7 +446,7 @@ class RoutineViewModel(
 
     private fun obtenerUidSeguro(userId: String): String {
         return if (userId.isBlank()) {
-            com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+            sessionRepository.currentUserId
         } else {
             userId
         }
@@ -561,12 +569,7 @@ class RoutineViewModel(
             if (finalUid.isEmpty()) {
                 try {
                     val deviceId = deviceIdProvider()
-                    val doc = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                        .collection("dispositivos_niños")
-                        .document(deviceId)
-                        .get()
-                        .await()
-                    finalUid = doc.getString("padreId") ?: ""
+                    finalUid = deviceRepository.getParentId(deviceId)
                 } catch (e: Exception) {
                     Log.e(TAG, "Error en completeTaskPorNombre", e)
                 }
@@ -603,7 +606,6 @@ class RoutineViewModel(
                     repository.saveRoutinePorDia(finalUid, turnoValido, diaFull, listaActual)
 
                     if (finalUid.isNotEmpty()) {
-                        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
                         val lang = appLanguage.value
 
                         // 1. Enviar notificación por la tarea completada
@@ -616,16 +618,7 @@ class RoutineViewModel(
                             else -> "¡Actividad completada! 🌟" to "Tu hijo ha completado la actividad: ${actividadTexto.lowercase()}."
                         }
 
-                        val taskNotifData = mapOf(
-                            "title" to taskTitle,
-                            "description" to taskDesc,
-                            "type" to "INFO",
-                            "timestamp" to com.google.firebase.Timestamp.now()
-                        )
-                        db.collection("users")
-                            .document(finalUid)
-                            .collection("notifications")
-                            .add(taskNotifData)
+                        parentProfileRepository.addNotification(finalUid, taskTitle, taskDesc, type = "INFO")
 
                         // 2. Verificar si todas las tareas de este turno aplicables a hoy están completadas
                         val targetPrefijo = RoutineProgressCalculator.obtenerPrefijoDia(diaActual)
@@ -648,16 +641,7 @@ class RoutineViewModel(
                                 else -> "¡Rutina de la ${turnoValido.lowercase()} completada! 🎉" to "Tu hijo ha terminado con éxito todas las tareas de la rutina de la ${turnoValido.lowercase()}."
                             }
 
-                            val routineNotifData = mapOf(
-                                "title" to routineTitle,
-                                "description" to routineDesc,
-                                "type" to "SUCCESS",
-                                "timestamp" to com.google.firebase.Timestamp.now()
-                            )
-                            db.collection("users")
-                                .document(finalUid)
-                                .collection("notifications")
-                                .add(routineNotifData)
+                            parentProfileRepository.addNotification(finalUid, routineTitle, routineDesc, type = "SUCCESS")
                         }
                     }
                 } catch (e: Exception) {

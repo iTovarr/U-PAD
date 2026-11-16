@@ -16,7 +16,10 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
             themePreferences = container.themePreferences,
             widgetUpdater = container.widgetUpdater,
             deviceIdProvider = container.deviceIdProvider,
-            arasaacRepository = container.arasaacRepository
+            arasaacRepository = container.arasaacRepository,
+            sessionRepository = container.sessionRepository,
+            deviceRepository = container.deviceRepository,
+            parentProfileRepository = container.parentProfileRepository
         )
         modelClass.isAssignableFrom(AiViewModel::class.java) -> AiViewModel(container.aiRepository)
         modelClass.isAssignableFrom(TrackingViewModel::class.java) -> TrackingViewModel(container.deviceRepository)
