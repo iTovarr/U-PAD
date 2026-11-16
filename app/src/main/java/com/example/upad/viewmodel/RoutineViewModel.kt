@@ -371,7 +371,7 @@ class RoutineViewModel(
         viewModelScope.launch {
             try {
                 if (query.length > 2) {
-                    _searchResults.value = arasaacRepository.searchPictograms(query)
+                    _searchResults.value = arasaacRepository.searchPictograms(query, _appLanguage.value)
                 } else {
                     _searchResults.value = emptyList()
                 }
@@ -659,7 +659,7 @@ class RoutineViewModel(
                     .filter { it.length > 2 }
 
                 for (palabra in palabras) {
-                    val resultados = arasaacRepository.searchPictograms(palabra)
+                    val resultados = arasaacRepository.searchPictograms(palabra, _appLanguage.value)
                     if (resultados.isNotEmpty()) {
                         val idImagen = resultados.first()._id
                         urlImagenFinal = "https://static.arasaac.org/pictograms/$idImagen/${idImagen}_300.png"
