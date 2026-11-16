@@ -19,9 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import java.util.Locale
 import androidx.compose.ui.res.stringResource
@@ -39,9 +39,10 @@ fun TaskExecutionScreen(
     val colorGrisBloqueado = Color(0xFFB0BEC5)
     val colorNaranjaPomodoro = Color(0xFFFF5722)
 
+    val session = LocalAppContainer.current.sessionRepository
     val currentUserId = remember {
         padreId.ifEmpty {
-            FirebaseAuth.getInstance().currentUser?.uid ?: ""
+            session.currentUserId
         }
     }
 
