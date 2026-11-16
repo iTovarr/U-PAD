@@ -1,11 +1,30 @@
-*.iml
-.gradle
-/local.properties
-/.idea/
-.DS_Store
-/build
+# Gradle
+.gradle/
+build/
 /captures
+
+# Android Studio / IntelliJ
+*.iml
+/.idea/
 .externalNativeBuild
 .cxx
+.kotlin/
+
+# Configuración local y credenciales (nunca deben subirse)
 local.properties
 app/google-services.json
+*.jks
+*.keystore
+keystore.properties
+
+# Binarios generados (se distribuyen por GitHub Releases, no por el repo)
+*.apk
+*.aab
+*.ap_
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
