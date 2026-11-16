@@ -28,6 +28,28 @@ android {
     // GROQ_API_KEY puede (y debe) dejarse vacía para que no viaje en el APK.
     val aiProxyUrl = localProperties.getProperty("AI_PROXY_URL") ?: ""
 
+    // Firma de release: solo se configura si existe keystore.properties en la raíz
+    // (ver keystore.properties.example). Sin él, assembleRelease genera un APK sin firmar.
+    val keystoreProperties = Properties()
+    val keystorePropertiesFile = project.rootProject.file("keystore.properties")
+    val tieneFirmaRelease = keystorePropertiesFile.exists()
+    if (tieneFirmaRelease) {
+        keystorePropertiesFile.inputStream().use { stream ->
+            keystoreProperties.load(stream)
+        }
+    }
+
+    signingConfigs {
+        if (tieneFirmaRelease) {
+            create("release") {
+                storeFile = project.rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.upad"
         minSdk = 24
@@ -48,6 +70,9 @@ android {
             // R8 reduce y ofusca el código; shrinkResources elimina recursos sin uso.
             isMinifyEnabled = true
             isShrinkResources = true
+            if (tieneFirmaRelease) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
