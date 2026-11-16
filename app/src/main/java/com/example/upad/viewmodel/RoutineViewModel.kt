@@ -1,5 +1,6 @@
 package com.example.upad.viewmodel
 
+import android.util.Log
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,8 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.example.upad.utils.PairingCode
 import com.example.upad.utils.RoutineProgressCalculator
 import kotlinx.coroutines.tasks.await
+
+private const val TAG = "RoutineViewModel"
 
 data class TaskItem(
     val actividad: String = "",
@@ -118,7 +121,7 @@ class RoutineViewModel(
                 val list = repository.obtenerMensajesRefuerzo(uidValido, turnoValido)
                 _mensajesRefuerzo.value = list
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en cargarMensajesRefuerzo", e)
             }
         }
     }
@@ -130,7 +133,7 @@ class RoutineViewModel(
             try {
                 repository.guardarMensajesRefuerzo(uidValido, turnoValido, mensajes)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en guardarMensajesRefuerzoPremium", e)
             }
         }
     }
@@ -318,7 +321,7 @@ class RoutineViewModel(
                             }
                         } catch (e: Exception) {
                             // Sin red o sin código libre: se permite reintentar en el próximo evento.
-                            e.printStackTrace()
+                            Log.e(TAG, "Error en iniciarEscuchaDispositivoNiño", e)
                             codigoGeneradoEnSesion = false
                         }
                     }
@@ -360,7 +363,7 @@ class RoutineViewModel(
             try {
                 repository.updateDeviceLocation(deviceId, latitude, longitude)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en updateLocation", e)
             }
         }
     }
@@ -416,7 +419,7 @@ class RoutineViewModel(
                 try {
                     repository.setPremiumStatus(userId, activarPremium)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en setSuscripcionManual", e)
                 }
             }
         }
@@ -432,7 +435,7 @@ class RoutineViewModel(
                 try {
                     repository.saveUserLanguage(userId, languageCode)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en changeLanguage", e)
                 }
             }
         }
@@ -558,7 +561,7 @@ class RoutineViewModel(
             com.example.upad.widget.ParentRoutineWidgetProvider.notificarCambioDatos(context)
             com.example.upad.widget.PremiumProgressWidgetProvider.notificarCambioDatos(context)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Error en notificarCambioAlWidget", e)
         }
     }
 
@@ -620,7 +623,7 @@ class RoutineViewModel(
                 try {
                     repository.saveRoutinePorDia(uidValido, turnoValido, diaFull, listaActualizada)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en addTask", e)
                 }
             }
         }
@@ -657,7 +660,7 @@ class RoutineViewModel(
             try {
                 repository.saveRoutinePorDia(uidValido, turnoValido, diaFull, listaActualizada)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en addTaskConDia", e)
             }
         }
     }
@@ -686,7 +689,7 @@ class RoutineViewModel(
                 try {
                     repository.saveRoutinePorDia(uidValido, turnoValido, diaFull, listLocal)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en removeTask", e)
                 }
             }
         }
@@ -724,7 +727,7 @@ class RoutineViewModel(
                         .await()
                     finalUid = doc.getString("padreId") ?: ""
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en completeTaskPorNombre", e)
                 }
             }
 
@@ -817,7 +820,7 @@ class RoutineViewModel(
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en completeTaskPorNombre", e)
                 }
             }
         }
@@ -892,7 +895,7 @@ class RoutineViewModel(
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en agregarActividadAutomatica", e)
             }
 
             val diasFinales = if (diasSeleccionados.isEmpty()) {
@@ -936,7 +939,7 @@ class RoutineViewModel(
                 try {
                     repository.saveRoutinePorDia(uidValido, turnoValido, diaFull, listaActualizada)
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e(TAG, "Error en agregarActividadAutomatica", e)
                 }
             }
         }
@@ -995,7 +998,7 @@ class RoutineViewModel(
                         action = ChildSessionMonitorWidgetProvider.ACTION_REFRESH
                     }
                     context.sendBroadcast(intent)
-                } catch (e: Exception) { e.printStackTrace() }
+                } catch (e: Exception) { Log.e(TAG, "Error en registrarFeedbackEmocional", e) }
             }
         }
     }
