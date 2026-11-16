@@ -242,4 +242,7 @@
     <string name="error_invalid_email">Ingresa un correo electrónico válido.</string>
     <string name="error_password_too_short">La contraseña debe tener al menos %1$d caracteres.</string>
     <string name="offline_banner">Sin conexión. Los cambios se enviarán cuando vuelva.</string>
+    <string name="location_channel_name">Ubicación compartida</string>
+    <string name="location_notification_title">U-Pad comparte la ubicación</string>
+    <string name="location_notification_text">El tutor puede ver dónde está este dispositivo.</string>
 </resources>

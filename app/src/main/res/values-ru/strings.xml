@@ -242,4 +242,7 @@
     <string name="error_invalid_email">Введите действительный адрес электронной почты.</string>
     <string name="error_password_too_short">Пароль должен содержать не менее %1$d символов.</string>
     <string name="offline_banner">Нет соединения. Изменения будут отправлены после его восстановления.</string>
+    <string name="location_channel_name">Общий доступ к местоположению</string>
+    <string name="location_notification_title">U-Pad передаёт местоположение</string>
+    <string name="location_notification_text">Опекун может видеть, где находится это устройство.</string>
 </resources>

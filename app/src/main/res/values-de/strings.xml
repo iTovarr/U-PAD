@@ -242,4 +242,7 @@
     <string name="error_invalid_email">Gib eine gültige E-Mail-Adresse ein.</string>
     <string name="error_password_too_short">Das Passwort muss mindestens %1$d Zeichen lang sein.</string>
     <string name="offline_banner">Keine Verbindung. Änderungen werden gesendet, sobald sie zurück ist.</string>
+    <string name="location_channel_name">Geteilter Standort</string>
+    <string name="location_notification_title">U-Pad teilt den Standort</string>
+    <string name="location_notification_text">Die Betreuungsperson kann sehen, wo sich dieses Gerät befindet.</string>
 </resources>

@@ -242,4 +242,7 @@
     <string name="error_invalid_email">Saisissez une adresse e-mail valide.</string>
     <string name="error_password_too_short">Le mot de passe doit contenir au moins %1$d caractères.</string>
     <string name="offline_banner">Pas de connexion. Les modifications seront envoyées à son retour.</string>
+    <string name="location_channel_name">Position partagée</string>
+    <string name="location_notification_title">U-Pad partage la position</string>
+    <string name="location_notification_text">Le tuteur peut voir où se trouve cet appareil.</string>
 </resources>

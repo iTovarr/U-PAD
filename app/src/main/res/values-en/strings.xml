@@ -242,4 +242,7 @@
     <string name="error_invalid_email">Enter a valid email address.</string>
     <string name="error_password_too_short">The password must be at least %1$d characters long.</string>
     <string name="offline_banner">No connection. Changes will be sent when it returns.</string>
+    <string name="location_channel_name">Shared location</string>
+    <string name="location_notification_title">U-Pad is sharing location</string>
+    <string name="location_notification_text">The guardian can see where this device is.</string>
 </resources>
