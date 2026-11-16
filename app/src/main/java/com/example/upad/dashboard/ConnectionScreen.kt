@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.request.ImageRequest
 import androidx.compose.ui.res.stringResource
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
 import com.example.upad.utils.PairingCode
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 data class DispositivoVinculado(val id: String, val modelo: String = "Dispositivo del Niño")
@@ -53,7 +53,8 @@ fun ConnectionScreen(
     val msgErrorRed = stringResource(id = R.string.network_error_linking)
     val msgCodigoInvalido = stringResource(id = R.string.code_invalid_expired)
     val msgIngresa6Numeros = stringResource(id = R.string.enter_6_numbers)
-    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = remember { session.currentUser }
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -89,7 +90,7 @@ fun ConnectionScreen(
     val colorVerdePremium = Color(0xFF2E7D32)
     val colorRojoSuave = Color(0xFFEF5350)
 
-    val idPadre = remember { FirebaseAuth.getInstance().currentUser?.uid ?: "" }
+    val idPadre = remember { session.currentUserId }
     var codigoIngresado by remember { mutableStateOf("") }
     var cargandoVerificacion by remember { mutableStateOf(true) }
     var mensajeError by remember { mutableStateOf("") }
