@@ -1,5 +1,6 @@
 package com.example.upad.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.IgnoreExtraProperties
@@ -7,6 +8,8 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import com.example.upad.dashboard.DispositivoVinculado
+
+private const val TAG = "TrackingViewModel"
 
 // ✅ Anotación para ignorar campos como 'ultimaActualizacion' si Firebase los maneja como Timestamp
 @IgnoreExtraProperties
@@ -37,7 +40,7 @@ class TrackingViewModel : ViewModel() {
             .document(hijoId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    error.printStackTrace()
+                    Log.e(TAG, "Error en iniciarRastreoHijo", error)
                     return@addSnapshotListener
                 }
 
@@ -61,7 +64,7 @@ class TrackingViewModel : ViewModel() {
             .whereEqualTo("padreId", padreId)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
-                    error.printStackTrace()
+                    Log.e(TAG, "Error en escucharDispositivosVinculados", error)
                     return@addSnapshotListener
                 }
 
