@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import coil.compose.AsyncImage
@@ -59,6 +61,8 @@ fun ProfileScreen(
     val context = LocalContext.current
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     val session = LocalAppContainer.current.sessionRepository
+    val pushTokenManager = LocalAppContainer.current.pushTokenManager
+    val scope = rememberCoroutineScope()
     val currentUser = session.currentUser
 
     // 🌗 ESTADOS GLOBALES DE DISEÑO
@@ -304,8 +308,18 @@ fun ProfileScreen(
                         colorTexto = Color(0xFFC62828),
                         colorTextoSec = Color(0xFFEF5350),
                         onClick = {
-                            session.signOut()
-                            onLogoutSuccess()
+                            val uid = session.currentUserId
+                            scope.launch {
+                                // Antes de cerrar sesión, este dispositivo deja de recibir los avisos
+                                // del tutor. Si no hay red no se bloquea el cierre de sesión.
+                                try {
+                                    withTimeout(3_000L) { pushTokenManager.eliminar(uid) }
+                                } catch (e: Exception) {
+                                    Log.e(TAG, "No se pudo quitar el token push", e)
+                                }
+                                session.signOut()
+                                onLogoutSuccess()
+                            }
                         }
                     )
                 }
