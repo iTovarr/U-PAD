@@ -23,12 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
 import com.example.upad.viewmodel.TaskItem
 import com.example.upad.utils.RoutineProgressCalculator
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun TodayCalendarScreen(
@@ -41,7 +41,8 @@ fun TodayCalendarScreen(
     val isDarkMode by routineViewModel.isDarkMode.collectAsState()
 
     val context = LocalContext.current
-    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = remember { session.currentUser }
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
