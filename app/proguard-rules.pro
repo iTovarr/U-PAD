@@ -1,21 +1,18 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Reglas de R8/ProGuard específicas de U-Pad.
+# Las librerías (Firebase, Retrofit, OkHttp, Compose...) ya traen sus propias reglas.
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Conserva archivo y número de línea para poder leer los stack traces de producción.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Gson y Firestore leen los tipos genéricos y las anotaciones por reflexión.
+-keepattributes Signature,*Annotation*,InnerClasses,EnclosingMethod
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Modelos de la API de ARASAAC: Gson los rellena por nombre de campo.
+-keep class com.example.upad.data.ArasaacPictogram { *; }
+-keep class com.example.upad.data.Keyword { *; }
+
+# Modelos que Firestore convierte por reflexión (set() con objetos y toObject()):
+# si R8 renombra sus propiedades, los campos se guardan o leen con otro nombre.
+-keep class com.example.upad.viewmodel.TaskItem { *; }
+-keep class com.example.upad.viewmodel.UbicacionHijo { *; }
