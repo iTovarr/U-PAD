@@ -66,13 +66,36 @@ U-Pad integra de forma segura la API de **Groq AI** mediante el uso del modelo d
 
 Para compilar y desplegar el proyecto con éxito, se requieren las siguientes API Keys y configuraciones de servicios:
 
-1. **Archivo local.properties**: Crea este archivo en la raíz del proyecto y define las llaves sensibles que leerá `build.gradle.kts` para inyectar en `BuildConfig`:
+1. **Archivo `local.properties`**: créalo en la raíz del proyecto (está ignorado por git) con las llaves que `app/build.gradle.kts` inyecta en el build:
    ```properties
-   GROQ_API_KEY=tu_clave_de_api_de_groq_aqui
    GOOGLE_CLIENT_ID=tu_client_id_de_google_sign_in_aqui
+   MAPS_API_KEY=tu_clave_del_sdk_de_google_maps_aqui
+
+   # Opción recomendada: proxy de IA (la clave de Groq se queda en el servidor)
+   AI_PROXY_URL=https://us-central1-TU_PROYECTO.cloudfunctions.net/aiChat
+
+   # Solo para desarrollo, si aún no desplegaste el proxy. Esta clave queda
+   # dentro del APK y puede extraerse: no la uses en builds que vayas a compartir.
+   GROQ_API_KEY=tu_clave_de_api_de_groq_aqui
    ```
-2. **Archivo AndroidManifest.xml**: Aloja la llave del SDK de Google Maps necesaria para renderizar los mapas satelitales en tiempo real (`com.google.android.geo.API_KEY`).
-3. **Archivo google-services.json**: Descárgalo desde tu consola de Firebase Console y ubícalo en la carpeta `/app` para conectar los servicios de Firestore y Auth.
+   Si `AI_PROXY_URL` está definida, la app usa el proxy y `GROQ_API_KEY` debe dejarse vacía.
+2. **Archivo `google-services.json`**: descárgalo desde Firebase Console y ubícalo en la carpeta `/app` para conectar Firestore, Storage y Auth.
+
+### Reglas de seguridad y proxy de IA (Firebase)
+
+El repositorio incluye las reglas de Firestore (`firestore.rules`) y Storage (`storage.rules`), y la Cloud Function `aiChat` (`functions/`) que reenvía las peticiones de IA a Groq sin exponer la clave. Se despliegan con [Firebase CLI](https://firebase.google.com/docs/cli):
+
+```bash
+firebase use TU_PROYECTO
+firebase deploy --only firestore:rules,storage
+
+# Proxy de IA (requiere el plan Blaze)
+cd functions && npm install && cd ..
+firebase functions:secrets:set GROQ_API_KEY
+firebase deploy --only functions
+```
+
+> Las reglas actuales documentan una limitación: el dispositivo del niño todavía no inicia sesión en Firebase, por lo que sus documentos se protegen prohibiendo listados y validando lo que se escribe. Ver los comentarios de `firestore.rules`.
 
 ---
 
