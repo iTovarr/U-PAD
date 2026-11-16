@@ -78,8 +78,10 @@ import android.content.Intent
 import com.example.upad.components.UPADBottomBar
 import com.example.upad.data.SessionRepository
 import com.example.upad.di.LocalAppContainer
+import com.example.upad.kiosk.KioskController
 import com.example.upad.navigation.Routes
 import com.example.upad.notifications.NotificationHelper
+import com.example.upad.utils.AppLocaleManager
 import com.example.upad.dashboard.EmotionsTrackScreen
 import com.example.upad.dashboard.HelpTutorialScreen
 import com.example.upad.dashboard.TodayCalendarScreen
@@ -97,6 +99,8 @@ class MainActivity : AppCompatActivity() {
     private var parentPremiumJob: Job? = null
     private val listenerStartTime = System.currentTimeMillis()
     private val notificationHelper by lazy { NotificationHelper(this) }
+    private val kioskController by lazy { KioskController(this) }
+    private val localeManager by lazy { AppLocaleManager(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -168,11 +172,11 @@ class MainActivity : AppCompatActivity() {
                         aiViewModel = aiViewModel,
                         settingsViewModel = settingsViewModel,
                         isPremiumListo = isPremiumUser != null,
-                        onCambiarEstadoSistema = ::gestionarRestriccionesSistema,
+                        onCambiarEstadoSistema = kioskController::aplicar,
                         onRouteChanged = { route ->
                             currentRoute = route
                             if (pendingLanguage.isNotEmpty() && esRutaSeguraParaIdioma(route)) {
-                                aplicarLocale(pendingLanguage)
+                                localeManager.aplicar(pendingLanguage)
                                 pendingLanguage = ""
                             }
                         }
@@ -184,7 +188,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun evaluarYAplicarIdioma(idiomaCode: String) {
         if (esRutaSeguraParaIdioma(currentRoute)) {
-            aplicarLocale(idiomaCode)
+            localeManager.aplicar(idiomaCode)
         } else {
             pendingLanguage = idiomaCode
         }
@@ -194,62 +198,6 @@ class MainActivity : AppCompatActivity() {
         if (route.isEmpty()) return true
         val esTareaActiva = route.contains(Routes.CHILD_TASK_EXECUTION_BASE) || route.contains(Routes.CHILD_TASK_FEEDBACK_BASE)
         return !esTareaActiva
-    }
-
-    private fun aplicarLocale(idiomaCode: String) {
-        val appLocale = LocaleListCompat.forLanguageTags(idiomaCode)
-        val currentLocales = AppCompatDelegate.getApplicationLocales()
-        if (currentLocales != appLocale) {
-            AppCompatDelegate.setApplicationLocales(appLocale)
-        }
-
-        // Guardar idioma para los widgets
-        try {
-            val widgetPrefs = getSharedPreferences("WIDGET_PREFS", Context.MODE_PRIVATE)
-            widgetPrefs.edit().putString("app_language", idiomaCode).apply()
-
-            val sessionPrefs = getSharedPreferences("SESSION_WIDGET_PREFS", Context.MODE_PRIVATE)
-            sessionPrefs.edit().putString("app_language", idiomaCode).apply()
-
-            // Notificar a los widgets para que se redibujen con el nuevo idioma
-            com.example.upad.widget.ParentRoutineWidgetProvider.notificarCambioDatos(this)
-            com.example.upad.widget.PremiumProgressWidgetProvider.notificarCambioDatos(this)
-
-            val intent = Intent(this, com.example.upad.widget.ChildSessionMonitorWidgetProvider::class.java).apply {
-                action = com.example.upad.widget.ParentRoutineWidgetProvider.ACTION_DATA_CHANGED
-            }
-            sendBroadcast(intent)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error en aplicarLocale", e)
-        }
-    }
-
-    private fun gestionarRestriccionesSistema(activarFijacionKiosco: Boolean) {
-        if (activarFijacionKiosco) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                window.insetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            } else {
-                @Suppress("DEPRECATION")
-                window.decorView.systemUiVisibility = (
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        )
-            }
-            try { startLockTask() } catch (e: Exception) { Log.e(TAG, "Error en gestionarRestriccionesSistema", e) }
-        } else {
-            try {
-                stopLockTask()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    window.insetsController?.show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-                } else {
-                    @Suppress("DEPRECATION")
-                    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                }
-                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            } catch (e: Exception) { Log.e(TAG, "Error en gestionarRestriccionesSistema", e) }
-        }
     }
 
     private fun requestNotificationPermission() {
