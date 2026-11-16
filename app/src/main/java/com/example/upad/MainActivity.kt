@@ -1,5 +1,6 @@
 package com.example.upad
 
+import android.util.Log
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
@@ -75,6 +76,8 @@ import com.example.upad.dashboard.EmotionsTrackScreen
 import com.example.upad.dashboard.HelpTutorialScreen
 import com.example.upad.dashboard.TodayCalendarScreen
 import com.google.firebase.auth.FirebaseAuth
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -207,7 +210,7 @@ class MainActivity : AppCompatActivity() {
             }
             sendBroadcast(intent)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Error en aplicarLocale", e)
         }
     }
 
@@ -224,7 +227,7 @@ class MainActivity : AppCompatActivity() {
                                 or View.SYSTEM_UI_FLAG_FULLSCREEN
                         )
             }
-            try { startLockTask() } catch (e: Exception) { e.printStackTrace() }
+            try { startLockTask() } catch (e: Exception) { Log.e(TAG, "Error en gestionarRestriccionesSistema", e) }
         } else {
             try {
                 stopLockTask()
@@ -235,7 +238,7 @@ class MainActivity : AppCompatActivity() {
                     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
                 }
                 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            } catch (e: Exception) { e.printStackTrace() }
+            } catch (e: Exception) { Log.e(TAG, "Error en gestionarRestriccionesSistema", e) }
         }
     }
 
@@ -333,7 +336,7 @@ class MainActivity : AppCompatActivity() {
                     notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
                 }
             } catch (e: SecurityException) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en mostrarNotificacionLocal", e)
             }
         }
     }
