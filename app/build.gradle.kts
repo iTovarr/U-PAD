@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.gms.google-services")
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -63,56 +63,52 @@ android {
 }
 
 dependencies {
+    // AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.datastore.preferences)
+
+    // Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.storage)
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    // Inicio de sesión con Google (Credential Manager) y huella digital
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services)
+    implementation(libs.googleid)
+    implementation(libs.androidx.biometric)
+
+    // Red: Retrofit para ARASAAC, OkHttp para la IA y Coil para los pictogramas
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.coil.compose)
+
+    // Mapas y ubicación
+    implementation(libs.maps.compose)
+    implementation(libs.play.services.location)
+
+    // Tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("androidx.navigation:navigation-compose:2.7.7")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-
-    // SplashScreen
-    implementation("androidx.core:core-splashscreen:1.2.0")
-
-    // BoM de Firebase
-    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore")
-
-    // Firebase Storage
-    implementation("com.google.firebase:firebase-storage")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
-
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // Coil para mostrar las imágenes de ARASAAC
-    implementation("io.coil-kt:coil-compose:2.4.0")
-
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services)
-    implementation(libs.googleid)
-    //huella digital
-    implementation("androidx.biometric:biometric:1.2.0-alpha05")
-    // Dependencias necesarias para DataStore Preferences
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
-    implementation("androidx.datastore:datastore-preferences-core:1.1.1")
-/// Pega esta línea:gemini
-    // Cambia la versión 0.9.0 por la 0.10.0 (o superior si usas un catálogo de versiones)
-// Cambia el 0.10.0 problemático por la versión verificada de producción
-    // Esta versión está totalmente disponible en los servidores y corrige las rutas de red internas de Gemini
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")    // 🗺️ Dependencias de Google Maps para Jetpack Compose
-    implementation("com.google.maps.android:maps-compose:4.3.3")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
