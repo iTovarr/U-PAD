@@ -30,6 +30,7 @@ import com.example.upad.di.LocalAppContainer
 import com.example.upad.viewmodel.TaskItem
 import com.example.upad.viewmodel.AiViewModel
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,12 +55,13 @@ fun CreateRoutineScreen(
     onSendRoutine: () -> Unit,
     onRemoveTaskClick: (Int) -> Unit,
     viewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     aiViewModel: AiViewModel,
     drawableId: Int,
     diaInicial: String = "LUNES"
 ) {
-    val isPremiumUser by viewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     val isAiLoading by aiViewModel.isAiLoading.collectAsState()
     val aiSuggestions by aiViewModel.aiSuggestions.collectAsState()

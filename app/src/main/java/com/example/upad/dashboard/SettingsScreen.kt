@@ -30,10 +30,12 @@ import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
@@ -54,9 +56,9 @@ fun SettingsScreen(
         }
     }
 
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
-    val appLanguage by routineViewModel.appLanguage.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
+    val appLanguage by settingsViewModel.appLanguage.collectAsState()
 
     val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
     val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
@@ -220,7 +222,7 @@ fun SettingsScreen(
                             title = if (isPremiumUser) "Tema Premium Visual" else stringResource(R.string.settings_dark_mode),
                             subtitle = if (isPremiumUser) "Cambiar entre Rosa Pastel y Azul Profundo" else stringResource(R.string.settings_dark_mode_desc),
                             checked = isDarkMode,
-                            onCheckedChange = { routineViewModel.setDarkMode(it) },
+                            onCheckedChange = { settingsViewModel.setDarkMode(it) },
                             switchColor = colorAcabadoPrincipal,
                             textColor = colorTextoPrincipal,
                             subTextColor = colorTextoSecundario
@@ -282,7 +284,7 @@ fun SettingsScreen(
                                 onClick = {
                                     expandedLanguage = false
                                     val userId = session.currentUser?.uid
-                                    routineViewModel.changeLanguage(userId, codigo)
+                                    settingsViewModel.changeLanguage(userId, codigo)
                                 }
                             )
                         }

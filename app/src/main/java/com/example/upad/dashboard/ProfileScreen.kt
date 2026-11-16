@@ -43,6 +43,7 @@ import coil.request.ImageRequest
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 
 private const val TAG = "ProfileScreen"
 
@@ -50,6 +51,7 @@ private const val TAG = "ProfileScreen"
 @Composable
 fun ProfileScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onNavigateBack: () -> Unit,
     onLogoutSuccess: () -> Unit,
     onNavigateToHelp: () -> Unit = {}
@@ -60,8 +62,8 @@ fun ProfileScreen(
     val currentUser = session.currentUser
 
     // 🌗 ESTADOS GLOBALES DE DISEÑO
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // 🔄 DETECTAR ORIENTACIÓN DE PANTALLA
     val configuration = LocalConfiguration.current

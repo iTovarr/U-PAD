@@ -13,13 +13,18 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
             repository = container.firebaseRepository,
             dataStoreManager = container.dataStoreManager,
             languageDataStore = container.languageDataStore,
-            themePreferences = container.themePreferences,
             widgetUpdater = container.widgetUpdater,
             deviceIdProvider = container.deviceIdProvider,
             arasaacRepository = container.arasaacRepository,
             sessionRepository = container.sessionRepository,
             deviceRepository = container.deviceRepository,
             parentProfileRepository = container.parentProfileRepository
+        )
+        modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(
+            dataStoreManager = container.dataStoreManager,
+            languageDataStore = container.languageDataStore,
+            themePreferences = container.themePreferences,
+            repository = container.firebaseRepository
         )
         modelClass.isAssignableFrom(AiViewModel::class.java) -> AiViewModel(container.aiRepository)
         modelClass.isAssignableFrom(TrackingViewModel::class.java) -> TrackingViewModel(container.deviceRepository)

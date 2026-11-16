@@ -11,15 +11,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.compose.ui.res.stringResource
 import com.example.upad.navigation.BottomBarScreen
-import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 
 @Composable
 fun UPADBottomBar(
     navController: NavHostController,
-    routineViewModel: RoutineViewModel
+    settingsViewModel: SettingsViewModel
 ) {
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

@@ -25,11 +25,13 @@ import androidx.compose.ui.unit.sp
 import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExperienceSetupScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit
 ) {
@@ -43,8 +45,8 @@ fun ExperienceSetupScreen(
     val pantallaPequeña = configuration.screenHeightDp < 650
 
     // 🎨 RECOLECCIÓN DINÁMICA IGUAL QUE EN SETTINGSSCREEN
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // --- CARGA DE ESTADOS CON PERSISTENCIA ---
     var selectedTheme by remember { mutableStateOf(prefs.getString("APP_THEME", "Modo claro") ?: "Modo claro") }
@@ -153,7 +155,7 @@ fun ExperienceSetupScreen(
                                     .clickable {
                                         selectedTheme = theme
                                         val cambiarAOscuro = theme == "Modo oscuro"
-                                        routineViewModel.setDarkMode(cambiarAOscuro)
+                                        settingsViewModel.setDarkMode(cambiarAOscuro)
                                     }
                                     .padding(horizontal = 12.dp, vertical = 8.dp)
                             ) {
@@ -161,7 +163,7 @@ fun ExperienceSetupScreen(
                                     selected = estaSeleccionado,
                                     onClick = {
                                         selectedTheme = theme
-                                        routineViewModel.setDarkMode(theme == "Modo oscuro")
+                                        settingsViewModel.setDarkMode(theme == "Modo oscuro")
                                     },
                                     colors = RadioButtonDefaults.colors(
                                         selectedColor = colorAcabadoPrincipal,

@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import com.example.upad.viewmodel.SettingsViewModel
 import android.util.Log
 import android.Manifest
 import android.content.Context
@@ -50,6 +51,7 @@ private const val TAG = "HijoTrackingScreen"
 @Composable
 fun HijoTrackingScreen(
     routineViewModel: RoutineViewModel, // 🛡️ AGREGADO DE FORMA SEGURA COMO PRIMER PARÁMETRO
+    settingsViewModel: SettingsViewModel,
     hijoId: String,
     onNavigateBack: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
@@ -57,8 +59,8 @@ fun HijoTrackingScreen(
     trackingViewModel: TrackingViewModel
 ) {
     // 📨 1. RECOLECCIÓN DE ESTADOS GLOBALES (Cabecera del componente)
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current

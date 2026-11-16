@@ -38,11 +38,13 @@ import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.AiViewModel
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 import java.util.Calendar
 
 @Composable
 fun AnalyticsScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     aiViewModel: AiViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToPremium: () -> Unit,
@@ -50,8 +52,8 @@ fun AnalyticsScreen(
     onNavigateToProfile: () -> Unit = {}
 ) {
     // 📨 1. ESTADOS LOCALES Y CONFIGURACIÓN EN LA CABECERA
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
     val aiAnalysis by aiViewModel.aiAnalysis.collectAsState()
     val isAnalyzing by aiViewModel.isAnalyzing.collectAsState()
 

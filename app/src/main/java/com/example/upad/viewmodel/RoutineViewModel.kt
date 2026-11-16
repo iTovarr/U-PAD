@@ -16,7 +16,6 @@ import com.example.upad.data.DeviceRepository
 import com.example.upad.data.LanguageDataStore
 import com.example.upad.data.ParentProfileRepository
 import com.example.upad.data.SessionRepository
-import com.example.upad.data.ThemePreferences
 import com.example.upad.widget.WidgetProgress
 import com.example.upad.widget.WidgetUpdater
 import com.example.upad.widget.ChildSessionMonitorWidgetProvider
@@ -52,7 +51,6 @@ class RoutineViewModel(
     private val repository: FirebaseRepository,
     private val dataStoreManager: DataStoreManager,
     private val languageDataStore: LanguageDataStore,
-    private val themePreferences: ThemePreferences,
     private val widgetUpdater: WidgetUpdater,
     private val deviceIdProvider: () -> String,
     private val arasaacRepository: ArasaacRepository,
@@ -66,15 +64,10 @@ class RoutineViewModel(
     private var listenerNoche: ListenerRegistration? = null
     private var languageListener: ListenerRegistration? = null
 
+    // Copias de solo lectura del plan y del idioma (los gestiona SettingsViewModel):
+    // se usan para el progreso de los widgets y el idioma de los avisos al tutor.
     private val _isPremiumManual = MutableStateFlow(false)
-    val isUserPremium: StateFlow<Boolean> = _isPremiumManual
-
     private val _appLanguage = MutableStateFlow("es")
-    val appLanguage: StateFlow<String> = _appLanguage.asStateFlow()
-
-    // 🌓 ESTADO DEL TEMA OSCURO PERSISTENTE COLECTADO LOCALMENTE
-    private val _isDarkMode = MutableStateFlow(false)
-    val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
     private val _mensajesRefuerzo = MutableStateFlow<List<String>>(emptyList())
     val reinforcementMessages: StateFlow<List<String>> = _mensajesRefuerzo.asStateFlow()
@@ -117,21 +110,6 @@ class RoutineViewModel(
             languageDataStore.languageFlow.collectLatest { lang ->
                 _appLanguage.value = lang
             }
-        }
-        // 🌓 Cargar el tema guardado al arrancar
-        _isDarkMode.value = themePreferences.isDarkMode()
-    }
-
-    fun setDarkMode(enabled: Boolean) {
-        _isDarkMode.value = enabled
-        themePreferences.setDarkMode(enabled)
-    }
-
-    // 🚀 ÚNICO CAMBIO: Se añade la función requerida por tus vistas de pago para evitar el error en rojo
-    fun setPremiumUser(value: Boolean) {
-        _isPremiumManual.value = value
-        viewModelScope.launch {
-            dataStoreManager.setPremiumStatus(value)
         }
     }
 
@@ -288,37 +266,6 @@ class RoutineViewModel(
 
     fun clearUnlinkError() {
         _errorDesvinculacion.value = ""
-    }
-
-    fun setSuscripcionManual(activarPremium: Boolean, userId: String? = null) {
-        viewModelScope.launch {
-            dataStoreManager.setPremiumStatus(activarPremium)
-            _isPremiumManual.value = activarPremium
-
-            if (!userId.isNullOrEmpty()) {
-                try {
-                    repository.setPremiumStatus(userId, activarPremium)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error en setSuscripcionManual", e)
-                }
-            }
-        }
-    }
-
-    fun purchasePremium(userId: String? = null) { setSuscripcionManual(true, userId) }
-    fun cancelPremium(userId: String? = null) { setSuscripcionManual(false, userId) }
-
-    fun changeLanguage(userId: String?, languageCode: String) {
-        viewModelScope.launch {
-            languageDataStore.saveLanguage(languageCode)
-            if (!userId.isNullOrEmpty()) {
-                try {
-                    repository.saveUserLanguage(userId, languageCode)
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error en changeLanguage", e)
-                }
-            }
-        }
     }
 
     fun iniciarEscuchaIdioma(userId: String) {
@@ -606,7 +553,7 @@ class RoutineViewModel(
                     repository.saveRoutinePorDia(finalUid, turnoValido, diaFull, listaActual)
 
                     if (finalUid.isNotEmpty()) {
-                        val lang = appLanguage.value
+                        val lang = _appLanguage.value
 
                         // 1. Enviar notificación por la tarea completada
                         val (taskTitle, taskDesc) = when (lang) {

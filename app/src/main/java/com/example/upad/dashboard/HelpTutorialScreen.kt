@@ -30,10 +30,12 @@ import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 
 @Composable
 fun HelpTutorialScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
@@ -42,8 +44,8 @@ fun HelpTutorialScreen(
     var pestañaSeleccionada by remember { mutableStateOf(0) }
 
     // 🌗 ESTADOS GLOBALES DE DISEÑO
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current

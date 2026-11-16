@@ -21,10 +21,12 @@ import androidx.compose.ui.res.stringResource
 import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 
 @Composable
 fun SubscriptionPlansScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onNavigateToBenefits: () -> Unit, // 🚀 Te lleva a ChangePlanScreen (Ver beneficios)
     onDirectToProfile: () -> Unit      // 🚀 Te lleva directo a ChildProfileSetupScreen (Plan Básico)
 
@@ -120,7 +122,7 @@ fun SubscriptionPlansScreen(
                     if (selectedPlan == "premium") {
                         onNavigateToBenefits() // Va a ver lo que incluye el plan
                     } else {
-                        routineViewModel.setPremiumUser(false)
+                        settingsViewModel.setPremiumUser(false)
                         guardarPlanBasicoEnFirebase()
                         onDirectToProfile()    // Va directo a configurar el niño en básico
                     }
@@ -136,7 +138,7 @@ fun SubscriptionPlansScreen(
 
             TextButton(
                 onClick = {
-                    routineViewModel.setPremiumUser(false)
+                    settingsViewModel.setPremiumUser(false)
                     guardarPlanBasicoEnFirebase()
                     onDirectToProfile()
                 },

@@ -69,6 +69,7 @@ import com.example.upad.dashboard.SettingsScreen
 import com.example.upad.viewmodel.AiViewModel
 import com.example.upad.viewmodel.AppViewModelFactory
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 import com.example.upad.dashboard.ConnectionScreen
 import com.example.upad.dashboard.AnalyticsScreen
 import com.example.upad.premium.PaymentViewScreen
@@ -119,17 +120,18 @@ class MainActivity : AppCompatActivity() {
             // Con ámbito de Activity, igual que routineViewModel: el estado de la IA
             // se conserva al navegar entre pantallas.
             val aiViewModel: AiViewModel = viewModel(factory = viewModelFactory)
+            val settingsViewModel: SettingsViewModel = viewModel(factory = viewModelFactory)
 
             // Reacciona a cada inicio o cierre de sesión. La recolección se cancela sola
             // al salir de la composición, así que no queda ningún listener colgado.
-            LaunchedEffect(routineViewModel) {
+            LaunchedEffect(settingsViewModel) {
                 container.sessionRepository.observeSession().collect { user ->
                     if (user != null) {
                         val sharedPrefs = getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE)
                         val rol = sharedPrefs.getString("rol_usuario", null)
                         if (rol == "padre" || rol == "padre_directo") {
                             iniciarEscuchaNotificacionesPadre(user.uid)
-                            iniciarEscuchaPremiumPadre(user.uid, routineViewModel)
+                            iniciarEscuchaPremiumPadre(user.uid, settingsViewModel)
                         }
                     } else {
                         notificationsJob?.cancel()
@@ -138,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            val appLanguage by routineViewModel.appLanguage.collectAsState()
+            val appLanguage by settingsViewModel.appLanguage.collectAsState()
             LaunchedEffect(appLanguage) {
                 evaluarYAplicarIdioma(appLanguage)
             }
@@ -146,7 +148,7 @@ class MainActivity : AppCompatActivity() {
             val sharedPrefs = remember { getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE) }
             val sistemaEstaEnOscuro = isSystemInDarkTheme()
 
-            val isDarkModeFlow by routineViewModel.isDarkMode.collectAsState()
+            val isDarkModeFlow by settingsViewModel.isDarkMode.collectAsState()
             var estadoTemaOscuroReal by remember {
                 mutableStateOf(sharedPrefs.getBoolean("pref_tema_oscuro", sistemaEstaEnOscuro))
             }
@@ -156,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 sharedPrefs.edit().putBoolean("pref_tema_oscuro", isDarkModeFlow).apply()
             }
 
-            val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = null)
+            val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = null)
 
             CompositionLocalProvider(LocalAppContainer provides container) {
                 UPadTheme(darkTheme = estadoTemaOscuroReal, isPremium = isPremiumUser ?: false) {
@@ -164,6 +166,7 @@ class MainActivity : AppCompatActivity() {
                         bloqueoActivo = ordenBloqueoPadreActiva,
                         routineViewModel = routineViewModel,
                         aiViewModel = aiViewModel,
+                        settingsViewModel = settingsViewModel,
                         isPremiumListo = isPremiumUser != null,
                         onCambiarEstadoSistema = ::gestionarRestriccionesSistema,
                         onRouteChanged = { route ->
@@ -282,14 +285,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun iniciarEscuchaPremiumPadre(userId: String, routineViewModel: RoutineViewModel) {
+    private fun iniciarEscuchaPremiumPadre(userId: String, settingsViewModel: SettingsViewModel) {
         parentPremiumJob?.cancel()
         if (userId.isEmpty()) return
 
         parentPremiumJob = lifecycleScope.launch {
             container.parentProfileRepository.observePremium(userId)
                 .catch { error -> Log.e(TAG, "Error al escuchar el plan del tutor", error) }
-                .collect { isPremium -> routineViewModel.setPremiumUser(isPremium) }
+                .collect { isPremium -> settingsViewModel.setPremiumUser(isPremium) }
         }
     }
 
@@ -314,13 +317,14 @@ fun UPadNavigation(
     bloqueoActivo: Boolean,
     routineViewModel: RoutineViewModel,
     aiViewModel: AiViewModel,
+    settingsViewModel: SettingsViewModel,
     isPremiumListo: Boolean,
     onCambiarEstadoSistema: (Boolean) -> Unit,
     onRouteChanged: (String) -> Unit
 ) {
     val navController = rememberNavController()
     val session = LocalAppContainer.current.sessionRepository
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     var padreIdDelHijo by remember { mutableStateOf("") }
 
@@ -348,7 +352,7 @@ fun UPadNavigation(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            UPADBottomBar(navController = navController, routineViewModel = routineViewModel)
+            UPADBottomBar(navController = navController, settingsViewModel = settingsViewModel)
         }
     ) { paddingValues ->
         Box(
@@ -440,6 +444,7 @@ fun UPadNavigation(
                 composable(Routes.SUBSCRIPTION_PLANS) {
                     SubscriptionPlansScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateToBenefits = { navController.navigate(Routes.CHANGE_PLAN) },
                         onDirectToProfile = { navController.navigate(Routes.TRIAL_DISCLAIMER) }
                     )
@@ -462,6 +467,7 @@ fun UPadNavigation(
                 composable(Routes.EXPERIENCE_SETUP) {
                     ExperienceSetupScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onBackClick = { navController.popBackStack() },
                         onNextClick = { navController.navigate(Routes.DEVICE_PAIRING) }
                     )
@@ -490,9 +496,10 @@ fun UPadNavigation(
                 composable(Routes.PAYMENT_VIEW) {
                     PaymentViewScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onPaymentConfirmed = {
                             val uid = session.currentUserId
-                            routineViewModel.setSuscripcionManual(true, uid)
+                            settingsViewModel.setSuscripcionManual(true, uid)
                             navController.navigate(Routes.PARENT_DASHBOARD) {
                                 popUpTo(Routes.PARENT_DASHBOARD) { inclusive = true }
                             }
@@ -508,6 +515,7 @@ fun UPadNavigation(
                     }
                     RoutineDashboardScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateToCreateRoutine = { turn, day -> navController.navigate(Routes.createRoutine(turn, day)) },
                         onRoutineClick = { turn, day -> navController.navigate(Routes.createRoutine(turn, day)) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) },
@@ -525,6 +533,7 @@ fun UPadNavigation(
                 composable(Routes.HELP_TUTORIAL) {
                     HelpTutorialScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
@@ -534,6 +543,7 @@ fun UPadNavigation(
                 composable(Routes.TODAY_CALENDAR) {
                     TodayCalendarScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
@@ -543,6 +553,7 @@ fun UPadNavigation(
                 composable(Routes.EMOTIONS_TRACK) {
                     EmotionsTrackScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
@@ -552,6 +563,7 @@ fun UPadNavigation(
                 composable(Routes.NOTIFICATIONS) {
                     NotificationsScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
@@ -568,6 +580,7 @@ fun UPadNavigation(
                     )
                     HijoTrackingScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         hijoId = hijoId,
                         trackingViewModel = trackingViewModel,
                         onNavigateBack = { navController.popBackStack() },
@@ -581,6 +594,7 @@ fun UPadNavigation(
                     val contextoPerfil = androidx.compose.ui.platform.LocalContext.current
                     ProfileScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onLogoutSuccess = {
                             val sharedPrefs = contextoPerfil.getSharedPreferences("UPadPrefs", android.content.Context.MODE_PRIVATE)
@@ -601,6 +615,7 @@ fun UPadNavigation(
                 composable(Routes.SETTINGS) {
                     SettingsScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
@@ -610,6 +625,7 @@ fun UPadNavigation(
                 composable(Routes.CONNECTION_CODE) {
                     ConnectionScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onLinkSuccess = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
@@ -620,6 +636,7 @@ fun UPadNavigation(
                 composable(Routes.ANALYTICS) {
                     AnalyticsScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         aiViewModel = aiViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToPremium = { navController.navigate(Routes.SUBSCRIPTION_PLANS) },
@@ -630,6 +647,7 @@ fun UPadNavigation(
                 composable(Routes.DEVICE_MANAGEMENT) {
                     DeviceManagementScreen(
                         routineViewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
@@ -687,6 +705,7 @@ fun UPadNavigation(
                             navController.navigate(Routes.PARENT_DASHBOARD)
                         },
                         viewModel = routineViewModel,
+                        settingsViewModel = settingsViewModel,
                         aiViewModel = aiViewModel,
                         drawableId = android.R.drawable.ic_menu_manage,
                         diaInicial = diaNormalizado,

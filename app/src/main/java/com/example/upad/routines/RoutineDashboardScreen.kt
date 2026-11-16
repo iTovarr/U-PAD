@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import com.example.upad.viewmodel.SettingsViewModel
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -47,6 +48,7 @@ data class RoutineItem(
 @Composable
 fun RoutineDashboardScreen(
     routineViewModel: com.example.upad.viewmodel.RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onNavigateToCreateRoutine: (String, String) -> Unit,
     onRoutineClick: (String, String) -> Unit,
     onNavigateToAnalytics: () -> Unit = {},
@@ -69,8 +71,8 @@ fun RoutineDashboardScreen(
     }
 
     // ── ESTADOS DEL VIEWMODEL ────────────────────────────────────────────────
-    val esPremium by routineViewModel.isUserPremium.collectAsState()
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val esPremium by settingsViewModel.isUserPremium.collectAsState()
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // ── PALETA DE COLORES ADAPTATIVA ─────────────────────────────────────────
     val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
@@ -204,7 +206,7 @@ fun RoutineDashboardScreen(
                 gradienteFondoPremium = gradienteFondoPremium,
                 fuentePremium = fuentePremium,
                 onChangePlan = { scope.launch { drawerState.close() }; onNavigateToChangePlan() },
-                onCancelPremium = { scope.launch { drawerState.close() }; routineViewModel.cancelPremium(currentUser?.uid ?: "") },
+                onCancelPremium = { scope.launch { drawerState.close() }; settingsViewModel.cancelPremium(currentUser?.uid ?: "") },
                 onUbicarHijo = { scope.launch { drawerState.close() }; onUbicarHijoAccionUnificada() },
                 onNavigateToAnalytics = { scope.launch { drawerState.close() }; onNavigateToAnalytics() },
                 onNavigateToDeviceManagement = { scope.launch { drawerState.close() }; onNavigateToDeviceManagement() },

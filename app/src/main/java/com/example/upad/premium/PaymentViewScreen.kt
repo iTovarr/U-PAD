@@ -17,12 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.upad.di.LocalAppContainer
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun PaymentViewScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onPaymentConfirmed: () -> Unit // 👶 Callback definitivo que te lleva a ChildProfileSetupScreen
 ) {
     val scope = rememberCoroutineScope()
@@ -101,7 +103,7 @@ fun PaymentViewScreen(
                         }
 
                         // 2. 🔥 Cambiamos el estado reactivo global en el ViewModel a Premium
-                        routineViewModel.setPremiumUser(true)
+                        settingsViewModel.setPremiumUser(true)
 
                         // 3. 👶 Saltamos a la pantalla de Perfil del niño
                         onPaymentConfirmed()

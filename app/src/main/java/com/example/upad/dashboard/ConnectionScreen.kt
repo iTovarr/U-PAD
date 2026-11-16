@@ -31,6 +31,7 @@ import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.SettingsViewModel
 import com.example.upad.data.PairingResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
@@ -40,14 +41,15 @@ data class DispositivoVinculado(val id: String, val modelo: String = "Dispositiv
 @Composable
 fun ConnectionScreen(
     routineViewModel: RoutineViewModel,
+    settingsViewModel: SettingsViewModel,
     onNavigateBack: () -> Unit,
     onLinkSuccess: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
 ) {
     // 📨 1. RECOLECCIÓN DE ESTADOS GLOBALES (Cabecera del componente)
-    val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
-    val isDarkMode by routineViewModel.isDarkMode.collectAsState()
+    val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
+    val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current
