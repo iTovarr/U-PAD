@@ -28,10 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.dashboard.components.DashboardDrawerContent
 import com.example.upad.dashboard.components.UpadTopAppBar
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -58,8 +58,8 @@ fun RoutineDashboardScreen(
     onNavigateToTracking: (String) -> Unit = {},
     onNavigateToHelp: () -> Unit = {}
 ) {
-    val firebaseAuth = remember { FirebaseAuth.getInstance() }
-    val currentUser = firebaseAuth.currentUser
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = session.currentUser
     val context = LocalContext.current
 
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
