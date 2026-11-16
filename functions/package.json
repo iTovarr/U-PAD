@@ -1,6 +1,6 @@
 {
   "name": "upad-functions",
-  "description": "Cloud Functions de U-Pad: proxy de IA que mantiene la clave de Groq en el servidor",
+  "description": "Cloud Functions de U-Pad: proxy de IA y notificaciones push al tutor",
   "private": true,
   "main": "index.js",
   "engines": {

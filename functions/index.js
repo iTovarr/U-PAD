@@ -1,14 +1,18 @@
 /**
- * Proxy de IA de U-Pad.
+ * Cloud Functions de U-Pad.
  *
- * La app Android llama a esta función en lugar de llamar a Groq directamente,
- * de modo que la clave de Groq vive solo en el servidor (Secret Manager) y no
- * viaja dentro del APK.
+ * aiChat: proxy de IA. La app Android llama a esta función en lugar de llamar a
+ * Groq directamente, de modo que la clave de Groq vive solo en el servidor
+ * (Secret Manager) y no viaja dentro del APK. Solo atiende a usuarios con sesión
+ * iniciada en Firebase Auth y fija el modelo y los límites de tamaño para que
+ * nadie pueda usarla como proxy genérico.
  *
- * Solo atiende a usuarios con sesión iniciada en Firebase Auth y fija el modelo
- * y los límites de tamaño para que nadie pueda usarla como proxy genérico.
+ * notifyParent: envía una notificación push al tutor cada vez que el dispositivo
+ * del niño deja un aviso en users/{uid}/notifications, para que le llegue aunque
+ * tenga la app cerrada.
  */
 const {onRequest} = require("firebase-functions/v2/https");
+const {onDocumentCreated} = require("firebase-functions/v2/firestore");
 const {defineSecret} = require("firebase-functions/params");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
@@ -92,5 +96,57 @@ exports.aiChat = onRequest(
         logger.error("Fallo al llamar a Groq", {uid, message: error.message});
         return sendError(res, 502, "El servicio de IA no está disponible");
       }
+    },
+);
+
+// Debe coincidir con NotificationHelper.CHANNEL_ID de la app Android.
+const NOTIFICATION_CHANNEL_ID = "upad_notifications_channel";
+const INVALID_TOKEN_CODES = [
+  "messaging/registration-token-not-registered",
+  "messaging/invalid-registration-token",
+  "messaging/invalid-argument",
+];
+
+exports.notifyParent = onDocumentCreated(
+    {document: "users/{uid}/notifications/{notificationId}", region: "us-central1"},
+    async (event) => {
+      const aviso = event.data && event.data.data();
+      if (!aviso) return;
+
+      const {uid, notificationId} = event.params;
+      const userRef = admin.firestore().collection("users").doc(uid);
+      const tokens = ((await userRef.get()).get("fcmTokens") || []).filter((t) => typeof t === "string");
+      if (tokens.length === 0) return;
+
+      const response = await admin.messaging().sendEachForMulticast({
+        tokens,
+        notification: {
+          title: String(aviso.title || "U-Pad"),
+          body: String(aviso.description || ""),
+        },
+        android: {
+          priority: "high",
+          notification: {
+            channelId: NOTIFICATION_CHANNEL_ID,
+            // La app usa el mismo tag al mostrar el aviso en primer plano, así que
+            // Android lo reemplaza en lugar de enseñarlo dos veces.
+            tag: notificationId,
+          },
+        },
+      });
+
+      // Se retiran los tokens de dispositivos que ya no existen o desinstalaron la app.
+      const invalidos = tokens.filter((_, i) => {
+        const error = response.responses[i].error;
+        return error && INVALID_TOKEN_CODES.includes(error.code);
+      });
+      if (invalidos.length > 0) {
+        await userRef.update({fcmTokens: admin.firestore.FieldValue.arrayRemove(...invalidos)});
+      }
+      logger.info("Aviso enviado al tutor", {
+        uid,
+        enviados: response.successCount,
+        fallidos: response.failureCount,
+      });
     },
 );
