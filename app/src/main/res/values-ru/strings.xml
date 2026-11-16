@@ -239,4 +239,6 @@
     <string name="axis_afternoon">Д</string>
     <string name="axis_evening">В</string>
     <string name="available_in_premium">Доступно в Premium-плане</string>
+    <string name="error_invalid_email">Введите действительный адрес электронной почты.</string>
+    <string name="error_password_too_short">Пароль должен содержать не менее %1$d символов.</string>
 </resources>

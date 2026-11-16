@@ -239,4 +239,6 @@
     <string name="axis_afternoon">T</string>
     <string name="axis_evening">N</string>
     <string name="available_in_premium">Disponible en Plan Premium</string>
+    <string name="error_invalid_email">Ingresa un correo electrónico válido.</string>
+    <string name="error_password_too_short">La contraseña debe tener al menos %1$d caracteres.</string>
 </resources>
