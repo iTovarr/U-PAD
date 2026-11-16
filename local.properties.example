@@ -1,0 +1,15 @@
+# Copia este archivo como local.properties (ignorado por git) y completa los valores.
+# Android Studio añade sdk.dir automáticamente al abrir el proyecto.
+
+# Client ID web de Google Sign-In (Firebase Console > Authentication > Google)
+GOOGLE_CLIENT_ID=
+
+# Clave del SDK de Google Maps para Android
+MAPS_API_KEY=
+
+# Recomendado: URL de la Cloud Function aiChat (la clave de Groq se queda en el servidor)
+AI_PROXY_URL=
+
+# Solo para desarrollo si aún no desplegaste el proxy: esta clave queda dentro del APK.
+# Déjala vacía cuando AI_PROXY_URL esté definida.
+GROQ_API_KEY=
