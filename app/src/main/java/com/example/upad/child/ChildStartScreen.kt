@@ -7,11 +7,7 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.Priority
+import com.example.upad.location.LocationTrackingService
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -86,40 +82,14 @@ fun ChildStartScreen(
         }
     }
 
-    DisposableEffect(estaVinculado, esPremiumPorPadre, tienePermisoUbicacion) {
-        var callback: LocationCallback? = null
-        var client: com.google.android.gms.location.FusedLocationProviderClient? = null
-
+    // El rastreo lo hace un servicio en primer plano, así que continúa mientras el niño
+    // realiza sus tareas o con la app en segundo plano. Se detiene al desvincular el
+    // dispositivo, si el tutor deja de ser premium o al volver a la selección de rol.
+    LaunchedEffect(estaVinculado, esPremiumPorPadre, tienePermisoUbicacion) {
         if (estaVinculado && esPremiumPorPadre && tienePermisoUbicacion) {
-            try {
-                client = LocationServices.getFusedLocationProviderClient(context)
-                val locationRequest = LocationRequest.Builder(
-                    Priority.PRIORITY_HIGH_ACCURACY, 10000L
-                ).setMinUpdateIntervalMillis(5000L).build()
-
-                callback = object : LocationCallback() {
-                    override fun onLocationResult(locationResult: LocationResult) {
-                        val location = locationResult.lastLocation
-                        if (location != null) {
-                            routineViewModel.updateLocation(deviceId, location.latitude, location.longitude)
-                        }
-                    }
-                }
-
-                client.requestLocationUpdates(
-                    locationRequest,
-                    callback,
-                    android.os.Looper.getMainLooper()
-                )
-            } catch (e: SecurityException) {
-                Log.e(TAG, "Error en onLocationResult", e)
-            }
-        }
-
-        onDispose {
-            if (client != null && callback != null) {
-                client.removeLocationUpdates(callback)
-            }
+            LocationTrackingService.start(context)
+        } else {
+            LocationTrackingService.stop(context)
         }
     }
 

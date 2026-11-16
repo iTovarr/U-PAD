@@ -213,16 +213,6 @@ class RoutineViewModel(
         detenerEscuchaIdioma()
     }
 
-    fun updateLocation(deviceId: String, latitude: Double, longitude: Double) {
-        viewModelScope.launch {
-            try {
-                repository.updateDeviceLocation(deviceId, latitude, longitude)
-            } catch (e: Exception) {
-                Log.e(TAG, "Error en updateLocation", e)
-            }
-        }
-    }
-
     fun desvincularDispositivo(deviceId: String, email: String, pass: String, onSuccess: () -> Unit) {
         if (email.isBlank() || pass.isBlank()) {
             _errorDesvinculacion.value = "Por favor, completa todos los campos."

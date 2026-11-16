@@ -337,6 +337,10 @@ fun UPadNavigation(
                 // ── AUTH ─────────────────────────────────────────────────────
                 composable(Routes.ROLE_SELECTION) {
                     val contextoRol = androidx.compose.ui.platform.LocalContext.current
+                    // Al volver a elegir rol, el dispositivo deja de compartir su ubicación.
+                    LaunchedEffect(Unit) {
+                        com.example.upad.location.LocationTrackingService.stop(contextoRol)
+                    }
                     RoleSelectionScreen(
                         onRoleSelected = { role: String ->
                             val sharedPrefs = contextoRol.getSharedPreferences("UPadPrefs", android.content.Context.MODE_PRIVATE)
