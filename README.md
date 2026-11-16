@@ -1,4 +1,6 @@
 # U-Pad 📱✨
+
+[![Android CI](https://github.com/iTovarr/U-PAD/actions/workflows/android.yml/badge.svg)](https://github.com/iTovarr/U-PAD/actions/workflows/android.yml)
 ### Apoyo Visual, Rutinas Inteligentes y Seguimiento en Tiempo Real para Niños con TEA
 
 U-Pad es una aplicación Android nativa diseñada para mejorar la autonomía diaria de niños con Trastorno del Espectro Autista (TEA) mediante agendas visuales basadas en pictogramas. Facilita la tranquilidad de los padres y tutores al permitirles supervisar en tiempo real el progreso de las rutinas y realizar un rastreo GPS satelital de la ubicación del menor. Asimismo, integra un asistente inteligente de IA que sugiere actividades personalizadas adaptadas a las necesidades específicas de cada niño.
@@ -98,6 +100,14 @@ firebase deploy --only functions
 > Las reglas actuales documentan una limitación: el dispositivo del niño todavía no inicia sesión en Firebase, por lo que sus documentos se protegen prohibiendo listados y validando lo que se escribe. Ver los comentarios de `firestore.rules`.
 
 ---
+
+### Calidad: tests, lint y CI
+
+```bash
+./gradlew testDebugUnitTest lintDebug
+```
+
+Cada push a `main` y cada pull request ejecuta en GitHub Actions los tests unitarios, Android Lint y la compilación del APK de debug (`.github/workflows/android.yml`).
 
 ### Build de release
 
