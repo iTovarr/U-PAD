@@ -1,0 +1,144 @@
+rules_version = '2';
+
+// Reglas de seguridad de Firestore para U-Pad.
+//
+// LIMITACIÓN CONOCIDA: el dispositivo del niño todavía NO inicia sesión en
+// Firebase Auth, así que las reglas no pueden saber "quién" es. Mientras eso no
+// cambie, los documentos que usa el modo niño (rutinas, dispositivo, códigos)
+// se protegen así:
+//   - Se prohíbe listar colecciones: solo se puede leer un documento cuyo ID ya
+//     se conoce (UID del tutor, ANDROID_ID del dispositivo o código de 6 dígitos).
+//   - Se valida la forma y el tamaño de lo que se escribe.
+// Todo lo que solo usa el tutor (perfil, plan, datos del hijo, notificaciones)
+// sí exige sesión iniciada y ser el dueño del documento.
+//
+// Siguiente paso recomendado: autenticación anónima en el dispositivo del niño
+// y autorizar su UID al vincular, para exigir `request.auth` en todas las reglas.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function estaAutenticado() {
+      return request.auth != null;
+    }
+
+    function esDueno(uid) {
+      return estaAutenticado() && request.auth.uid == uid;
+    }
+
+    // ── Perfil del tutor: nombre, idioma e isPremium ────────────────────────
+    // El dispositivo del niño lee este documento (idioma y plan del tutor).
+    // PENDIENTE: `isPremium` lo escribe la propia app (pago simulado). Con un
+    // cobro real debe escribirlo solo el backend y bloquearse aquí.
+    match /users/{uid} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update: if esDueno(uid);
+      allow delete: if false;
+
+      // El niño crea avisos ("actividad completada"); solo el tutor los lee.
+      match /notifications/{notificationId} {
+        allow read, update, delete: if esDueno(uid);
+        allow create: if request.resource.data.keys().hasOnly(['title', 'description', 'type', 'timestamp'])
+                      && request.resource.data.title is string
+                      && request.resource.data.title.size() <= 120
+                      && request.resource.data.description is string
+                      && request.resource.data.description.size() <= 500
+                      && request.resource.data.type in ['INFO', 'SUCCESS', 'WARNING', 'ALERT']
+                      && request.resource.data.timestamp is timestamp;
+      }
+    }
+
+    // ── Plan, perfil del hijo y configuración: solo el tutor ────────────────
+    match /usuarios/{uid} {
+      allow read, write: if esDueno(uid);
+
+      match /{document=**} {
+        allow read, write: if esDueno(uid);
+      }
+    }
+
+    // ── Rutinas del tutor ───────────────────────────────────────────────────
+    // El niño las lee y marca tareas como completadas sin sesión iniciada.
+    function rutinaValida() {
+      return (!('tasks' in request.resource.data)
+                || (request.resource.data.tasks is list && request.resource.data.tasks.size() <= 50))
+          && (!('mensajesRefuerzo' in request.resource.data)
+                || (request.resource.data.mensajesRefuerzo is list && request.resource.data.mensajesRefuerzo.size() <= 20));
+    }
+
+    match /routines/{padreId} {
+      allow read, write: if esDueno(padreId);
+
+      match /turns/{turno} {
+        allow get: if true;
+        allow list: if esDueno(padreId);
+        allow create, update: if turno in ['MAÑANA', 'TARDE', 'NOCHE'] && rutinaValida();
+        allow delete: if esDueno(padreId);
+
+        match /days/{dia} {
+          allow get: if true;
+          allow list: if esDueno(padreId);
+          allow create, update: if dia in ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO', 'DOMINGO']
+                                && rutinaValida();
+          allow delete: if esDueno(padreId);
+        }
+      }
+    }
+
+    // ── Dispositivos de los niños (ubicación, kiosco, tutor asociado) ───────
+    // El ID del documento es el ANDROID_ID del dispositivo.
+    function padreIdDe(datos) {
+      return datos.get('padreId', '');
+    }
+
+    match /dispositivos_niños/{deviceId} {
+      allow get: if true;
+      // El tutor solo puede listar sus propios dispositivos.
+      allow list: if estaAutenticado() && resource.data.padreId == request.auth.uid;
+      allow create: if true;
+      // Una vez vinculado, el tutor asociado no puede cambiarse: hay que
+      // desvincular (borrar el documento) y volver a vincular.
+      allow update: if padreIdDe(resource.data) == ''
+                    || padreIdDe(request.resource.data) == padreIdDe(resource.data);
+      allow delete: if estaAutenticado() && resource.data.padreId == request.auth.uid;
+    }
+
+    // ── Códigos de vinculación de 6 dígitos ─────────────────────────────────
+    function codigoExpirado(datos) {
+      return !('creadoEn' in datos)
+          || datos.creadoEn < request.time - duration.value(15, 'm');
+    }
+
+    function codigoNuevoValido() {
+      return request.resource.data.keys().hasOnly(['deviceId', 'estado', 'padreId', 'creadoEn'])
+          && request.resource.data.deviceId is string
+          && request.resource.data.estado == 'esperando'
+          && request.resource.data.padreId == ''
+          && request.resource.data.creadoEn == request.time;
+    }
+
+    match /codigos_vinculacion/{codigo} {
+      allow get: if true;
+      allow list: if false;
+
+      // El dispositivo del niño reserva un código libre...
+      allow create: if codigo.matches('^[0-9]{6}$') && codigoNuevoValido();
+
+      allow update: if
+        // ...o reutiliza uno que ya expiró,
+        (codigoExpirado(resource.data) && codigoNuevoValido())
+        // y el tutor (con sesión) canjea un código vigente a su propio nombre.
+        || (estaAutenticado()
+            && resource.data.estado == 'esperando'
+            && !codigoExpirado(resource.data)
+            && request.resource.data.estado == 'enlazado'
+            && request.resource.data.padreId == request.auth.uid
+            && request.resource.data.deviceId == resource.data.deviceId
+            && request.resource.data.creadoEn == resource.data.creadoEn);
+
+      // El niño borra el código tras vincularse; los expirados pueden limpiarse.
+      allow delete: if resource.data.estado == 'enlazado' || codigoExpirado(resource.data);
+    }
+  }
+}
