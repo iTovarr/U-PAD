@@ -73,12 +73,13 @@ import com.example.upad.premium.PaymentViewScreen
 import android.content.Context
 import android.content.Intent
 import com.example.upad.components.UPADBottomBar
+import com.example.upad.data.SessionRepository
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.navigation.Routes
 import com.example.upad.notifications.NotificationHelper
 import com.example.upad.dashboard.EmotionsTrackScreen
 import com.example.upad.dashboard.HelpTutorialScreen
 import com.example.upad.dashboard.TodayCalendarScreen
-import com.google.firebase.auth.FirebaseAuth
 
 private const val TAG = "MainActivity"
 
@@ -123,11 +124,10 @@ class MainActivity : AppCompatActivity() {
             // se conserva al navegar entre pantallas.
             val aiViewModel: AiViewModel = viewModel(factory = viewModelFactory)
 
-            // El listener se registra una sola vez y se retira al salir de la composición;
-            // antes se añadía uno nuevo en cada recreación de la Activity y nunca se quitaba.
-            DisposableEffect(routineViewModel) {
-                val authListener = FirebaseAuth.AuthStateListener { auth ->
-                    val user = auth.currentUser
+            // Reacciona a cada inicio o cierre de sesión. La recolección se cancela sola
+            // al salir de la composición, así que no queda ningún listener colgado.
+            LaunchedEffect(routineViewModel) {
+                container.sessionRepository.observeSession().collect { user ->
                     if (user != null) {
                         val sharedPrefs = getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE)
                         val rol = sharedPrefs.getString("rol_usuario", null)
@@ -139,10 +139,6 @@ class MainActivity : AppCompatActivity() {
                         notificationsListener?.remove()
                         parentPremiumListener?.remove()
                     }
-                }
-                FirebaseAuth.getInstance().addAuthStateListener(authListener)
-                onDispose {
-                    FirebaseAuth.getInstance().removeAuthStateListener(authListener)
                 }
             }
 
@@ -166,21 +162,23 @@ class MainActivity : AppCompatActivity() {
 
             val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = null)
 
-            UPadTheme(darkTheme = estadoTemaOscuroReal, isPremium = isPremiumUser ?: false) {
-                UPadNavigation(
-                    bloqueoActivo = ordenBloqueoPadreActiva,
-                    routineViewModel = routineViewModel,
-                    aiViewModel = aiViewModel,
-                    isPremiumListo = isPremiumUser != null,
-                    onCambiarEstadoSistema = ::gestionarRestriccionesSistema,
-                    onRouteChanged = { route ->
-                        currentRoute = route
-                        if (pendingLanguage.isNotEmpty() && esRutaSeguraParaIdioma(route)) {
-                            aplicarLocale(pendingLanguage)
-                            pendingLanguage = ""
+            CompositionLocalProvider(LocalAppContainer provides container) {
+                UPadTheme(darkTheme = estadoTemaOscuroReal, isPremium = isPremiumUser ?: false) {
+                    UPadNavigation(
+                        bloqueoActivo = ordenBloqueoPadreActiva,
+                        routineViewModel = routineViewModel,
+                        aiViewModel = aiViewModel,
+                        isPremiumListo = isPremiumUser != null,
+                        onCambiarEstadoSistema = ::gestionarRestriccionesSistema,
+                        onRouteChanged = { route ->
+                            currentRoute = route
+                            if (pendingLanguage.isNotEmpty() && esRutaSeguraParaIdioma(route)) {
+                                aplicarLocale(pendingLanguage)
+                                pendingLanguage = ""
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }
@@ -321,10 +319,9 @@ class MainActivity : AppCompatActivity() {
 }
 
 // ── DESTINO INICIAL ──────────────────────────────────────────────────────────
-private fun obtenerDestinoInicial(context: android.content.Context): String {
-    val auth = FirebaseAuth.getInstance()
+private fun obtenerDestinoInicial(context: android.content.Context, session: SessionRepository): String {
     val sharedPreferences = context.getSharedPreferences("UPadPrefs", android.content.Context.MODE_PRIVATE)
-    val usuarioLogueado = auth.currentUser != null
+    val usuarioLogueado = session.currentUser != null
     val rolGuardado = sharedPreferences.getString("rol_usuario", null)
     return if (usuarioLogueado && !rolGuardado.isNullOrEmpty()) {
         if (rolGuardado == "padre" || rolGuardado == "padre_directo") Routes.PARENT_DASHBOARD else Routes.CHILD_START
@@ -345,6 +342,7 @@ fun UPadNavigation(
     onRouteChanged: (String) -> Unit
 ) {
     val navController = rememberNavController()
+    val session = LocalAppContainer.current.sessionRepository
     val isDarkMode by routineViewModel.isDarkMode.collectAsState()
 
     var padreIdDelHijo by remember { mutableStateOf("") }
@@ -392,7 +390,7 @@ fun UPadNavigation(
                     }
                     if (isPremiumListo) {
                         LaunchedEffect(Unit) {
-                            val destinoReal = obtenerDestinoInicial(contextoNav)
+                            val destinoReal = obtenerDestinoInicial(contextoNav, session)
                             navController.navigate(destinoReal) {
                                 popUpTo(Routes.SINCRONIZANDO) { inclusive = true }
                             }
@@ -516,7 +514,7 @@ fun UPadNavigation(
                     PaymentViewScreen(
                         routineViewModel = routineViewModel,
                         onPaymentConfirmed = {
-                            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                            val uid = session.currentUserId
                             routineViewModel.setSuscripcionManual(true, uid)
                             navController.navigate(Routes.PARENT_DASHBOARD) {
                                 popUpTo(Routes.PARENT_DASHBOARD) { inclusive = true }
@@ -528,7 +526,7 @@ fun UPadNavigation(
                 // ── DASHBOARD PADRE ──────────────────────────────────────────
                 composable(Routes.PARENT_DASHBOARD) {
                     LaunchedEffect(Unit) {
-                        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                        val uid = session.currentUserId
                         routineViewModel.cargarRutinasDesdeFirebase(uid)
                     }
                     RoutineDashboardScreen(
@@ -687,7 +685,7 @@ fun UPadNavigation(
                     }
 
                     LaunchedEffect(turnoNormalizado, diaNormalizado) {
-                        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                        val uid = session.currentUserId
                         routineViewModel.cargarRutinasPorDia(uid, diaNormalizado)
                     }
 
@@ -705,7 +703,7 @@ fun UPadNavigation(
                         onNavigateToPictogramSearch = { navController.navigate(Routes.pictogramSelection(turnoNormalizado, diaNormalizado)) },
                         onRemoveTaskClick = { index -> routineViewModel.removeTask(turnoNormalizado, index) },
                         onSendRoutine = {
-                            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                            val uid = session.currentUserId
                             routineViewModel.saveAll(uid, turnoNormalizado)
                             navController.navigate(Routes.PARENT_DASHBOARD)
                         },
@@ -740,7 +738,7 @@ fun UPadNavigation(
                         viewModel = routineViewModel,
                         onBackClick = { navController.popBackStack() },
                         onPictogramSelected = { description, url ->
-                            val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                            val uid = session.currentUserId
                             routineViewModel.addTaskConDia(turnoNormalizado, description, url, diaNormalizado, uid)
                             navController.popBackStack()
                         }
@@ -789,7 +787,7 @@ fun UPadNavigation(
                         activityName = activityName,
                         onFeedbackSelected = { emocion ->
                             val idPadre = padreIdDelHijo.ifEmpty {
-                                FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                                session.currentUserId
                             }
                             val horaActual = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
                             val turnoActual = when {
@@ -834,7 +832,7 @@ fun UPadNavigation(
 
                 composable(Routes.ACTIVITY_DETAILS) {
                     LaunchedEffect(Unit) {
-                        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                        val uid = session.currentUserId
                         routineViewModel.cargarRutinasDesdeFirebase(uid)
                     }
                     ActivityDetailsScreen(
