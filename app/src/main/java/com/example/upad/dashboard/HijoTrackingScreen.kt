@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import android.util.Log
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -43,6 +44,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
 import com.google.firebase.auth.FirebaseAuth
+
+private const val TAG = "HijoTrackingScreen"
 
 @Composable
 fun HijoTrackingScreen(
@@ -151,7 +154,7 @@ fun HijoTrackingScreen(
                     android.os.Looper.getMainLooper()
                 )
             } catch (e: SecurityException) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en onLocationResult", e)
             }
         }
     }
