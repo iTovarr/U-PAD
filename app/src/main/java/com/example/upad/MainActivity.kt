@@ -321,23 +321,21 @@ class MainActivity : AppCompatActivity() {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
-        with(androidx.core.app.NotificationManagerCompat.from(this)) {
-            try {
-                val hasPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    androidx.core.content.ContextCompat.checkSelfPermission(
-                        this@MainActivity,
-                        android.Manifest.permission.POST_NOTIFICATIONS
-                    ) == android.content.pm.PackageManager.PERMISSION_GRANTED
-                } else {
-                    true
-                }
+        // Desde Android 13 hace falta el permiso POST_NOTIFICATIONS concedido por el usuario.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            androidx.core.content.ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.POST_NOTIFICATIONS
+            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
 
-                if (hasPermission) {
-                    notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
-                }
-            } catch (e: SecurityException) {
-                Log.e(TAG, "Error en mostrarNotificacionLocal", e)
-            }
+        try {
+            androidx.core.app.NotificationManagerCompat.from(this)
+                .notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Error en mostrarNotificacionLocal", e)
         }
     }
 
