@@ -22,10 +22,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,8 +36,9 @@ fun ExperienceSetupScreen(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val prefs = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
-    val firestore = remember { FirebaseFirestore.getInstance() }
-    val auth = remember { FirebaseAuth.getInstance() }
+    val container = LocalAppContainer.current
+    val session = container.sessionRepository
+    val parentProfileRepository = container.parentProfileRepository
 
     val pantallaPequeña = configuration.screenHeightDp < 650
 
@@ -275,16 +275,14 @@ fun ExperienceSetupScreen(
                                 apply()
                             }
 
-                            val uid = auth.currentUser?.uid
+                            val uid = session.currentUser?.uid
                             if (uid != null) {
-                                val configuracionExperiencia = mapOf(
-                                    "temaSeleccionado" to selectedTheme,
-                                    "volumenAudio" to audioVolume.toDouble(),
-                                    "vozHabilitada" to voiceEnabled
+                                parentProfileRepository.saveExperienceSettings(
+                                    uid = uid,
+                                    tema = selectedTheme,
+                                    volumenAudio = audioVolume.toDouble(),
+                                    vozHabilitada = voiceEnabled
                                 )
-                                firestore.collection("usuarios").document(uid)
-                                    .collection("configuracion").document("experiencia")
-                                    .set(configuracionExperiencia, com.google.firebase.firestore.SetOptions.merge())
                             }
 
                             onNextClick()
