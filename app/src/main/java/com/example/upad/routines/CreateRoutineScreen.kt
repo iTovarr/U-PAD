@@ -26,10 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.viewmodel.TaskItem
 import com.example.upad.viewmodel.AiViewModel
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -83,8 +83,9 @@ fun CreateRoutineScreen(
         if (isDarkMode) Color(0xFF1E1E1E) else Color.White
     }
 
+    val session = LocalAppContainer.current.sessionRepository
     val currentUserId = remember {
-        FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        session.currentUserId
     }
 
     var routineName by remember(routineTurn) { mutableStateOf("Rutina de la $routineTurn") }
