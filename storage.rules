@@ -1,0 +1,36 @@
+rules_version = '2';
+
+// Reglas de seguridad de Firebase Storage para U-Pad.
+//
+// Solo el tutor dueño de la carpeta puede subir o leer archivos mediante el SDK.
+// La app muestra las imágenes con su URL de descarga (lleva un token propio),
+// por lo que el dispositivo del niño puede verlas sin necesidad de sesión.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function esDueno(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Solo imágenes de hasta 5 MB.
+    function esImagenValida() {
+      return request.resource.size < 5 * 1024 * 1024
+          && request.resource.contentType.matches('image/.*');
+    }
+
+    // Pictogramas personalizados subidos por el tutor.
+    match /pictograms/{uid}/{archivo} {
+      allow read, delete: if esDueno(uid);
+      allow create, update: if esDueno(uid) && esImagenValida();
+    }
+
+    // Foto de perfil del hijo.
+    match /usuarios/{uid}/{archivo} {
+      allow read, delete: if esDueno(uid);
+      allow create, update: if esDueno(uid) && esImagenValida();
+    }
+
+    // Cualquier otra ruta queda denegada por defecto.
+  }
+}
