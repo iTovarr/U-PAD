@@ -80,6 +80,21 @@ class ParentProfileRepository(
         ).await()
     }
 
+    /**
+     * Deja un aviso para el tutor. Lo usa el dispositivo del niño y no espera al
+     * servidor: Firestore encola la escritura aunque en ese momento no haya red.
+     */
+    fun addNotification(padreId: String, title: String, description: String, type: String) {
+        firestore.collection("users").document(padreId).collection("notifications").add(
+            mapOf(
+                "title" to title,
+                "description" to description,
+                "type" to type,
+                "timestamp" to Timestamp.now()
+            )
+        )
+    }
+
     /** Emite el estado premium del tutor cada vez que cambia su documento en `users`. */
     fun observePremium(padreId: String): Flow<Boolean> = callbackFlow {
         val listener = firestore.collection("users").document(padreId)

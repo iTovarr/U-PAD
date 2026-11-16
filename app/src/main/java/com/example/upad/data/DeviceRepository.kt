@@ -117,6 +117,10 @@ class DeviceRepository(private val firestore: FirebaseFirestore = FirebaseFirest
         return PairingResult.VINCULADO
     }
 
+    /** UID del tutor al que está vinculado el dispositivo, o cadena vacía si no lo está. */
+    suspend fun getParentId(deviceId: String): String =
+        dispositivos.document(deviceId).get().await().getString("padreId") ?: ""
+
     /** Desvincula un dispositivo borrando su documento. */
     suspend fun deleteDevice(deviceId: String) {
         dispositivos.document(deviceId).delete().await()
