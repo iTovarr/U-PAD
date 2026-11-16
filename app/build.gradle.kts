@@ -101,10 +101,6 @@ dependencies {
     // Coil para mostrar las imágenes de ARASAAC
     implementation("io.coil-kt:coil-compose:2.4.0")
 
-    // Librerias para firebase
-    implementation(libs.firebase.auth)
-    implementation(libs.play.services.auth)
-
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services)
     implementation(libs.googleid)
