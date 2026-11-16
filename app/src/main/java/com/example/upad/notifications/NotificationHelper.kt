@@ -37,8 +37,13 @@ class NotificationHelper(context: Context) {
         manager.createNotificationChannel(channel)
     }
 
-    /** Muestra una notificación que abre la app al tocarla. No hace nada si falta el permiso. */
-    fun mostrar(title: String, description: String) {
+    /**
+     * Muestra una notificación que abre la app al tocarla. No hace nada si falta el permiso.
+     *
+     * [tag] identifica el aviso (su ID en Firestore). Si el mismo aviso llega también
+     * como notificación push, Android lo reemplaza en lugar de mostrarlo dos veces.
+     */
+    fun mostrar(title: String, description: String, tag: String? = null) {
         val intent = Intent(appContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -66,14 +71,20 @@ class NotificationHelper(context: Context) {
         }
 
         try {
-            NotificationManagerCompat.from(appContext)
-                .notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
+            val manager = NotificationManagerCompat.from(appContext)
+            if (tag != null) {
+                // FCM publica sus notificaciones con etiqueta usando el ID 0.
+                manager.notify(tag, 0, builder.build())
+            } else {
+                manager.notify((System.currentTimeMillis() % 100000).toInt(), builder.build())
+            }
         } catch (e: SecurityException) {
             Log.e(TAG, "No se pudo mostrar la notificación", e)
         }
     }
 
-    private companion object {
+    companion object {
+        /** También lo usan las notificaciones push (ver AndroidManifest y la función notifyParent). */
         const val CHANNEL_ID = "upad_notifications_channel"
     }
 }

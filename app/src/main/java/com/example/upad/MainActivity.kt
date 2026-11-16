@@ -136,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                         val rol = sharedPrefs.getString("rol_usuario", null)
                         if (rol == "padre" || rol == "padre_directo") {
                             iniciarEscuchaNotificacionesPadre(user.uid)
+                            registrarTokenPush(user.uid)
                             iniciarEscuchaPremiumPadre(user.uid, settingsViewModel)
                         }
                     } else {
@@ -228,9 +229,22 @@ class MainActivity : AppCompatActivity() {
                     // Solo se notifican los avisos creados después de abrir la app.
                     val creadoEn = aviso.timestamp?.time ?: 0L
                     if (creadoEn > listenerStartTime - 5000) {
-                        notificationHelper.mostrar(aviso.title, aviso.description)
+                        notificationHelper.mostrar(aviso.title, aviso.description, tag = aviso.id)
                     }
                 }
+        }
+    }
+
+    /** Asocia este dispositivo al tutor para que reciba los avisos aunque la app esté cerrada. */
+    private fun registrarTokenPush(userId: String) {
+        lifecycleScope.launch {
+            try {
+                container.pushTokenManager.registrar(userId)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(TAG, "No se pudo registrar el token push", e)
+            }
         }
     }
 
