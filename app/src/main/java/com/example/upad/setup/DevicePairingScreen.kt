@@ -24,8 +24,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.utils.PairingCode
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,8 +44,9 @@ fun DevicePairingScreen(
     val childName = remember { prefs.getString("CHILD_NAME", "tu pequeño") ?: "tu pequeño" }
  
     // Extraemos el UID real del Padre logueado en Firebase Auth
+    val session = LocalAppContainer.current.sessionRepository
     val currentParentId = remember {
-        FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        session.currentUserId
     }
  
     // --- ESTADOS LÓGICOS DE CONEXIÓN ---
