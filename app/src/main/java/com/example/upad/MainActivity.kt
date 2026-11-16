@@ -36,8 +36,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 import com.example.upad.dashboard.HijoTrackingScreen
 import com.example.upad.auth.ForgotPasswordScreen
 import com.example.upad.auth.LoginScreen
@@ -89,10 +91,9 @@ class MainActivity : AppCompatActivity() {
     private var pendingLanguage = ""
 
     private var ordenBloqueoPadreActiva by mutableStateOf(false)
-    private val firestore = FirebaseFirestore.getInstance()
-    private var kioscoListener: ListenerRegistration? = null
-    private var notificationsListener: ListenerRegistration? = null
-    private var parentPremiumListener: ListenerRegistration? = null
+    private val container by lazy { (application as UPadApplication).container }
+    private var notificationsJob: Job? = null
+    private var parentPremiumJob: Job? = null
     private val listenerStartTime = System.currentTimeMillis()
     private val notificationHelper by lazy { NotificationHelper(this) }
 
@@ -105,19 +106,14 @@ class MainActivity : AppCompatActivity() {
 
         val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
-        kioscoListener = firestore.collection("dispositivos_niños").document(deviceId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
-                if (snapshot != null && snapshot.exists()) {
-                    val kioscoActivo = snapshot.getBoolean("kioscoActivo") ?: false
-                    ordenBloqueoPadreActiva = kioscoActivo
-                } else {
-                    ordenBloqueoPadreActiva = false
-                }
-            }
+        // Orden de bloqueo remoto del tutor. lifecycleScope cancela la escucha al destruirse la Activity.
+        lifecycleScope.launch {
+            container.deviceRepository.observeKioskActive(deviceId)
+                .catch { error -> Log.e(TAG, "Error al escuchar el bloqueo remoto", error) }
+                .collect { ordenBloqueoPadreActiva = it }
+        }
 
         setContent {
-            val container = (application as UPadApplication).container
             val viewModelFactory = remember { AppViewModelFactory(container) }
             val routineViewModel: RoutineViewModel = viewModel(factory = viewModelFactory)
             // Con ámbito de Activity, igual que routineViewModel: el estado de la IA
@@ -136,8 +132,8 @@ class MainActivity : AppCompatActivity() {
                             iniciarEscuchaPremiumPadre(user.uid, routineViewModel)
                         }
                     } else {
-                        notificationsListener?.remove()
-                        parentPremiumListener?.remove()
+                        notificationsJob?.cancel()
+                        parentPremiumJob?.cancel()
                     }
                 }
             }
@@ -270,52 +266,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun iniciarEscuchaNotificacionesPadre(userId: String) {
-        notificationsListener?.remove()
+        notificationsJob?.cancel()
         if (userId.isEmpty()) return
 
-        notificationsListener = firestore.collection("users")
-            .document(userId)
-            .collection("notifications")
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
-                if (snapshot != null) {
-                    for (dc in snapshot.documentChanges) {
-                        if (dc.type == com.google.firebase.firestore.DocumentChange.Type.ADDED) {
-                            val doc = dc.document
-                            val timestamp = doc.getTimestamp("timestamp")
-                            val tMillis = timestamp?.toDate()?.time ?: 0L
-                            if (tMillis > listenerStartTime - 5000) {
-                                val title = doc.getString("title") ?: "U-Pad Alerta"
-                                val description = doc.getString("description") ?: ""
-                                notificationHelper.mostrar(title, description)
-                            }
-                        }
+        notificationsJob = lifecycleScope.launch {
+            container.parentProfileRepository.observeAddedNotifications(userId)
+                .catch { error -> Log.e(TAG, "Error al escuchar los avisos del tutor", error) }
+                .collect { aviso ->
+                    // Solo se notifican los avisos creados después de abrir la app.
+                    val creadoEn = aviso.timestamp?.time ?: 0L
+                    if (creadoEn > listenerStartTime - 5000) {
+                        notificationHelper.mostrar(aviso.title, aviso.description)
                     }
                 }
-            }
+        }
     }
 
     private fun iniciarEscuchaPremiumPadre(userId: String, routineViewModel: RoutineViewModel) {
-        parentPremiumListener?.remove()
+        parentPremiumJob?.cancel()
         if (userId.isEmpty()) return
 
-        parentPremiumListener = firestore.collection("users")
-            .document(userId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) return@addSnapshotListener
-                if (snapshot != null && snapshot.exists()) {
-                    val isPremium = snapshot.getBoolean("isPremium") ?: false
-                    routineViewModel.setPremiumUser(isPremium)
-                }
-            }
+        parentPremiumJob = lifecycleScope.launch {
+            container.parentProfileRepository.observePremium(userId)
+                .catch { error -> Log.e(TAG, "Error al escuchar el plan del tutor", error) }
+                .collect { isPremium -> routineViewModel.setPremiumUser(isPremium) }
+        }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        kioscoListener?.remove()
-        notificationsListener?.remove()
-        parentPremiumListener?.remove()
-    }
 }
 
 // ── DESTINO INICIAL ──────────────────────────────────────────────────────────
