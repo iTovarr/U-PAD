@@ -30,6 +30,9 @@ service cloud.firestore {
     // El dispositivo del niño lee este documento (idioma y plan del tutor).
     // PENDIENTE: `isPremium` lo escribe la propia app (pago simulado). Con un
     // cobro real debe escribirlo solo el backend y bloquearse aquí.
+    // También guarda `fcmTokens`: los dispositivos del tutor que reciben los
+    // avisos push. PENDIENTE: al ser legible sin sesión, conviene moverlo a una
+    // subcolección privada cuando el dispositivo del niño inicie sesión.
     match /users/{uid} {
       allow get: if true;
       allow list: if false;

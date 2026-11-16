@@ -85,13 +85,13 @@ Para compilar y desplegar el proyecto con éxito, se requieren las siguientes AP
 
 ### Reglas de seguridad y proxy de IA (Firebase)
 
-El repositorio incluye las reglas de Firestore (`firestore.rules`) y Storage (`storage.rules`), y la Cloud Function `aiChat` (`functions/`) que reenvía las peticiones de IA a Groq sin exponer la clave. Se despliegan con [Firebase CLI](https://firebase.google.com/docs/cli):
+El repositorio incluye las reglas de Firestore (`firestore.rules`) y Storage (`storage.rules`) y dos Cloud Functions (`functions/`): `aiChat`, que reenvía las peticiones de IA a Groq sin exponer la clave, y `notifyParent`, que envía una notificación push al tutor cuando el niño completa una actividad, aunque tenga la app cerrada. Se despliegan con [Firebase CLI](https://firebase.google.com/docs/cli):
 
 ```bash
 firebase use TU_PROYECTO
 firebase deploy --only firestore:rules,storage
 
-# Proxy de IA (requiere el plan Blaze)
+# Proxy de IA y notificaciones push (requieren el plan Blaze)
 cd functions && npm install && cd ..
 firebase functions:secrets:set GROQ_API_KEY
 firebase deploy --only functions
