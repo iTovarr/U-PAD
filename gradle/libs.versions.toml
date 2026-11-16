@@ -22,7 +22,7 @@ materialIconsExtended = "1.7.8"
 
 # Firebase y Google Play Services
 firebaseBom = "34.19.0"
-playServicesLocation = "21.3.0"
+playServicesLocation = "21.4.0"
 mapsCompose = "4.3.3"
 
 # Red e imágenes
