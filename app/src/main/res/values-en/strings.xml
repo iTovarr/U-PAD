@@ -241,4 +241,5 @@
     <string name="available_in_premium">Available in Premium Plan</string>
     <string name="error_invalid_email">Enter a valid email address.</string>
     <string name="error_password_too_short">The password must be at least %1$d characters long.</string>
+    <string name="offline_banner">No connection. Changes will be sent when it returns.</string>
 </resources>
