@@ -64,62 +64,17 @@ class FirebaseRepository {
             .await()
     }
 
-    // --- ESCUCHA EN TIEMPO REAL CORREGIDA ---
-    // Escucha EXACTAMENTE en la misma ruta donde se guarda
+    // Escucha en tiempo real EXACTAMENTE la misma ruta donde se guarda
     fun escucharRutinasDelPadre(padreId: String, turn: String, onDataChanged: (List<TaskItem>) -> Unit): ListenerRegistration {
         return firestore.collection("routines")
             .document(padreId)
             .collection("turns")
-            .document(turn.uppercase()) // Buscamos en "MAÑANA", "TARDE" o "NOCHE"
+            .document(turn.uppercase()) // "MAÑANA", "TARDE" o "NOCHE"
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     return@addSnapshotListener
                 }
-
-                val tareas = mutableListOf<TaskItem>()
-                if (snapshot != null && snapshot.exists()) {
-                    val tasksList = snapshot.get("tasks") as? List<*> ?: emptyList<Any>()
-                    for (taskItem in tasksList) {
-                        if (taskItem is Map<*, *>) {
-                            try {
-                                val actividad = taskItem["actividad"] as? String ?: ""
-                                val palabraClave = taskItem["palabraClave"] as? String ?: ""
-                                val imageUrl = taskItem["imageUrl"] as? String ?: ""
-                                
-                                val rawDias = taskItem["dias"] as? List<*> ?: emptyList<Any>()
-                                val dias = rawDias.mapNotNull { it?.toString() }
-                                
-                                val durationNum = taskItem["duration"] as? Number ?: 15
-
-                                val rawEstados = taskItem["estadosPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                                val estadosPorDia = rawEstados.entries.associate {
-                                    it.key.toString() to (it.value as? Boolean ?: false)
-                                }
-
-                                val rawEmociones = taskItem["emocionesPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                                val emocionesPorDia = rawEmociones.entries.associate {
-                                    it.key.toString() to (it.value as? String ?: "")
-                                }
-
-                                tareas.add(
-                                    TaskItem(
-                                        actividad = actividad,
-                                        palabraClave = palabraClave,
-                                        imageUrl = imageUrl,
-                                        dias = dias,
-                                        duration = durationNum.toInt(),
-                                        estadosPorDia = estadosPorDia,
-                                        emocionesPorDia = emocionesPorDia
-                                    )
-                                )
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }
-                }
-                // Le enviamos la lista real con "actividad" al ViewModel
-                onDataChanged(tareas)
+                onDataChanged(TaskItemMapper.fromFirestoreList(snapshot?.get("tasks")))
             }
     }
 
@@ -131,49 +86,7 @@ class FirebaseRepository {
             .get()
             .await()
 
-        val tareas = mutableListOf<TaskItem>()
-        if (document.exists()) {
-            val tasksList = document.get("tasks") as? List<*> ?: emptyList<Any>()
-            for (taskItem in tasksList) {
-                if (taskItem is Map<*, *>) {
-                    try {
-                        val actividad = taskItem["actividad"] as? String ?: ""
-                        val palabraClave = taskItem["palabraClave"] as? String ?: ""
-                        val imageUrl = taskItem["imageUrl"] as? String ?: ""
-                        
-                        val rawDias = taskItem["dias"] as? List<*> ?: emptyList<Any>()
-                        val dias = rawDias.mapNotNull { it?.toString() }
-                        
-                        val durationNum = taskItem["duration"] as? Number ?: 15
-
-                        val rawEstados = taskItem["estadosPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                        val estadosPorDia = rawEstados.entries.associate {
-                            it.key.toString() to (it.value as? Boolean ?: false)
-                        }
-
-                        val rawEmociones = taskItem["emocionesPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                        val emocionesPorDia = rawEmociones.entries.associate {
-                            it.key.toString() to (it.value as? String ?: "")
-                        }
-
-                        tareas.add(
-                            TaskItem(
-                                actividad = actividad,
-                                palabraClave = palabraClave,
-                                imageUrl = imageUrl,
-                                dias = dias,
-                                duration = durationNum.toInt(),
-                                estadosPorDia = estadosPorDia,
-                                emocionesPorDia = emocionesPorDia
-                            )
-                        )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        }
-        return tareas
+        return TaskItemMapper.fromFirestoreList(document.get("tasks"))
     }
 
     suspend fun saveRoutinePorDia(userId: String, turn: String, dia: String, tasks: List<TaskItem>) {
@@ -198,50 +111,7 @@ class FirebaseRepository {
                 if (error != null) {
                     return@addSnapshotListener
                 }
-
-                val tareas = mutableListOf<TaskItem>()
-                if (snapshot != null && snapshot.exists()) {
-                    val tasksList = snapshot.get("tasks") as? List<*> ?: emptyList<Any>()
-                    for (taskItem in tasksList) {
-                        if (taskItem is Map<*, *>) {
-                            try {
-                                val actividad = taskItem["actividad"] as? String ?: ""
-                                val palabraClave = taskItem["palabraClave"] as? String ?: ""
-                                val imageUrl = taskItem["imageUrl"] as? String ?: ""
-                                
-                                val rawDias = taskItem["dias"] as? List<*> ?: emptyList<Any>()
-                                val dias = rawDias.mapNotNull { it?.toString() }
-                                
-                                val durationNum = taskItem["duration"] as? Number ?: 15
-
-                                val rawEstados = taskItem["estadosPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                                val estadosPorDia = rawEstados.entries.associate {
-                                    it.key.toString() to (it.value as? Boolean ?: false)
-                                }
-
-                                val rawEmociones = taskItem["emocionesPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                                val emocionesPorDia = rawEmociones.entries.associate {
-                                    it.key.toString() to (it.value as? String ?: "")
-                                }
-
-                                tareas.add(
-                                    TaskItem(
-                                        actividad = actividad,
-                                        palabraClave = palabraClave,
-                                        imageUrl = imageUrl,
-                                        dias = dias,
-                                        duration = durationNum.toInt(),
-                                        estadosPorDia = estadosPorDia,
-                                        emocionesPorDia = emocionesPorDia
-                                    )
-                                )
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }
-                }
-                onDataChanged(tareas)
+                onDataChanged(TaskItemMapper.fromFirestoreList(snapshot?.get("tasks")))
             }
     }
 
@@ -255,49 +125,7 @@ class FirebaseRepository {
             .get()
             .await()
 
-        val tareas = mutableListOf<TaskItem>()
-        if (document.exists()) {
-            val tasksList = document.get("tasks") as? List<*> ?: emptyList<Any>()
-            for (taskItem in tasksList) {
-                if (taskItem is Map<*, *>) {
-                    try {
-                        val actividad = taskItem["actividad"] as? String ?: ""
-                        val palabraClave = taskItem["palabraClave"] as? String ?: ""
-                        val imageUrl = taskItem["imageUrl"] as? String ?: ""
-                        
-                        val rawDias = taskItem["dias"] as? List<*> ?: emptyList<Any>()
-                        val dias = rawDias.mapNotNull { it?.toString() }
-                        
-                        val durationNum = taskItem["duration"] as? Number ?: 15
-
-                        val rawEstados = taskItem["estadosPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                        val estadosPorDia = rawEstados.entries.associate {
-                            it.key.toString() to (it.value as? Boolean ?: false)
-                        }
-
-                        val rawEmociones = taskItem["emocionesPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                        val emocionesPorDia = rawEmociones.entries.associate {
-                            it.key.toString() to (it.value as? String ?: "")
-                        }
-
-                        tareas.add(
-                            TaskItem(
-                                actividad = actividad,
-                                palabraClave = palabraClave,
-                                imageUrl = imageUrl,
-                                dias = dias,
-                                duration = durationNum.toInt(),
-                                estadosPorDia = estadosPorDia,
-                                emocionesPorDia = emocionesPorDia
-                            )
-                        )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-        }
-        return tareas
+        return TaskItemMapper.fromFirestoreList(document.get("tasks"))
     }
 
     fun listenToChildDevice(deviceId: String, onSnapshot: (com.google.firebase.firestore.DocumentSnapshot?, com.google.firebase.firestore.FirebaseFirestoreException?) -> Unit): ListenerRegistration {
