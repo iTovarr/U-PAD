@@ -8,10 +8,10 @@ plugins {
 
 android {
     namespace = "com.example.upad"
+    // Compose 1.12 exige compilar contra el SDK 37. targetSdk sigue en 36, así que
+    // el comportamiento de la app en los dispositivos no cambia.
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(37)
     }
 
     val localProperties = Properties()
