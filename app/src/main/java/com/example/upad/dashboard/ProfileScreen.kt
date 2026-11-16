@@ -36,13 +36,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 private const val TAG = "ProfileScreen"
 
@@ -56,8 +56,8 @@ fun ProfileScreen(
 ) {
     val context = LocalContext.current
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
-    val firebaseAuth = remember { FirebaseAuth.getInstance() }
-    val currentUser = firebaseAuth.currentUser
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = session.currentUser
 
     // 🌗 ESTADOS GLOBALES DE DISEÑO
     val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)
@@ -302,7 +302,7 @@ fun ProfileScreen(
                         colorTexto = Color(0xFFC62828),
                         colorTextoSec = Color(0xFFEF5350),
                         onClick = {
-                            firebaseAuth.signOut()
+                            session.signOut()
                             onLogoutSuccess()
                         }
                     )
