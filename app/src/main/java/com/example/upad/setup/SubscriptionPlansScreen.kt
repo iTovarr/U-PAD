@@ -18,10 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun SubscriptionPlansScreen(
@@ -34,20 +33,15 @@ fun SubscriptionPlansScreen(
     val colorAmarilloTEA = Color(0xFFFFD54F)
     val colorFondoBase = Color(0xFFF0F4F8)
 
-    val auth = remember { FirebaseAuth.getInstance() }
-    val firestore = remember { FirebaseFirestore.getInstance() }
+    val container = LocalAppContainer.current
+    val session = container.sessionRepository
+    val parentProfileRepository = container.parentProfileRepository
     var selectedPlan by remember { mutableStateOf("premium") }
 
     val guardarPlanBasicoEnFirebase = {
-        val uid = auth.currentUser?.uid
+        val uid = session.currentUser?.uid
         if (uid != null) {
-            val datosPlan = hashMapOf(
-                "planSuscripcion" to "basico",
-                "estadoSuscripcion" to "Gratuito",
-                "fechaSeleccionPlan" to com.google.firebase.Timestamp.now()
-            )
-            firestore.collection("usuarios").document(uid)
-                .set(datosPlan, com.google.firebase.firestore.SetOptions.merge())
+            parentProfileRepository.saveSubscriptionPlan(uid, plan = "basico", estado = "Gratuito")
         }
     }
 
