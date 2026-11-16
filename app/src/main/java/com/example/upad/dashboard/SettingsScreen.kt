@@ -25,11 +25,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SettingsScreen(
@@ -39,7 +39,8 @@ fun SettingsScreen(
     onNavigateToProfile: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = remember { session.currentUser }
 
     // ✅ FIX 1: Cargar imageUri igual que en ProfileScreen — reactivo y con LaunchedEffect
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
@@ -280,7 +281,7 @@ fun SettingsScreen(
                                 text = { Text(text = nombre, color = colorTextoPrincipal) },
                                 onClick = {
                                     expandedLanguage = false
-                                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+                                    val userId = session.currentUser?.uid
                                     routineViewModel.changeLanguage(userId, codigo)
                                 }
                             )
