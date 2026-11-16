@@ -31,8 +31,9 @@ import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
-import com.example.upad.utils.PairingCode
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.upad.data.PairingResult
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 data class DispositivoVinculado(val id: String, val modelo: String = "Dispositivo del Niño")
 
@@ -96,29 +97,23 @@ fun ConnectionScreen(
     var mensajeError by remember { mutableStateOf("") }
 
     val listaDispositivos = remember { mutableStateListOf<DispositivoVinculado>() }
-    val firestore = remember { FirebaseFirestore.getInstance() }
+    val deviceRepository = LocalAppContainer.current.deviceRepository
+    val scope = rememberCoroutineScope()
 
     // --- ESCUCHAR MULTIDISPOSITIVOS EN TIEMPO REAL ---
-    DisposableEffect(idPadre) {
-        val listener = firestore.collection("dispositivos_niños")
-            .whereEqualTo("padreId", idPadre)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    cargandoVerificacion = false
-                    return@addSnapshotListener
-                }
+    LaunchedEffect(idPadre) {
+        try {
+            deviceRepository.observeDevicesOf(idPadre).collect { dispositivos ->
                 listaDispositivos.clear()
-                if (snapshot != null) {
-                    for (dispositivo in snapshot.documents) {
-                        val model = dispositivo.getString("modelo") ?: "Dispositivo del Niño"
-                        listaDispositivos.add(DispositivoVinculado(id = dispositivo.id, modelo = model))
-                    }
-                }
+                listaDispositivos.addAll(
+                    dispositivos.map { DispositivoVinculado(id = it.id, modelo = it.modelo ?: "Dispositivo del Niño") }
+                )
                 cargandoVerificacion = false
             }
-
-        onDispose {
-            listener.remove()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            cargandoVerificacion = false
         }
     }
 
@@ -257,35 +252,22 @@ fun ConnectionScreen(
                                         onClick = {
                                             if (codigoIngresado.length == 6) {
                                                 mensajeError = ""
-                                                firestore.collection("codigos_vinculacion").document(codigoIngresado)
-                                                    .get()
-                                                    .addOnSuccessListener { snapshot ->
-                                                        val codigoCanjeable = snapshot.exists() && PairingCode.esCanjeable(
-                                                            estado = snapshot.getString("estado"),
-                                                            creadoEnMillis = snapshot.getTimestamp("creadoEn")?.toDate()?.time,
-                                                            ahoraMillis = System.currentTimeMillis()
-                                                        )
-                                                        if (codigoCanjeable) {
-                                                            val actualizaciones = mapOf(
-                                                                "estado" to PairingCode.ESTADO_ENLAZADO,
-                                                                "padreId" to idPadre
-                                                            )
-                                                            firestore.collection("codigos_vinculacion").document(codigoIngresado)
-                                                                .update(actualizaciones)
-                                                                .addOnSuccessListener {
-                                                                    codigoIngresado = ""
-                                                                    onLinkSuccess()
-                                                                }
-                                                                .addOnFailureListener {
-                                                                    mensajeError = msgErrorRed
-                                                                }
-                                                        } else {
-                                                            mensajeError = msgCodigoInvalido
+                                                val codigo = codigoIngresado
+                                                scope.launch {
+                                                    try {
+                                                        when (deviceRepository.redeemPairingCode(codigo, idPadre)) {
+                                                            PairingResult.VINCULADO -> {
+                                                                codigoIngresado = ""
+                                                                onLinkSuccess()
+                                                            }
+                                                            PairingResult.CODIGO_INVALIDO -> mensajeError = msgCodigoInvalido
                                                         }
-                                                    }
-                                                    .addOnFailureListener {
+                                                    } catch (e: CancellationException) {
+                                                        throw e
+                                                    } catch (e: Exception) {
                                                         mensajeError = msgErrorRed
                                                     }
+                                                }
                                             } else {
                                                 mensajeError = msgIngresa6Numeros
                                             }
@@ -394,7 +376,15 @@ fun ConnectionScreen(
 
                                         IconButton(
                                             onClick = {
-                                                firestore.collection("dispositivos_niños").document(dispositivo.id).delete()
+                                                scope.launch {
+                                                    try {
+                                                        deviceRepository.deleteDevice(dispositivo.id)
+                                                    } catch (e: CancellationException) {
+                                                        throw e
+                                                    } catch (e: Exception) {
+                                                        mensajeError = msgErrorRed
+                                                    }
+                                                }
                                             }
                                         ) {
                                             Icon(
