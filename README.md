@@ -101,6 +101,12 @@ firebase deploy --only functions
 
 ---
 
+### Limitaciones conocidas
+
+* **Modo kiosco**: el bloqueo del dispositivo del niño usa la fijación de pantalla estándar de Android (`startLockTask`). Sin registrar la app como *Device Owner* —lo que exige aprovisionar el dispositivo, por ejemplo con `adb shell dpm set-device-owner`—, el sistema muestra un aviso al fijar la app y el niño puede salir con el gesto de desanclar. Es una ayuda para mantener el foco, no un bloqueo inviolable.
+* **Rastreo GPS**: el servicio de ubicación se inicia al abrir el modo niño y sigue activo en segundo plano, pero si el sistema lo detiene (ahorro de batería agresivo, reinicio del dispositivo) no se reanuda hasta que se vuelve a abrir la app.
+* **Notificaciones push y proxy de IA**: requieren desplegar las Cloud Functions (plan Blaze). Sin ellas, los avisos solo llegan con la app abierta y la IA usa la clave incluida en el build.
+
 ### Calidad: tests, lint y CI
 
 ```bash
