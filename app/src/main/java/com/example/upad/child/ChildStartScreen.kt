@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import android.util.Log
 import android.provider.Settings
 import android.Manifest
 import android.content.pm.PackageManager
@@ -45,6 +46,8 @@ import com.example.upad.R
 import com.example.upad.viewmodel.RoutineViewModel
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import java.util.Calendar
+
+private const val TAG = "ChildStartScreen"
 
 @Composable
 fun ChildStartScreen(
@@ -109,7 +112,7 @@ fun ChildStartScreen(
                     android.os.Looper.getMainLooper()
                 )
             } catch (e: SecurityException) {
-                e.printStackTrace()
+                Log.e(TAG, "Error en onLocationResult", e)
             }
         }
 
