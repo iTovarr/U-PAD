@@ -176,7 +176,7 @@ fun DeviceManagementScreen(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     val displayName = if (dispositivo.nombreDispositivo == "Tablet/Celular Niño") {
-                                        when (java.util.Locale.getDefault().language) {
+                                        when (androidx.compose.ui.platform.LocalConfiguration.current.locales[0].language) {
                                             "en" -> "Child's Tablet/Phone"
                                             "fr" -> "Tablette/Téléphone de l'enfant"
                                             "de" -> "Tablet/Handy des Kindes"
