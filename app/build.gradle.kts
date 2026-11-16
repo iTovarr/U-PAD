@@ -24,6 +24,9 @@ android {
     val groqApiKey = localProperties.getProperty("GROQ_API_KEY") ?: ""
     val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID") ?: ""
     val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
+    // URL de la Cloud Function `aiChat`. Si está definida, la app usa el proxy y
+    // GROQ_API_KEY puede (y debe) dejarse vacía para que no viaje en el APK.
+    val aiProxyUrl = localProperties.getProperty("AI_PROXY_URL") ?: ""
 
     defaultConfig {
         applicationId = "com.example.upad"
@@ -36,6 +39,7 @@ android {
 
         buildConfigField("String", "GROQ_API_KEY", "\"$groqApiKey\"")
         buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleClientId\"")
+        buildConfigField("String", "AI_PROXY_URL", "\"$aiProxyUrl\"")
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 

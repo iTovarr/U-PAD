@@ -1,7 +1,9 @@
 package com.example.upad.data
 
 import com.example.upad.BuildConfig
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -65,9 +67,9 @@ class AiRepository {
                 .toString()
 
             val request = Request.Builder()
-                .url(GROQ_URL)
+                .url(endpoint())
                 .post(body.toRequestBody(JSON_MEDIA_TYPE))
-                .addHeader("Authorization", "Bearer ${BuildConfig.GROQ_API_KEY}")
+                .addHeader("Authorization", "Bearer ${credencial()}")
                 .build()
 
             client.newCall(request).execute().use { response ->
@@ -88,6 +90,24 @@ class AiRepository {
                     .getString("content")
             }
         }
+
+    private fun usaProxy(): Boolean = BuildConfig.AI_PROXY_URL.isNotBlank()
+
+    /** Con proxy configurado se llama a la Cloud Function; si no, a Groq directamente. */
+    private fun endpoint(): String = if (usaProxy()) BuildConfig.AI_PROXY_URL else GROQ_URL
+
+    /**
+     * Con proxy se envía el ID token de Firebase del tutor (la clave de Groq vive
+     * solo en el servidor). Sin proxy se usa la clave incluida en el build, lo que
+     * solo es aceptable en desarrollo.
+     */
+    private suspend fun credencial(): String {
+        if (!usaProxy()) return BuildConfig.GROQ_API_KEY
+        val usuario = FirebaseAuth.getInstance().currentUser
+            ?: throw IOException("Inicia sesión para usar las sugerencias con IA")
+        return usuario.getIdToken(false).await().token
+            ?: throw IOException("No se pudo validar la sesión")
+    }
 
     companion object {
         private const val GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
