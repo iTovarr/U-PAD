@@ -25,9 +25,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.upad.R
-import com.example.upad.data.FirebaseRepository
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.utils.CredentialValidator
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 @Composable
@@ -44,9 +44,10 @@ fun RegisterScreen(
     val msgCamposVacios = stringResource(id = R.string.error_fill_all_fields)
     val msgEmailInvalido = stringResource(id = R.string.error_invalid_email)
     val msgPasswordCorta = stringResource(id = R.string.error_password_too_short, CredentialValidator.MIN_PASSWORD_LENGTH)
-    val auth = FirebaseAuth.getInstance()
+    val container = LocalAppContainer.current
+    val session = container.sessionRepository
     val scope = rememberCoroutineScope()
-    val repository = remember { FirebaseRepository() }
+    val repository = container.firebaseRepository
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
@@ -162,29 +163,28 @@ fun RegisterScreen(
                         isLoading = true
 
                         // La contraseña se envía tal cual: recortarla la haría distinta de la que escribió el usuario.
-                        auth.createUserWithEmailAndPassword(email.trim(), password)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    val userId = auth.currentUser?.uid
-
-                                    if (userId != null) {
-                                        scope.launch {
-                                            try {
-                                                repository.saveUserData(userId, name)
-                                                onRegisterComplete(email, password)
-                                            } catch (e: Exception) {
-                                                Log.e("UPAD_DEBUG", "ERROR AL GUARDAR EN DB: ${e.message}")
-                                                isLoading = false
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    isLoading = false
-                                    val errorMsg = task.exception?.message ?: "Error desconocido"
-                                    Log.e("UPAD_DEBUG", "ERROR DE AUTH: $errorMsg")
-                                    Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
-                                }
+                        scope.launch {
+                            val userId = try {
+                                session.register(email.trim(), password)
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                isLoading = false
+                                Log.e("UPAD_DEBUG", "ERROR DE AUTH: ${e.message}")
+                                Toast.makeText(context, e.message ?: "Error desconocido", Toast.LENGTH_LONG).show()
+                                return@launch
                             }
+
+                            try {
+                                repository.saveUserData(userId, name)
+                                onRegisterComplete(email, password)
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                Log.e("UPAD_DEBUG", "ERROR AL GUARDAR EN DB: ${e.message}")
+                                isLoading = false
+                            }
+                        }
                     }
                 },
                 modifier = Modifier
