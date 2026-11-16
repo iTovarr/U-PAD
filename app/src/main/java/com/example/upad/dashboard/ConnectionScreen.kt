@@ -30,6 +30,7 @@ import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.utils.PairingCode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -255,9 +256,14 @@ fun ConnectionScreen(
                                                 firestore.collection("codigos_vinculacion").document(codigoIngresado)
                                                     .get()
                                                     .addOnSuccessListener { snapshot ->
-                                                        if (snapshot.exists()) {
+                                                        val codigoCanjeable = snapshot.exists() && PairingCode.esCanjeable(
+                                                            estado = snapshot.getString("estado"),
+                                                            creadoEnMillis = snapshot.getTimestamp("creadoEn")?.toDate()?.time,
+                                                            ahoraMillis = System.currentTimeMillis()
+                                                        )
+                                                        if (codigoCanjeable) {
                                                             val actualizaciones = mapOf(
-                                                                "estado" to "enlazado",
+                                                                "estado" to PairingCode.ESTADO_ENLAZADO,
                                                                 "padreId" to idPadre
                                                             )
                                                             firestore.collection("codigos_vinculacion").document(codigoIngresado)

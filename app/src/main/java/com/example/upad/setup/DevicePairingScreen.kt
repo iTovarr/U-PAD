@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.utils.PairingCode
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -242,9 +243,14 @@ fun DevicePairingScreen(
                             firestore.collection("codigos_vinculacion").document(pairingCode)
                                 .get()
                                 .addOnSuccessListener { snapshot ->
-                                    if (snapshot.exists()) {
+                                    val codigoCanjeable = snapshot.exists() && PairingCode.esCanjeable(
+                                        estado = snapshot.getString("estado"),
+                                        creadoEnMillis = snapshot.getTimestamp("creadoEn")?.toDate()?.time,
+                                        ahoraMillis = System.currentTimeMillis()
+                                    )
+                                    if (codigoCanjeable) {
                                         val actualizaciones = mapOf(
-                                            "estado" to "enlazado",
+                                            "estado" to PairingCode.ESTADO_ENLAZADO,
                                             "padreId" to currentParentId
                                         )
 
