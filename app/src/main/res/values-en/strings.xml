@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">U Pad</string>
+    <string name="widget_progreso">IN PROGRESS</string>
+    <string name="widget_refrescar">Refresh</string>
+    <string name="widget_buscando">Looking for activity...</string>
+    <string name="widget_siguiente_actividad">Next activity in: -- min</string>
+    <string name="widget_registro_emocional">Emotional state log:</string>
+    <string name="emoji_tranquilo">😊</string>
+    <string name="emoji_ansioso">😐</string>
+    <string name="emoji_crisis">😡</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_subscription">Your Subscription</string>
+    <string name="plan_gold">UPAD Gold Plan ✨</string>
+    <string name="plan_basic">Basic Plan</string>
+    <string name="gold_desc">Unlimited full access &amp; AI enabled</string>
+    <string name="basic_desc">Basic routine functions</string>
+    <string name="active">ACTIVE</string>
+    <string name="settings_general">General Preferences</string>
+    <string name="settings_notifications">Routine Notifications</string>
+    <string name="settings_notifications_desc">Remind pending tasks</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_dark_mode_desc">Change interface to dark tones</string>
+    <string name="settings_app">Application</string>
+    <string name="settings_language">App Language</string>
+    <string name="change_basic_plan">Switch to Basic Plan</string>
+    <string name="change_premium_plan">Switch to Premium Plan</string>
+    <string name="locate_child">Locate my Child</string>
+    <string name="performance_analysis">Performance Analysis</string>
+    <string name="lock_device">Lock Device</string>
+    <string name="connect_child">Connect with Child (Code)</string>
+    <string name="my_profile">My Profile</string>
+    <string name="morning">MORNING</string>
+    <string name="afternoon">AFTERNOON</string>
+    <string name="evening">EVENING</string>
+    <string name="monday">MONDAY</string>
+    <string name="tuesday">TUESDAY</string>
+    <string name="wednesday">WEDNESDAY</string>
+    <string name="thursday">THURSDAY</string>
+    <string name="friday">FRIDAY</string>
+    <string name="saturday">SATURDAY</string>
+    <string name="sunday">SUNDAY</string>
+    <string name="today_program">TODAY\'S PROGRAM</string>
+    <string name="program_of">PROGRAM OF</string>
+    <string name="hello_parent">HELLO, %1$s!</string>
+    <string name="child_routines">Your child\'s routines</string>
+    <string name="open_menu">Open menu</string>
+    <string name="create_new_routine">Create new routine</string>
+    <string name="routine_manager">Routine Manager</string>
+    <string name="parent_tutor">PARENT/TUTOR</string>
+    <string name="monthly_view">MONTHLY VIEW</string>
+    <string name="activity_blocks">ACTIVITY BLOCKS</string>
+    <string name="tasks_completed">%1$d/%2$d tasks completed</string>
+    <string name="select_turn">Select Turn</string>
+    <string name="choose_time_block">Choose the time block to add or edit your routine for %1$s:</string>
+    <string name="cancel">Cancel</string>
+    <string name="child_pairing_instructions">Hello! Tell your parents to enter this code on their phone:</string>
+    <string name="my_activities_today">MY ACTIVITIES FOR TODAY! 🏆</string>
+    <string name="morning_activities">🌅 MORNING ACTIVITIES</string>
+    <string name="available_morning_only">Available in the morning only.</string>
+    <string name="afternoon_activities">☀️ AFTERNOON ACTIVITIES</string>
+    <string name="available_afternoon_only">Available from 1:00 PM to 6:00 PM.</string>
+    <string name="evening_activities">🌙 EVENING ACTIVITIES</string>
+    <string name="available_evening_only">Available starting at 6:00 PM.</string>
+    <string name="ready_to_start_activities">All ready to start your activities!</string>
+    <string name="view_my_tasks">VIEW MY TASKS 🚀</string>
+    <string name="no_activities_for_turn">No activities added for this turn.</string>
+    <string name="activity_duration_turn">⏱️ %1$s min | 📍 %2$s</string>
+    <string name="todays_progress">TODAY\'S PROGRESS</string>
+    <string name="total_tasks">Total tasks</string>
+    <string name="completed_tasks">Completed tasks</string>
+    <string name="pending_tasks">Pending tasks</string>
+
+    <!-- Bottom Bar & Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_analytics">Analytics</string>
+    <string name="nav_profile">Profile</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_emotions">Emotions</string>
+    <string name="nav_alerts">Alerts</string>
+
+    <!-- Create/Edit Routine Screen -->
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    <string name="day_sun">Sun</string>
+    <string name="today_label_parenthesis">(Today)</string>
+    <string name="save_action">SAVE</string>
+    <string name="premium_badge">PREMIUM</string>
+    <string name="basic_badge">Basic</string>
+    <string name="turn_label">SHIFT: %1$s</string>
+    <string name="edit_activities_title">Edit Activities</string>
+    <string name="routine_name_label">Routine Name</string>
+    <string name="add_activity_section">ADD ACTIVITY</string>
+    <string name="add_activity_placeholder">e.g. Study English, eat fruit...</string>
+    <string name="scheduled_days_label">Scheduled days:</string>
+    <string name="add_manually_btn">ADD MANUALLY ➕</string>
+    <string name="processing_ai">PROCESSING WITH AI...</string>
+    <string name="suggest_activity_ai">SUGGEST ACTIVITY WITH AI ✨</string>
+    <string name="view_weekly_schedule">VIEW WEEKLY SCHEDULE:</string>
+    <string name="activities_of_day_count">ACTIVITIES FOR %1$s (%2$d)</string>
+    <string name="no_activities_for_day">No activities for %1$s.</string>
+    <string name="ai_recommendations">AI Recommendations</string>
+    <string name="select_ai_activity_desc">Select the activity you want to add to your child\'s schedule:</string>
+    <string name="saving_routine_progress">Saving changes for shift\n%1$s...</string>
+    <string name="days_label_prefix">Days: %1$s</string>
+    <string name="days_all">Days: Every day</string>
+    <string name="back">Back</string>
+    <string name="delete">Delete</string>
+
+    <!-- Analytics / Performance Analysis Screen -->
+    <string name="weekly_report">Weekly Report</string>
+    <string name="effectiveness_today">Today\'s Effectiveness (%1$s)</string>
+    <string name="no_activity">No activity</string>
+    <string name="achieved_percentage">%1$d%% Achieved</string>
+    <string name="progress_desc">Progress distributed across your child\'s three daily shifts.</string>
+    <string name="weekly_turn_compliance">WEEKLY SHIFT COMPLIANCE</string>
+    <string name="behavioral_recommendations">BEHAVIORAL RECOMMENDATIONS</string>
+    <string name="upad_ai_mind_active">UPAD AI Mind Active</string>
+    <string name="ai_analysis_recommendation_desc">We detected that the \'Afternoon\' block on Thursdays decreases in effectiveness. We suggest moving the rest pictogram forward by 15 minutes to prevent sensory overload.</string>
+    <string name="unlock_ai_desc">Unlock the AI assistant to predict crises and optimize breaks.</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Profile Screen -->
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="name_label">Name</string>
+    <string name="email_label">Email Address</string>
+    <string name="logout">Log Out</string>
+    <string name="username_label">Username</string>
+    <string name="change_photo">Change photo</string>
+
+    <!-- Subscription Plans Screen -->
+    <string name="choose_a_plan">CHOOSE A PLAN!</string>
+    <string name="choose_a_plan_desc">Unlock incredible tools for your child\'s development.</string>
+    <string name="plan_basic_title">BASIC PLAN</string>
+    <string name="free_price">Free</string>
+    <string name="plan_premium_title">PREMIUM PLAN</string>
+    <string name="premium_price">$9.99 / month</string>
+    <string name="unlimited_pictograms">Unlimited pictograms</string>
+    <string name="choose_plan_btn">CHOOSE PLAN</string>
+    <string name="other_moment">Maybe later</string>
+
+    <!-- Change Plan Screen -->
+    <string name="plan_subscription_title">Subscription Plan</string>
+    <string name="most_recommended_plan">MOST RECOMMENDED PLAN</string>
+    <string name="per_month"> / month</string>
+    <string name="premium_desc">Unlimited smart companion for your child.</string>
+    <string name="benefit_1">Adaptive AI recommendations based on daily progress.</string>
+    <string name="benefit_2">Connection with Teacher/Tutor to assign classroom tasks.</string>
+    <string name="benefit_3">Synchronization with Google Calendar (appointments and alarms).</string>
+    <string name="benefit_4">Unlimited creation of routines and pictogram sequences.</string>
+    <string name="benefit_5">Advanced Hardware lock and distraction-free environment.</string>
+    <string name="benefit_6">Instant cloud synchronization (Parent - Child).</string>
+    <string name="renewal_desc">Automatic monthly renewal. Cancel at any time from the app settings without additional fees.</string>
+    <string name="secure_payment_methods">SECURE PAYMENT METHODS</string>
+    <string name="pay_with_credit_card">PAY WITH CREDIT CARD 💳</string>
+    <string name="pay_with_google">PAY WITH GOOGLE  🚀</string>
+
+    <!-- Device Connection Screen -->
+    <string name="devices_title">Devices</string>
+    <string name="device_management_title">Device Management</string>
+    <string name="device_management_desc">Link your child\'s tablet or cell phone to synchronize their visual routines in real time.</string>
+    <string name="connect_new_device">CONNECT NEW DEVICE</string>
+    <string name="child_code_label">Child\'s 6-digit code</string>
+    <string name="network_error_linking">Network error during link process.</string>
+    <string name="code_invalid_expired">The code does not exist or has expired.</string>
+    <string name="enter_6_numbers">Please enter the 6 numbers.</string>
+    <string name="link_device_btn">LINK DEVICE</string>
+    <string name="linked_devices_count">LINKED DEVICES (%1$d)</string>
+    <string name="no_devices_linked">No devices linked yet.</string>
+    <string name="unlink">Unlink</string>
+
+    <!-- Device Management Screen -->
+    <string name="remote_lock_control_title">Remote Lock Control</string>
+    <string name="no_linked_devices_for_lock">You don\'t have any linked devices.</string>
+    <string name="go_to_connection_menu_desc">Go to the Connection side menu to link the child\'s device with the 6-digit code.</string>
+    <string name="status_blocked_remote">Status: Remotely BLOCKED 🔒</string>
+    <string name="status_free">Status: FREE 🔓</string>
+    <string name="unlock_action">Unlock</string>
+    <string name="lock_action">Lock</string>
+
+    <!-- Parent confirmation dialog in ChildStartScreen -->
+    <string name="parent_confirmation_title">Parent Confirmation</string>
+    <string name="parent_confirmation_desc">Enter your parent/guardian email and password to unlink this device.</string>
+    <string name="parent_email_label">Parent\'s Email</string>
+    <string name="parent_password_label">Parent\'s Password</string>
+    <string name="unlink_action_btn">UNLINK</string>
+    <string name="cancel_action_btn">CANCEL</string>
+    <string name="error_unlink_failed">Error unlinking: %1$s</string>
+    <string name="error_email_mismatch">The email does not match the parent linked to this device.</string>
+    <string name="error_incorrect_credentials">Incorrect credentials</string>
+    <string name="error_fill_all_fields">Please, fill in all fields.</string>
+
+    <!-- RoutineCompletedScreen -->
+    <string name="routine_completed_title">YOU DID IT! 🎉</string>
+    <string name="no_pending_tasks">You have no pending tasks</string>
+    <string name="activity_completed_success">You completed the activity successfully</string>
+    <string name="today_status_label">TODAY\'S STATUS:</string>
+    <string name="next_activity_label">NEXT ACTIVITY:</string>
+    <string name="routine_completed_default_preview">Congratulations! You completed everything</string>
+    <string name="time_to_rest_or_play">It is time to rest or play! ⭐</string>
+    <string name="keep_it_up">Keep it up, you are doing great!</string>
+    <string name="understood_btn">GOT IT! ➔</string>
+
+    <!-- TaskExecutionScreen -->
+    <string name="loading_activity">Loading your activity...</string>
+    <string name="mission_accomplished">MISSION ACCOMPLISHED!</string>
+    <string name="focused_great_job">You did a great job focusing!</string>
+    <string name="active_focus">🎯 ACTIVE FOCUS</string>
+    <string name="time_completed">TIME COMPLETED! 🌟</string>
+    <string name="watch_clock_run">WATCH THE CLOCK RUN! ⏳</string>
+    <string name="finish_btn">FINISH! 🎉</string>
+    <string name="wait_clock">WAIT FOR THE CLOCK TO FINISH 🔒</string>
+
+    <!-- TaskFeedbackScreen -->
+    <string name="feedback_great_job">YOU DID GREAT! 🎉</string>
+    <string name="feedback_question">How do you feel after:</string>
+    <string name="feedback_happy">HAPPY</string>
+    <string name="feedback_neutral">NEUTRAL</string>
+    <string name="feedback_sad">SAD</string>
+
+    <!-- Widgets -->
+    <string name="widget_routine_completed_feedback">Routine finished. Felt: %1$s</string>
+    <string name="widget_feeling_happy">Happy 😊</string>
+    <string name="widget_feeling_neutral">Neutral 😐</string>
+    <string name="widget_feeling_sad">Sad 🙁</string>
+    <string name="widget_feeling_unregistered">Not registered</string>
+    <string name="widget_next_activity_minutes">Next activity in: %1$d min</string>
+    <string name="widget_free_time">Free</string>
+    <string name="legend_morning"> Mor</string>
+    <string name="legend_afternoon"> Aft</string>
+    <string name="legend_evening"> Eve</string>
+    <string name="axis_morning">M</string>
+    <string name="axis_afternoon">A</string>
+    <string name="axis_evening">E</string>
+    <string name="available_in_premium">Available in Premium Plan</string>
+</resources>

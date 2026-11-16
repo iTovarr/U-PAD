@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_session_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_widget_session"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:ignore="VisualLintBounds,VisualLintSystemNav,LayoutFidelity,TextContrastCheck">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tv_widget_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/widget_progreso"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#01579B" /> <ImageButton
+        android:id="@+id/btn_refresh_session"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:padding="12dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        android:src="@android:drawable/ic_popup_sync"
+        android:tint="#616161"
+        android:contentDescription="@string/widget_refrescar" /> </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_actividad_actual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/widget_buscando"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#1E1E1E"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tv_tiempo_restante"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/widget_siguiente_actividad"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="#424242"
+        android:layout_marginBottom="16dp" /> <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#EEEEEE"
+    android:importantForAccessibility="no"
+    android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:id="@+id/tv_registro_emocional_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/widget_registro_emocional"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#424242"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" /> <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:weightSum="3">
+    <TextView
+        android:id="@+id/btn_emoji_tranquilo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/emoji_tranquilo"
+        android:textSize="36sp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
+    <TextView
+        android:id="@+id/btn_emoji_ansioso"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/emoji_ansioso"
+        android:textSize="36sp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
+    <TextView
+        android:id="@+id/btn_emoji_crisis"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/emoji_crisis"
+        android:textSize="36sp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless" />
+</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">U Pad</string>
+    <string name="widget_progreso">В ПРОЦЕССЕ</string>
+    <string name="widget_refrescar">Обновить</string>
+    <string name="widget_buscando">Поиск активности...</string>
+    <string name="widget_siguiente_actividad">Следующая активность через: -- мин</string>
+    <string name="widget_registro_emocional">Журнал эмоционального состояния:</string>
+    <string name="emoji_tranquilo">😊</string>
+    <string name="emoji_ansioso">😐</string>
+    <string name="emoji_crisis">😡</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_subscription">Ваша подписка</string>
+    <string name="plan_gold">План UPAD Gold ✨</string>
+    <string name="plan_basic">Базовый план</string>
+    <string name="gold_desc">Полный доступ и ИИ включены</string>
+    <string name="basic_desc">Базовые функции рутины</string>
+    <string name="active">АКТИВНО</string>
+    <string name="settings_general">Общие настройки</string>
+    <string name="settings_notifications">Уведомления о рутинах</string>
+    <string name="settings_notifications_desc">Напоминать о задачах</string>
+    <string name="settings_dark_mode">Тёмный режим</string>
+    <string name="settings_dark_mode_desc">Сменить интерфейс на тёмный</string>
+    <string name="settings_app">Приложение</string>
+    <string name="settings_language">Язык приложения</string>
+    <string name="change_basic_plan">Перейти на базовый тариф</string>
+    <string name="change_premium_plan">Перейти на премиум тариф</string>
+    <string name="locate_child">Найти моего ребенка</string>
+    <string name="performance_analysis">Анализ успеваемости</string>
+    <string name="lock_device">Заблокировать устройство</string>
+    <string name="connect_child">Подключиться к ребенку (код)</string>
+    <string name="my_profile">Мой профиль</string>
+    <string name="morning">УТРО</string>
+    <string name="afternoon">ДЕНЬ</string>
+    <string name="evening">ВЕЧЕР</string>
+    <string name="monday">ПОНЕДЕЛЬНИК</string>
+    <string name="tuesday">ВТОРНИК</string>
+    <string name="wednesday">СРЕДА</string>
+    <string name="thursday">ЧЕТВЕРГ</string>
+    <string name="friday">ПЯТНИЦА</string>
+    <string name="saturday">СУББОТА</string>
+    <string name="sunday">ВОСКРЕСЕНЬЕ</string>
+    <string name="today_program">ПРОГРАММА НА СЕГОДНЯ</string>
+    <string name="program_of">ПРОГРАММА НА</string>
+    <string name="hello_parent">ПРИВЕТ, %1$s!</string>
+    <string name="child_routines">Расписание вашего ребенка</string>
+    <string name="open_menu">Открыть меню</string>
+    <string name="create_new_routine">Создать новую рутину</string>
+    <string name="routine_manager">Диспетчер расписания</string>
+    <string name="parent_tutor">РОДИТЕЛЬ/ОПЕКУН</string>
+    <string name="monthly_view">ОБЗОР ЗА МЕСЯЦ</string>
+    <string name="activity_blocks">БЛОКИ АКТИВНОСТИ</string>
+    <string name="tasks_completed">%1$d/%2$d задач выполнено</string>
+    <string name="select_turn">Выбрать смену</string>
+    <string name="choose_time_block">Выберите временной блок, чтобы добавить или изменить рутину на %1$s:</string>
+    <string name="cancel">Отмена</string>
+    <string name="child_pairing_instructions">Привет! Попроси родителей ввести этот код на своем телефоне:</string>
+    <string name="my_activities_today">МОИ АКТИВНОСТИ НА СЕГОДНЯ! 🏆</string>
+    <string name="morning_activities">🌅 УТРЕННИЕ АКТИВНОСТИ</string>
+    <string name="available_morning_only">Доступно только утром.</string>
+    <string name="afternoon_activities">☀️ ДНЕВНЫЕ АКТИВНОСТИ</string>
+    <string name="available_afternoon_only">Доступно с 13:00 до 18:00.</string>
+    <string name="evening_activities">🌙 ВЕЧЕРНИЕ АКТИВНОСТИ</string>
+    <string name="available_evening_only">Доступно после 18:00.</string>
+    <string name="ready_to_start_activities">Все готово для начала занятий!</string>
+    <string name="view_my_tasks">ПОСМОТРЕТЬ МОИ ЗАДАЧИ 🚀</string>
+    <string name="no_activities_for_turn">Нет добавленных активностей на эту смену.</string>
+    <string name="activity_duration_turn">⏱️ %1$s мин | 📍 %2$s</string>
+    <string name="todays_progress">СЕГОДНЯШНИЙ ПРОГРЕСС</string>
+    <string name="total_tasks">Всего задач</string>
+    <string name="completed_tasks">Выполненные задачи</string>
+    <string name="pending_tasks">Предстоящие задачи</string>
+
+    <!-- Bottom Bar & Navigation -->
+    <string name="nav_home">Главная</string>
+    <string name="nav_analytics">Анализ</string>
+    <string name="nav_profile">Профиль</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_calendar">Календарь</string>
+    <string name="nav_emotions">Эмоции</string>
+    <string name="nav_alerts">Оповещения</string>
+
+    <!-- Create/Edit Routine Screen -->
+    <string name="day_mon">Пн</string>
+    <string name="day_tue">Вт</string>
+    <string name="day_wed">Ср</string>
+    <string name="day_thu">Чт</string>
+    <string name="day_fri">Пт</string>
+    <string name="day_sat">Сб</string>
+    <string name="day_sun">Вс</string>
+    <string name="today_label_parenthesis">(Сегодня)</string>
+    <string name="save_action">СОХРАНИТЬ</string>
+    <string name="premium_badge">PREMIUM</string>
+    <string name="basic_badge">Базовый</string>
+    <string name="turn_label">СМЕНА: %1$s</string>
+    <string name="edit_activities_title">Редактировать активности</string>
+    <string name="routine_name_label">Название рутины</string>
+    <string name="add_activity_section">ДОБАВИТЬ АКТИВНОСТЬ</string>
+    <string name="add_activity_placeholder">Напр.: Учить английский, съесть фрукт...</string>
+    <string name="scheduled_days_label">Запланированные дни:</string>
+    <string name="add_manually_btn">ДОБАВИТЬ ВРУЧНУЮ ➕</string>
+    <string name="processing_ai">ОБРАБОТКА ИИ...</string>
+    <string name="suggest_activity_ai">ПРЕДЛОЖИТЬ АКТИВНОСТЬ ИИ ✨</string>
+    <string name="view_weekly_schedule">ПОСМОТРЕТЬ НЕДЕЛЬНЫЙ ПЛАН:</string>
+    <string name="activities_of_day_count">АКТИВНОСТИ НА %1$s (%2$d)</string>
+    <string name="no_activities_for_day">Нет активностей на %1$s.</string>
+    <string name="ai_recommendations">Рекомендации ИИ</string>
+    <string name="select_ai_activity_desc">Выберите активность, которую хотите добавить в расписание ребенка:</string>
+    <string name="saving_routine_progress">Сохранение изменений для смены\n%1$s...</string>
+    <string name="days_label_prefix">Дни: %1$s</string>
+    <string name="days_all">Дни: Каждый день</string>
+    <string name="back">Назад</string>
+    <string name="delete">Удалить</string>
+
+    <!-- Analytics / Performance Analysis Screen -->
+    <string name="weekly_report">Еженедельный отчет</string>
+    <string name="effectiveness_today">Эффективность сегодня (%1$s)</string>
+    <string name="no_activity">Нет активности</string>
+    <string name="achieved_percentage">%1$d%% Достигнуто</string>
+    <string name="progress_desc">Прогресс распределен по трем ежедневным сменам ребенка.</string>
+    <string name="weekly_turn_compliance">ЕЖЕНЕДЕЛЬНОЕ ВЫПОЛНЕНИЕ ПО СМЕНАМ</string>
+    <string name="behavioral_recommendations">ПОВЕДЕНЧЕСКИЕ РЕКОМЕНДАЦИИ</string>
+    <string name="upad_ai_mind_active">UPAD AI Mind Активен</string>
+    <string name="ai_analysis_recommendation_desc">Мы заметили, что эффективность смены «День» по четвергам снижается. Рекомендуем перенести пиктограмму отдыха на 15 минут раньше, чтобы предотвратить сенсорную перегрузку.</string>
+    <string name="unlock_ai_desc">Разблокируйте ИИ-помощника для прогнозирования кризисов и оптимизации перерывов.</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Profile Screen -->
+    <string name="edit_profile_title">Редактировать профиль</string>
+    <string name="name_label">Имя</string>
+    <string name="email_label">Электронная почта</string>
+    <string name="logout">Выйти</string>
+    <string name="username_label">Имя пользователя</string>
+    <string name="change_photo">Изменить фото</string>
+
+    <!-- Subscription Plans Screen -->
+    <string name="choose_a_plan">ВЫБЕРИТЕ ТАРИФ!</string>
+    <string name="choose_a_plan_desc">Разблокируйте потрясающие инструменты для развития вашего ребенка.</string>
+    <string name="plan_basic_title">БАЗОВЫЙ ТАРИФ</string>
+    <string name="free_price">Бесплатно</string>
+    <string name="plan_premium_title">ПРЕМИУМ ТАРИФ</string>
+    <string name="premium_price">9,99 $ / мес.</string>
+    <string name="unlimited_pictograms">Безлимитные пиктограммы</string>
+    <string name="choose_plan_btn">ВЫБРАТЬ ТАРИФ</string>
+    <string name="other_moment">В другой раз</string>
+
+    <!-- Change Plan Screen -->
+    <string name="plan_subscription_title">Тариф подписки</string>
+    <string name="most_recommended_plan">САМЫЙ РЕКОМЕНДУЕМЫЙ ТАРИФ</string>
+    <string name="per_month"> / мес.</string>
+    <string name="premium_desc">Безлимитное умное сопровождение для вашего ребенка.</string>
+    <string name="benefit_1">Адаптивные рекомендации ИИ на основе ежедневного прогресса.</string>
+    <string name="benefit_2">Связь с учителем/репетитором для назначения классных заданий.</string>
+    <string name="benefit_3">Синхронизация с Google Календарем (встречи и будильники).</string>
+    <string name="benefit_4">Безлимитное создание рутин и последовательностей пиктограмм.</string>
+    <string name="benefit_5">Продвинутая блокировка устройства и режим без отвлечений.</string>
+    <string name="benefit_6">Мгновенная облачная синхронизация (Родитель - Ребенок).</string>
+    <string name="renewal_desc">Автоматическое ежемесячное продление. Отменяйте в любое время в настройках приложения без дополнительных комиссий.</string>
+    <string name="secure_payment_methods">БЕЗОПАСНЫЕ СПОСОБЫ ОПЛАТЫ</string>
+    <string name="pay_with_credit_card">ОПЛАТИТЬ КРЕДИТНОЙ КАРТОЙ 💳</string>
+    <string name="pay_with_google">ОПЛАТИТЬ С ПОМОЩЬЮ GOOGLE  🚀</string>
+
+    <!-- Device Connection Screen -->
+    <string name="devices_title">Устройства</string>
+    <string name="device_management_title">Управление устройствами</string>
+    <string name="device_management_desc">Привяжите планшет или телефон ребенка, чтобы синхронизировать его визуальные рутины в реальном времени.</string>
+    <string name="connect_new_device">ПОДКЛЮЧИТЬ НОВОЕ УСТРОЙСТВО</string>
+    <string name="child_code_label">6-значный код ребенка</string>
+    <string name="network_error_linking">Сетевая ошибка при привязке.</string>
+    <string name="code_invalid_expired">Код не существует или его срок действия истек.</string>
+    <string name="enter_6_numbers">Пожалуйста, введите 6 цифр.</string>
+    <string name="link_device_btn">ПРИВЯЗАТЬ УСТРОЙСТВО</string>
+    <string name="linked_devices_count">ПРИВЯЗАННЫЕ УСТРОЙСТВА (%1$d)</string>
+    <string name="no_devices_linked">Привязанных устройств пока нет.</string>
+    <string name="unlink">Отвязать</string>
+
+    <!-- Device Management Screen -->
+    <string name="remote_lock_control_title">Удаленная блокировка</string>
+    <string name="no_linked_devices_for_lock">У вас нет привязанных устройств.</string>
+    <string name="go_to_connection_menu_desc">Перейдите в боковое меню «Подключение», чтобы связать устройство ребенка с помощью 6-значного кода.</string>
+    <string name="status_blocked_remote">Состояние: Заблокировано удаленно 🔒</string>
+    <string name="status_free">Состояние: Доступно 🔓</string>
+    <string name="unlock_action">Разблокировать</string>
+    <string name="lock_action">Заблокировать</string>
+
+    <!-- Parent confirmation dialog in ChildStartScreen -->
+    <string name="parent_confirmation_title">Подтверждение родителя</string>
+    <string name="parent_confirmation_desc">Введите электронную почту и пароль родителя/опекуна, чтобы отвязать это устройство.</string>
+    <string name="parent_email_label">Эл. почта родителя</string>
+    <string name="parent_password_label">Пароль родителя</string>
+    <string name="unlink_action_btn">ОТВЯЗАТЬ</string>
+    <string name="cancel_action_btn">ОТМЕНА</string>
+    <string name="error_unlink_failed">Ошибка отвязки: %1$s</string>
+    <string name="error_email_mismatch">Почта не совпадает с привязанным родителем.</string>
+    <string name="error_incorrect_credentials">Неверные учетные данные</string>
+    <string name="error_fill_all_fields">Пожалуйста, заполните все поля.</string>
+
+    <!-- RoutineCompletedScreen -->
+    <string name="routine_completed_title">ТЫ СДЕЛАЛ ЭТО! 🎉</string>
+    <string name="no_pending_tasks">Нет невыполненных задач</string>
+    <string name="activity_completed_success">Занятие успешно завершено</string>
+    <string name="today_status_label">СТАТУС НА СЕГОДНЯ:</string>
+    <string name="next_activity_label">СЛЕДУЮЩЕЕ ЗАНЯТИЕ:</string>
+    <string name="routine_completed_default_preview">Поздравляем! Ты всё выполнил</string>
+    <string name="time_to_rest_or_play">Время отдыхать или играть! ⭐</string>
+    <string name="keep_it_up">Так держать, у тебя отлично получается!</string>
+    <string name="understood_btn">ПОНЯТНО! ➔</string>
+
+    <!-- TaskExecutionScreen -->
+    <string name="loading_activity">Загрузка занятия...</string>
+    <string name="mission_accomplished">МИССИЯ ВЫПОЛНЕНА!</string>
+    <string name="focused_great_job">Отличная концентрация!</string>
+    <string name="active_focus">🎯 АКТИВНЫЙ ФОКУС</string>
+    <string name="time_completed">ВРЕМЯ ВЫШЛО! 🌟</string>
+    <string name="watch_clock_run">СЛЕДИ ЗА ВРЕМЕНЕМ! ⏳</string>
+    <string name="finish_btn">ЗАВЕРШИТЬ! 🎉</string>
+    <string name="wait_clock">ЖДИ ЗАВЕРШЕНИЯ ТАЙМЕРА 🔒</string>
+
+    <!-- TaskFeedbackScreen -->
+    <string name="feedback_great_job">ОТЛИЧНАЯ РАБОТА! 🎉</string>
+    <string name="feedback_question">Как ты себя чувствуешь после:</string>
+    <string name="feedback_happy">РАДОСТЬ</string>
+    <string name="feedback_neutral">НЕЙТРАЛЬНО</string>
+    <string name="feedback_sad">ГРУСТЬ</string>
+
+    <!-- Widgets -->
+    <string name="widget_routine_completed_feedback">Рутина завершена. Самочувствие: %1$s</string>
+    <string name="widget_feeling_happy">Радостно 😊</string>
+    <string name="widget_feeling_neutral">Нейтрально 😐</string>
+    <string name="widget_feeling_sad">Грустно 🙁</string>
+    <string name="widget_feeling_unregistered">Не зарегистрировано</string>
+    <string name="widget_next_activity_minutes">Следующее занятие через: %1$d мин</string>
+    <string name="widget_free_time">Свободно</string>
+    <string name="legend_morning"> Утр</string>
+    <string name="legend_afternoon"> Дне</string>
+    <string name="legend_evening"> Веч</string>
+    <string name="axis_morning">У</string>
+    <string name="axis_afternoon">Д</string>
+    <string name="axis_evening">В</string>
+    <string name="available_in_premium">Доступно в Premium-плане</string>
+</resources>

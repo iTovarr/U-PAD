@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">U Pad</string>
+    <string name="widget_progreso">EN COURS</string>
+    <string name="widget_refrescar">Actualiser</string>
+    <string name="widget_buscando">Recherche de l\'activité...</string>
+    <string name="widget_siguiente_actividad">Prochaine activité dans : -- min</string>
+    <string name="widget_registro_emocional">Journal de l\'état émotionnel :</string>
+    <string name="emoji_tranquilo">😊</string>
+    <string name="emoji_ansioso">😐</string>
+    <string name="emoji_crisis">😡</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_subscription">Votre Abonnement</string>
+    <string name="plan_gold">Forfait UPAD Gold ✨</string>
+    <string name="plan_basic">Forfait Basique</string>
+    <string name="gold_desc">Accès total illimité et IA activée</string>
+    <string name="basic_desc">Fonctions de base des routines</string>
+    <string name="active">ACTIF</string>
+    <string name="settings_general">Préférences générales</string>
+    <string name="settings_notifications">Notifications de routines</string>
+    <string name="settings_notifications_desc">Rappeler les tâches en attente</string>
+    <string name="settings_dark_mode">Mode Sombre</string>
+    <string name="settings_dark_mode_desc">Changer l\'interface en tons sombres</string>
+    <string name="settings_app">Application</string>
+    <string name="settings_language">Langue de l\'application</string>
+    <string name="change_basic_plan">Passer au forfait basique</string>
+    <string name="change_premium_plan">Passer au forfait premium</string>
+    <string name="locate_child">Localiser mon enfant</string>
+    <string name="performance_analysis">Analyse des performances</string>
+    <string name="lock_device">Verrouiller l\'appareil</string>
+    <string name="connect_child">Se connecter avec l\'enfant (Code)</string>
+    <string name="my_profile">Mon profil</string>
+    <string name="morning">MATIN</string>
+    <string name="afternoon">APRÈS-MIDI</string>
+    <string name="evening">SOIR</string>
+    <string name="monday">LUNDI</string>
+    <string name="tuesday">MARDI</string>
+    <string name="wednesday">MERCREDI</string>
+    <string name="thursday">JEUDI</string>
+    <string name="friday">VENDREDI</string>
+    <string name="saturday">SAMEDI</string>
+    <string name="sunday">DIMANCHE</string>
+    <string name="today_program">PROGRAMME D\'AUJOURD\'HUI</string>
+    <string name="program_of">PROGRAMME DU</string>
+    <string name="hello_parent">BONJOUR, %1$s !</string>
+    <string name="child_routines">Routines de votre enfant</string>
+    <string name="open_menu">Ouvrir le menu</string>
+    <string name="create_new_routine">Créer une nouvelle routine</string>
+    <string name="routine_manager">Gestionnaire de routines</string>
+    <string name="parent_tutor">PARENT/TUTEUR</string>
+    <string name="monthly_view">VUE MENSUELLE</string>
+    <string name="activity_blocks">BLOCS D\'ACTIVITÉ</string>
+    <string name="tasks_completed">%1$d/%2$d tâches accomplies</string>
+    <string name="select_turn">Sélectionner la période</string>
+    <string name="choose_time_block">Choisissez la tranche horaire pour ajouter ou modifier votre routine pour le %1$s :</string>
+    <string name="cancel">Annuler</string>
+    <string name="child_pairing_instructions">Bonjour ! Demande à tes parents de saisir ce code sur leur téléphone :</string>
+    <string name="my_activities_today">MES ACTIVITÉS D\'AUJOURD\'HUI ! 🏆</string>
+    <string name="morning_activities">🌅 ACTIVITÉS DU MATIN</string>
+    <string name="available_morning_only">Disponible uniquement le matin.</string>
+    <string name="afternoon_activities">☀️ ACTIVITÉS DE L\'APRÈS-MIDI</string>
+    <string name="available_afternoon_only">Disponible de 13h00 à 18h00.</string>
+    <string name="evening_activities">🌙 ACTIVITÉS DU SOIR</string>
+    <string name="available_evening_only">Disponible à partir de 18h00.</string>
+    <string name="ready_to_start_activities">Tout est prêt pour commencer tes activités !</string>
+    <string name="view_my_tasks">VOIR MES TÂCHES 🚀</string>
+    <string name="no_activities_for_turn">Aucune activité ajoutée pour cette période.</string>
+    <string name="activity_duration_turn">⏱️ %1$s min | 📍 %2$s</string>
+    <string name="todays_progress">PROGRÈS D\'AUJOURD\'HUI</string>
+    <string name="total_tasks">Tâches totales</string>
+    <string name="completed_tasks">Tâches terminées</string>
+    <string name="pending_tasks">Tâches en attente</string>
+
+    <!-- Bottom Bar & Navigation -->
+    <string name="nav_home">Accueil</string>
+    <string name="nav_analytics">Analyses</string>
+    <string name="nav_profile">Profil</string>
+    <string name="nav_settings">Paramètres</string>
+    <string name="nav_calendar">Calendrier</string>
+    <string name="nav_emotions">Émotions</string>
+    <string name="nav_alerts">Alertes</string>
+
+    <!-- Create/Edit Routine Screen -->
+    <string name="day_mon">Lun</string>
+    <string name="day_tue">Mar</string>
+    <string name="day_wed">Mer</string>
+    <string name="day_thu">Jeu</string>
+    <string name="day_fri">Ven</string>
+    <string name="day_sat">Sam</string>
+    <string name="day_sun">Dim</string>
+    <string name="today_label_parenthesis">(Aujourd\'hui)</string>
+    <string name="save_action">ENREGISTRER</string>
+    <string name="premium_badge">PREMIUM</string>
+    <string name="basic_badge">Basique</string>
+    <string name="turn_label">TOUR : %1$s</string>
+    <string name="edit_activities_title">Modifier les activités</string>
+    <string name="routine_name_label">Nom de la routine</string>
+    <string name="add_activity_section">AJOUTER ACTIVITÉ</string>
+    <string name="add_activity_placeholder">Ex : Étudier l\'anglais, manger des fruits...</string>
+    <string name="scheduled_days_label">Jours programmés :</string>
+    <string name="add_manually_btn">AJOUTER MANUELLEMENT ➕</string>
+    <string name="processing_ai">TRAITEMENT PAR IA...</string>
+    <string name="suggest_activity_ai">SUGGÉRER ACTIVITÉ PAR IA ✨</string>
+    <string name="view_weekly_schedule">VOIR L\'AGENDA HEBDOMADAIRE :</string>
+    <string name="activities_of_day_count">ACTIVITÉS DU %1$s (%2$d)</string>
+    <string name="no_activities_for_day">Aucune activité pour le %1$s.</string>
+    <string name="ai_recommendations">Recommandations IA</string>
+    <string name="select_ai_activity_desc">Sélectionnez l\'activité que vous souhaitez ajouter à l\'agenda de votre enfant :</string>
+    <string name="saving_routine_progress">Enregistrement des modifications pour le tour\n%1$s...</string>
+    <string name="days_label_prefix">Jours : %1$s</string>
+    <string name="days_all">Jours : Tous les jours</string>
+    <string name="back">Retour</string>
+    <string name="delete">Supprimer</string>
+
+    <!-- Analytics / Performance Analysis Screen -->
+    <string name="weekly_report">Rapport hebdomadaire</string>
+    <string name="effectiveness_today">Efficacité aujourd\'hui (%1$s)</string>
+    <string name="no_activity">Aucune activité</string>
+    <string name="achieved_percentage">%1$d%% Atteint</string>
+    <string name="progress_desc">Progrès répartis sur les trois tours quotidiens de l\'enfant.</string>
+    <string name="weekly_turn_compliance">CONFORMITÉ HEBDOMADAIRE PAR TOUR</string>
+    <string name="behavioral_recommendations">RECOMMANDATIONS COMPORTEMENTALES</string>
+    <string name="upad_ai_mind_active">UPAD AI Mind Actif</string>
+    <string name="ai_analysis_recommendation_desc">Nous avons détecté que le bloc de l\'après-midi du jeudi perd en efficacité. Nous suggérons d\'avancer le pictogramme de repos de 15 minutes pour éviter la surcharge sensorielle.</string>
+    <string name="unlock_ai_desc">Débloquez l\'assistant IA pour prédire les crises et optimiser les pauses.</string>
+    <string name="pro_badge">PRO</string>
+
+    <!-- Profile Screen -->
+    <string name="edit_profile_title">Modifier le profil</string>
+    <string name="name_label">Nom</string>
+    <string name="email_label">Adresse e-mail</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="username_label">Nom d\'utilisateur</string>
+    <string name="change_photo">Modifier la photo</string>
+
+    <!-- Subscription Plans Screen -->
+    <string name="choose_a_plan">CHOISISSEZ UN FORFAIT !</string>
+    <string name="choose_a_plan_desc">Débloquez des outils incroyables pour le développement de votre enfant.</string>
+    <string name="plan_basic_title">FORFAIT BASIQUE</string>
+    <string name="free_price">Gratuit</string>
+    <string name="plan_premium_title">FORFAIT PREMIUM</string>
+    <string name="premium_price">9,99 $ / mois</string>
+    <string name="unlimited_pictograms">Pictogrammes illimités</string>
+    <string name="choose_plan_btn">CHOISIR LE FORFAIT</string>
+    <string name="other_moment">Plus tard</string>
+
+    <!-- Change Plan Screen -->
+    <string name="plan_subscription_title">Forfait d\'abonnement</string>
+    <string name="most_recommended_plan">LE FORFAIT LE PLUS RECOMMANDÉ</string>
+    <string name="per_month"> / mois</string>
+    <string name="premium_desc">Accompagnement intelligent sans limites pour votre enfant.</string>
+    <string name="benefit_1">Recommandations IA adaptatives basées sur les progrès quotidiens.</string>
+    <string name="benefit_2">Connexion avec l\'enseignant/tuteur pour attribuer des tâches en classe.</string>
+    <string name="benefit_3">Synchronisation avec Google Agenda (rendez-vous et alarmes).</string>
+    <string name="benefit_4">Création illimitée de routines et séquences de pictogrammes.</string>
+    <string name="benefit_5">Verrouillage matériel avancé et environnement sans distraction.</string>
+    <string name="benefit_6">Synchronisation instantanée dans le cloud (Parent - Enfant).</string>
+    <string name="renewal_desc">Renouvellement mensuel automatique. Résiliez à tout moment dans les paramètres de l\'application sans frais supplémentaires.</string>
+    <string name="secure_payment_methods">MODES DE PAIEMENT SÉCURISÉS</string>
+    <string name="pay_with_credit_card">PAYER PAR CARTE DE CRÉDIT 💳</string>
+    <string name="pay_with_google">PAYER AVEC GOOGLE  🚀</string>
+
+    <!-- Device Connection Screen -->
+    <string name="devices_title">Appareils</string>
+    <string name="device_management_title">Gestion des appareils</string>
+    <string name="device_management_desc">Liez la tablette ou le téléphone de votre enfant pour synchroniser ses routines visuelles en temps réel.</string>
+    <string name="connect_new_device">CONNECTER UN NOUVEL APPAREIL</string>
+    <string name="child_code_label">Code à 6 chiffres de l\'enfant</string>
+    <string name="network_error_linking">Erreur réseau lors de la liaison.</string>
+    <string name="code_invalid_expired">Le code n\'existe pas ou a expiré.</string>
+    <string name="enter_6_numbers">Veuillez saisir les 6 chiffres.</string>
+    <string name="link_device_btn">LIER L\'APPAREIL</string>
+    <string name="linked_devices_count">APPAREILS LIÉS (%1$d)</string>
+    <string name="no_devices_linked">Aucun appareil lié pour le moment.</string>
+    <string name="unlink">Délier</string>
+
+    <!-- Device Management Screen -->
+    <string name="remote_lock_control_title">Contrôle de verrouillage à distance</string>
+    <string name="no_linked_devices_for_lock">Vous n\'avez aucun appareil lié.</string>
+    <string name="go_to_connection_menu_desc">Accédez au menu latéral Connexion pour lier l\'appareil de l\'enfant avec le code à 6 chiffres.</string>
+    <string name="status_blocked_remote">Statut : BLOQUÉ à distance 🔒</string>
+    <string name="status_free">Statut : LIBRE 🔓</string>
+    <string name="unlock_action">Libérer</string>
+    <string name="lock_action">Bloquer</string>
+
+    <!-- Parent confirmation dialog in ChildStartScreen -->
+    <string name="parent_confirmation_title">Confirmation du Parent</string>
+    <string name="parent_confirmation_desc">Saisissez l\'adresse e-mail et le mot de passe de votre parent/tuteur pour dissocier cet appareil.</string>
+    <string name="parent_email_label">E-mail du parent</string>
+    <string name="parent_password_label">Mot de passe du parent</string>
+    <string name="unlink_action_btn">DISSOCIER</string>
+    <string name="cancel_action_btn">ANNULER</string>
+    <string name="error_unlink_failed">Erreur de dissociation: %1$s</string>
+    <string name="error_email_mismatch">L\'e-mail ne correspond pas au parent lié à cet appareil.</string>
+    <string name="error_incorrect_credentials">Identifiants incorrects</string>
+    <string name="error_fill_all_fields">Veuillez remplir tous les champs.</string>
+
+    <!-- RoutineCompletedScreen -->
+    <string name="routine_completed_title">TU AS RÉUSSI! 🎉</string>
+    <string name="no_pending_tasks">Pas de tâches en attente</string>
+    <string name="activity_completed_success">Activité réussie</string>
+    <string name="today_status_label">STATUT D\'AUJOURD\'HUI:</string>
+    <string name="next_activity_label">ACTIVITÉ SUIVANTE:</string>
+    <string name="routine_completed_default_preview">Félicitations! Tu as tout fini</string>
+    <string name="time_to_rest_or_play">C\'est l\'heure de se reposer ou de jouer! ⭐</string>
+    <string name="keep_it_up">Continue comme ça, tu te débrouilles très bien!</string>
+    <string name="understood_btn">COMPRIS! ➔</string>
+
+    <!-- TaskExecutionScreen -->
+    <string name="loading_activity">Chargement de ton activité...</string>
+    <string name="mission_accomplished">MISSION ACCOMPLIE!</string>
+    <string name="focused_great_job">Tu as fait un excellent travail de concentration!</string>
+    <string name="active_focus">🎯 CONCENTRATION ACTIVE</string>
+    <string name="time_completed">TEMPS ÉCOULÉ! 🌟</string>
+    <string name="watch_clock_run">REGARDE LE TEMPS PASSER! ⏳</string>
+    <string name="finish_btn">TERMINER! 🎉</string>
+    <string name="wait_clock">ATTENDS LA FIN DU CHRONO 🔒</string>
+
+    <!-- TaskFeedbackScreen -->
+    <string name="feedback_great_job">TU AS ÉTÉ GÉNIAL! 🎉</string>
+    <string name="feedback_question">Comment te sens-tu après:</string>
+    <string name="feedback_happy">HEUREUX</string>
+    <string name="feedback_neutral">NEUTRE</string>
+    <string name="feedback_sad">TRISTE</string>
+
+    <!-- Widgets -->
+    <string name="widget_routine_completed_feedback">Routine terminée. Ressenti: %1$s</string>
+    <string name="widget_feeling_happy">Heureux 😊</string>
+    <string name="widget_feeling_neutral">Neutre 😐</string>
+    <string name="widget_feeling_sad">Triste 🙁</string>
+    <string name="widget_feeling_unregistered">Non enregistré</string>
+    <string name="widget_next_activity_minutes">Prochaine activité dans: %1$d min</string>
+    <string name="widget_free_time">Libre</string>
+    <string name="legend_morning"> Mat</string>
+    <string name="legend_afternoon"> Apr</string>
+    <string name="legend_evening"> Soi</string>
+    <string name="axis_morning">M</string>
+    <string name="axis_afternoon">A</string>
+    <string name="axis_evening">S</string>
+    <string name="available_in_premium">Disponible avec le Plan Premium</string>
+</resources>

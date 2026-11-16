@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <application
+        android:name=".UPadApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/upad_icono"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/upad_icono"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App.Start">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.App.Start">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".widget.ParentRoutineWidgetProvider"
+            android:exported="true"
+            android:label="Progreso de Hoy">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.upad.widget.ACTION_REFRESH" />
+                <action android:name="com.example.upad.widget.ACTION_DATA_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/parent_routine_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.ChildSessionMonitorWidgetProvider"
+            android:exported="true"
+            android:label="Monitor de Sesión U-pad">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.upad.widget.session.ACTION_REFRESH" />
+                <action android:name="com.example.upad.widget.ACTION_DATA_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_child_session_monitor_info" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.PremiumProgressWidgetProvider"
+            android:exported="true"
+            android:label="Progreso de Hoy (Premium)">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.upad.widget.premium.ACTION_REFRESH" />
+                <action android:name="com.example.upad.widget.ACTION_DATA_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/premium_progress_widget_info" />
+        </receiver>
+    </application>
+
+</manifest>
