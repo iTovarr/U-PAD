@@ -72,6 +72,7 @@ import com.example.upad.premium.PaymentViewScreen
 import android.content.Context
 import android.content.Intent
 import com.example.upad.components.UPADBottomBar
+import com.example.upad.navigation.Routes
 import com.example.upad.dashboard.EmotionsTrackScreen
 import com.example.upad.dashboard.HelpTutorialScreen
 import com.example.upad.dashboard.TodayCalendarScreen
@@ -182,7 +183,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun esRutaSeguraParaIdioma(route: String): Boolean {
         if (route.isEmpty()) return true
-        val esTareaActiva = route.contains("child_task_execution") || route.contains("child_task_feedback")
+        val esTareaActiva = route.contains(Routes.CHILD_TASK_EXECUTION_BASE) || route.contains(Routes.CHILD_TASK_FEEDBACK_BASE)
         return !esTareaActiva
     }
 
@@ -360,8 +361,6 @@ class MainActivity : AppCompatActivity() {
         notificationsListener?.remove()
         parentPremiumListener?.remove()
     }
-
-    val ROUTE_HELP = "help_tutorial"
 }
 
 // ── DESTINO INICIAL ──────────────────────────────────────────────────────────
@@ -371,9 +370,9 @@ private fun obtenerDestinoInicial(context: android.content.Context): String {
     val usuarioLogueado = auth.currentUser != null
     val rolGuardado = sharedPreferences.getString("rol_usuario", null)
     return if (usuarioLogueado && !rolGuardado.isNullOrEmpty()) {
-        if (rolGuardado == "padre" || rolGuardado == "padre_directo") "parent_dashboard" else "child_start"
+        if (rolGuardado == "padre" || rolGuardado == "padre_directo") Routes.PARENT_DASHBOARD else Routes.CHILD_START
     } else {
-        "role_selection"
+        Routes.ROLE_SELECTION
     }
 }
 
@@ -394,7 +393,7 @@ fun UPadNavigation(
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val rutaActual = navBackStackEntry?.destination?.route ?: ""
-    val estaEnSeccionNiño = rutaActual.startsWith("child_")
+    val estaEnSeccionNiño = rutaActual.startsWith(Routes.CHILD_PREFIX)
 
     LaunchedEffect(rutaActual) { onRouteChanged(rutaActual) }
 
@@ -426,10 +425,10 @@ fun UPadNavigation(
         ) {
             val contextoNav = androidx.compose.ui.platform.LocalContext.current
 
-            NavHost(navController = navController, startDestination = "sincronizando") {
+            NavHost(navController = navController, startDestination = Routes.SINCRONIZANDO) {
 
                 // ── SINCRONIZANDO ────────────────────────────────────────────
-                composable("sincronizando") {
+                composable(Routes.SINCRONIZANDO) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
                     }
@@ -437,14 +436,14 @@ fun UPadNavigation(
                         LaunchedEffect(Unit) {
                             val destinoReal = obtenerDestinoInicial(contextoNav)
                             navController.navigate(destinoReal) {
-                                popUpTo("sincronizando") { inclusive = true }
+                                popUpTo(Routes.SINCRONIZANDO) { inclusive = true }
                             }
                         }
                     }
                 }
 
                 // ── AUTH ─────────────────────────────────────────────────────
-                composable("role_selection") {
+                composable(Routes.ROLE_SELECTION) {
                     val contextoRol = androidx.compose.ui.platform.LocalContext.current
                     RoleSelectionScreen(
                         onRoleSelected = { role: String ->
@@ -452,198 +451,198 @@ fun UPadNavigation(
                             when (role) {
                                 "padre_directo" -> {
                                     sharedPrefs.edit().putString("rol_usuario", "padre_directo").apply()
-                                    navController.navigate("parent_dashboard") {
-                                        popUpTo("role_selection") { inclusive = true }
+                                    navController.navigate(Routes.PARENT_DASHBOARD) {
+                                        popUpTo(Routes.ROLE_SELECTION) { inclusive = true }
                                     }
                                 }
                                 "padre" -> {
                                     sharedPrefs.edit().putString("rol_usuario", "padre").apply()
-                                    navController.navigate("welcome")
+                                    navController.navigate(Routes.WELCOME)
                                 }
                                 else -> {
                                     sharedPrefs.edit().putString("rol_usuario", "hijo").apply()
-                                    navController.navigate("child_start")
+                                    navController.navigate(Routes.CHILD_START)
                                 }
                             }
                         }
                     )
                 }
 
-                composable("welcome") {
+                composable(Routes.WELCOME) {
                     WelcomeScreen(
-                        onNavigateToLogin = { navController.navigate("login") },
-                        onNavigateToRegister = { navController.navigate("register") },
+                        onNavigateToLogin = { navController.navigate(Routes.LOGIN) },
+                        onNavigateToRegister = { navController.navigate(Routes.REGISTER) },
                         onLoginExitoso = {
-                            navController.navigate("parent_dashboard") {
-                                popUpTo("welcome") { inclusive = true }
+                            navController.navigate(Routes.PARENT_DASHBOARD) {
+                                popUpTo(Routes.WELCOME) { inclusive = true }
                             }
                         }
                     )
                 }
 
-                composable("login") {
+                composable(Routes.LOGIN) {
                     LoginScreen(
                         onLoginClick = { _, _ ->
-                            navController.navigate("parent_dashboard") {
-                                popUpTo("login") { inclusive = true }
+                            navController.navigate(Routes.PARENT_DASHBOARD) {
+                                popUpTo(Routes.LOGIN) { inclusive = true }
                             }
                         },
-                        onForgotPasswordClick = { navController.navigate("forgot_password") },
+                        onForgotPasswordClick = { navController.navigate(Routes.FORGOT_PASSWORD) },
                         onBackClick = { navController.popBackStack() }
                     )
                 }
 
-                composable("register") {
+                composable(Routes.REGISTER) {
                     RegisterScreen(
-                        onRegisterComplete = { _, _ -> navController.navigate("subscription_plans") },
+                        onRegisterComplete = { _, _ -> navController.navigate(Routes.SUBSCRIPTION_PLANS) },
                         onBackClick = { navController.popBackStack() }
                     )
                 }
 
-                composable("forgot_password") {
+                composable(Routes.FORGOT_PASSWORD) {
                     ForgotPasswordScreen(onBackToLogin = { navController.popBackStack() })
                 }
 
                 // ── SETUP ────────────────────────────────────────────────────
-                composable("subscription_plans") {
+                composable(Routes.SUBSCRIPTION_PLANS) {
                     SubscriptionPlansScreen(
                         routineViewModel = routineViewModel,
-                        onNavigateToBenefits = { navController.navigate("change_plan") },
-                        onDirectToProfile = { navController.navigate("trial_disclaimer") }
+                        onNavigateToBenefits = { navController.navigate(Routes.CHANGE_PLAN) },
+                        onDirectToProfile = { navController.navigate(Routes.TRIAL_DISCLAIMER) }
                     )
                 }
 
-                composable("trial_disclaimer") {
+                composable(Routes.TRIAL_DISCLAIMER) {
                     TrialDisclaimerScreen(
-                        onStartTrialClick = { navController.navigate("child_profile_setup") },
+                        onStartTrialClick = { navController.navigate(Routes.CHILD_PROFILE_SETUP) },
                         onMoreInfoClick = {}
                     )
                 }
 
-                composable("child_profile_setup") {
+                composable(Routes.CHILD_PROFILE_SETUP) {
                     ChildProfileSetupScreen(
                         onBackClick = { navController.popBackStack() },
-                        onSaveClick = { navController.navigate("experience_setup") }
+                        onSaveClick = { navController.navigate(Routes.EXPERIENCE_SETUP) }
                     )
                 }
 
-                composable("experience_setup") {
+                composable(Routes.EXPERIENCE_SETUP) {
                     ExperienceSetupScreen(
                         routineViewModel = routineViewModel,
                         onBackClick = { navController.popBackStack() },
-                        onNextClick = { navController.navigate("device_pairing") }
+                        onNextClick = { navController.navigate(Routes.DEVICE_PAIRING) }
                     )
                 }
 
-                composable("device_pairing") {
+                composable(Routes.DEVICE_PAIRING) {
                     DevicePairingScreen(
-                        onNavigateToDashboard = { navController.navigate("parent_dashboard") }
+                        onNavigateToDashboard = { navController.navigate(Routes.PARENT_DASHBOARD) }
                     )
                 }
 
-                composable("tutorials") {
+                composable(Routes.TUTORIALS) {
                     TutorialsScreen(
                         onBackClick = { navController.popBackStack() },
-                        onFinishSetupClick = { navController.navigate("parent_dashboard") }
+                        onFinishSetupClick = { navController.navigate(Routes.PARENT_DASHBOARD) }
                     )
                 }
 
-                composable("change_plan") {
+                composable(Routes.CHANGE_PLAN) {
                     ChangePlanScreen(
                         onBackClick = { navController.popBackStack() },
-                        onNavigateToPayment = { navController.navigate("payment_view") }
+                        onNavigateToPayment = { navController.navigate(Routes.PAYMENT_VIEW) }
                     )
                 }
 
-                composable("payment_view") {
+                composable(Routes.PAYMENT_VIEW) {
                     PaymentViewScreen(
                         routineViewModel = routineViewModel,
                         onPaymentConfirmed = {
                             val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                             routineViewModel.setSuscripcionManual(true, uid)
-                            navController.navigate("parent_dashboard") {
-                                popUpTo("parent_dashboard") { inclusive = true }
+                            navController.navigate(Routes.PARENT_DASHBOARD) {
+                                popUpTo(Routes.PARENT_DASHBOARD) { inclusive = true }
                             }
                         }
                     )
                 }
 
                 // ── DASHBOARD PADRE ──────────────────────────────────────────
-                composable("parent_dashboard") {
+                composable(Routes.PARENT_DASHBOARD) {
                     LaunchedEffect(Unit) {
                         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                         routineViewModel.cargarRutinasDesdeFirebase(uid)
                     }
                     RoutineDashboardScreen(
                         routineViewModel = routineViewModel,
-                        onNavigateToCreateRoutine = { turn, day -> navController.navigate("create_routine/$turn/$day") },
-                        onRoutineClick = { turn, day -> navController.navigate("create_routine/$turn/$day") },
-                        onNavigateToProfile = { navController.navigate("profile") },
-                        onNavigateToSettings = { navController.navigate("settings") },
-                        onNavigateToConnection = { navController.navigate("connection_code") },
-                        onNavigateToAnalytics = { navController.navigate("analytics") },
-                        onNavigateToDeviceManagement = { navController.navigate("device_management") },
-                        onNavigateToChangePlan = { navController.navigate("change_plan") },
-                        onNavigateToTracking = { hijoId -> navController.navigate("tracking/$hijoId") },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") }
+                        onNavigateToCreateRoutine = { turn, day -> navController.navigate(Routes.createRoutine(turn, day)) },
+                        onRoutineClick = { turn, day -> navController.navigate(Routes.createRoutine(turn, day)) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) },
+                        onNavigateToSettings = { navController.navigate(Routes.SETTINGS) },
+                        onNavigateToConnection = { navController.navigate(Routes.CONNECTION_CODE) },
+                        onNavigateToAnalytics = { navController.navigate(Routes.ANALYTICS) },
+                        onNavigateToDeviceManagement = { navController.navigate(Routes.DEVICE_MANAGEMENT) },
+                        onNavigateToChangePlan = { navController.navigate(Routes.CHANGE_PLAN) },
+                        onNavigateToTracking = { hijoId -> navController.navigate(Routes.tracking(hijoId)) },
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) }
                     )
                 }
 
                 // ✅ FIX: help_tutorial ahora pasa onNavigateToHelp y onNavigateToProfile
-                composable("help_tutorial") {
+                composable(Routes.HELP_TUTORIAL) {
                     HelpTutorialScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
-                composable("today_calendar") {
+                composable(Routes.TODAY_CALENDAR) {
                     TodayCalendarScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
-                composable("emotions_track") {
+                composable(Routes.EMOTIONS_TRACK) {
                     EmotionsTrackScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
-                composable("notifications") {
+                composable(Routes.NOTIFICATIONS) {
                     NotificationsScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
                 composable(
-                    route = "tracking/{hijoId}",
-                    arguments = listOf(navArgument("hijoId") { type = NavType.StringType })
+                    route = Routes.TRACKING,
+                    arguments = listOf(navArgument(Routes.ARG_HIJO_ID) { type = NavType.StringType })
                 ) { backStackEntry ->
-                    val hijoId = backStackEntry.arguments?.getString("hijoId") ?: ""
+                    val hijoId = backStackEntry.arguments?.getString(Routes.ARG_HIJO_ID) ?: ""
                     val trackingViewModel: com.example.upad.viewmodel.TrackingViewModel = viewModel()
                     HijoTrackingScreen(
                         routineViewModel = routineViewModel,
                         hijoId = hijoId,
                         trackingViewModel = trackingViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
                 // ✅ FIX: profile ahora recibe onNavigateToHelp
-                composable("profile") {
+                composable(Routes.PROFILE) {
                     val contextoPerfil = androidx.compose.ui.platform.LocalContext.current
                     ProfileScreen(
                         routineViewModel = routineViewModel,
@@ -654,63 +653,63 @@ fun UPadNavigation(
                                 .remove("rol_usuario")
                                 .remove("pref_tema_oscuro")
                                 .apply()
-                            navController.navigate("role_selection") {
+                            navController.navigate(Routes.ROLE_SELECTION) {
                                 popUpTo(0) { inclusive = true }
                             }
                         },
                         // ✅ FIX: conectado — antes faltaba este parámetro
-                        onNavigateToHelp = { navController.navigate("help_tutorial") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) }
                     )
                 }
 
                 // ✅ FIX: settings recibe onNavigateToHelp si tu SettingsScreen lo tiene
-                composable("settings") {
+                composable(Routes.SETTINGS) {
                     SettingsScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
-                composable("connection_code") {
+                composable(Routes.CONNECTION_CODE) {
                     ConnectionScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onLinkSuccess = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
-                composable("analytics") {
+                composable(Routes.ANALYTICS) {
                     AnalyticsScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToPremium = { navController.navigate("subscription_plans") },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToPremium = { navController.navigate(Routes.SUBSCRIPTION_PLANS) },
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
-                composable("device_management") {
+                composable(Routes.DEVICE_MANAGEMENT) {
                     DeviceManagementScreen(
                         routineViewModel = routineViewModel,
                         onNavigateBack = { navController.popBackStack() },
-                        onNavigateToHelp = { navController.navigate("help_tutorial") },
-                        onNavigateToProfile = { navController.navigate("profile") }
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )
                 }
 
                 // ── CREATE ROUTINE ───────────────────────────────────────────
                 composable(
-                    route = "create_routine/{routineTurn}/{selectedDay}",
+                    route = Routes.CREATE_ROUTINE,
                     arguments = listOf(
-                        navArgument("routineTurn") { type = NavType.StringType },
-                        navArgument("selectedDay") { type = NavType.StringType }
+                        navArgument(Routes.ARG_ROUTINE_TURN) { type = NavType.StringType },
+                        navArgument(Routes.ARG_SELECTED_DAY) { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
-                    val turn = backStackEntry.arguments?.getString("routineTurn") ?: "MAÑANA"
-                    val day = backStackEntry.arguments?.getString("selectedDay") ?: "LUNES"
+                    val turn = backStackEntry.arguments?.getString(Routes.ARG_ROUTINE_TURN) ?: "MAÑANA"
+                    val day = backStackEntry.arguments?.getString(Routes.ARG_SELECTED_DAY) ?: "LUNES"
                     val turnoNormalizado = when (turn.uppercase().trim()) {
                         "MAÑANA", "MANANA" -> "MAÑANA"
                         "TARDE" -> "TARDE"
@@ -744,12 +743,12 @@ fun UPadNavigation(
                         childName = "tu hijo",
                         pasosSeleccionados = listaPasosTurno,
                         onBackClick = { navController.popBackStack() },
-                        onNavigateToPictogramSearch = { navController.navigate("pictogram_selection/$turnoNormalizado/$diaNormalizado") },
+                        onNavigateToPictogramSearch = { navController.navigate(Routes.pictogramSelection(turnoNormalizado, diaNormalizado)) },
                         onRemoveTaskClick = { index -> routineViewModel.removeTask(turnoNormalizado, index) },
                         onSendRoutine = {
                             val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                             routineViewModel.saveAll(uid, turnoNormalizado)
-                            navController.navigate("parent_dashboard")
+                            navController.navigate(Routes.PARENT_DASHBOARD)
                         },
                         viewModel = routineViewModel,
                         drawableId = android.R.drawable.ic_menu_manage,
@@ -760,14 +759,14 @@ fun UPadNavigation(
 
                 // ── PICTOGRAM ────────────────────────────────────────────────
                 composable(
-                    route = "pictogram_selection/{routineTurn}/{selectedDay}",
+                    route = Routes.PICTOGRAM_SELECTION,
                     arguments = listOf(
-                        navArgument("routineTurn") { type = NavType.StringType },
-                        navArgument("selectedDay") { type = NavType.StringType }
+                        navArgument(Routes.ARG_ROUTINE_TURN) { type = NavType.StringType },
+                        navArgument(Routes.ARG_SELECTED_DAY) { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
-                    val turn = backStackEntry.arguments?.getString("routineTurn") ?: "MAÑANA"
-                    val day = backStackEntry.arguments?.getString("selectedDay") ?: "LUNES"
+                    val turn = backStackEntry.arguments?.getString(Routes.ARG_ROUTINE_TURN) ?: "MAÑANA"
+                    val day = backStackEntry.arguments?.getString(Routes.ARG_SELECTED_DAY) ?: "LUNES"
                     val turnoNormalizado = when (turn.uppercase().trim()) {
                         "MAÑANA", "MANANA" -> "MAÑANA"; "TARDE" -> "TARDE"; "NOCHE" -> "NOCHE"; else -> "MAÑANA"
                     }
@@ -789,42 +788,42 @@ fun UPadNavigation(
                 }
 
                 // ── SECCIÓN NIÑO ─────────────────────────────────────────────
-                composable("child_start") {
+                composable(Routes.CHILD_START) {
                     ChildStartScreen(
                         routineViewModel = routineViewModel,
                         onNavigateToTask = { actividadNombre, turno ->
-                            navController.navigate("child_task_execution/$actividadNombre/$turno")
+                            navController.navigate(Routes.childTaskExecution(actividadNombre, turno))
                         },
-                        onNavigateToCompleted = { navController.navigate("child_routine_completed") },
+                        onNavigateToCompleted = { navController.navigate(Routes.CHILD_ROUTINE_COMPLETED) },
                         onPadreIdObtenido = { pId -> padreIdDelHijo = pId }
                     )
                 }
 
                 composable(
-                    route = "child_task_execution/{activityName}/{routineTurn}",
+                    route = Routes.CHILD_TASK_EXECUTION,
                     arguments = listOf(
-                        navArgument("activityName") { type = NavType.StringType },
-                        navArgument("routineTurn") { type = NavType.StringType }
+                        navArgument(Routes.ARG_ACTIVITY_NAME) { type = NavType.StringType },
+                        navArgument(Routes.ARG_ROUTINE_TURN) { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
-                    val activityName = backStackEntry.arguments?.getString("activityName") ?: "Actividad"
-                    val turn = backStackEntry.arguments?.getString("routineTurn") ?: "MAÑANA"
+                    val activityName = backStackEntry.arguments?.getString(Routes.ARG_ACTIVITY_NAME) ?: "Actividad"
+                    val turn = backStackEntry.arguments?.getString(Routes.ARG_ROUTINE_TURN) ?: "MAÑANA"
                     TaskExecutionScreen(
                         viewModel = routineViewModel,
                         activityName = activityName,
                         turn = turn,
                         padreId = padreIdDelHijo,
                         onFinishRoutine = { nombreDeLaTareaCompletada ->
-                            navController.navigate("child_task_feedback/$nombreDeLaTareaCompletada")
+                            navController.navigate(Routes.childTaskFeedback(nombreDeLaTareaCompletada))
                         }
                     )
                 }
 
                 composable(
-                    route = "child_task_feedback/{activityName}",
-                    arguments = listOf(navArgument("activityName") { type = NavType.StringType })
+                    route = Routes.CHILD_TASK_FEEDBACK,
+                    arguments = listOf(navArgument(Routes.ARG_ACTIVITY_NAME) { type = NavType.StringType })
                 ) { backStackEntry ->
-                    val activityName = backStackEntry.arguments?.getString("activityName") ?: "Actividad"
+                    val activityName = backStackEntry.arguments?.getString(Routes.ARG_ACTIVITY_NAME) ?: "Actividad"
                     val context = androidx.compose.ui.platform.LocalContext.current
                     TaskFeedbackScreen(
                         activityName = activityName,
@@ -846,34 +845,34 @@ fun UPadNavigation(
                                 context = context
                             )
                             routineViewModel.cargarMensajesRefuerzo(idPadre, turnoActual)
-                            navController.navigate("child_routine_completed") {
-                                popUpTo("child_start") { inclusive = false }
+                            navController.navigate(Routes.CHILD_ROUTINE_COMPLETED) {
+                                popUpTo(Routes.CHILD_START) { inclusive = false }
                             }
                         }
                     )
                 }
 
-                composable("child_routine_completed") {
+                composable(Routes.CHILD_ROUTINE_COMPLETED) {
                     val reinforcementMessages by routineViewModel.reinforcementMessages.collectAsState()
                     RoutineCompletedScreen(
                         nextActivityPreview = "",
                         reinforcementMessages = reinforcementMessages,
                         onFinishClick = {
-                            navController.navigate("child_start") {
-                                popUpTo("child_start") { inclusive = true }
+                            navController.navigate(Routes.CHILD_START) {
+                                popUpTo(Routes.CHILD_START) { inclusive = true }
                             }
                         }
                     )
                 }
 
-                composable("achievement_report") {
+                composable(Routes.ACHIEVEMENT_REPORT) {
                     AchievementReportScreen(
                         onBackClick = { navController.popBackStack() },
-                        onViewDetailsClick = { navController.navigate("activity_details") }
+                        onViewDetailsClick = { navController.navigate(Routes.ACTIVITY_DETAILS) }
                     )
                 }
 
-                composable("activity_details") {
+                composable(Routes.ACTIVITY_DETAILS) {
                     LaunchedEffect(Unit) {
                         val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
                         routineViewModel.cargarRutinasDesdeFirebase(uid)

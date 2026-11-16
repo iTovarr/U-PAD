@@ -17,44 +17,44 @@ sealed class BottomBarScreen(
 ) {
     // 🏠 Comunes / Básicos
     object Dashboard : BottomBarScreen(
-        route = "parent_dashboard",
+        route = Routes.PARENT_DASHBOARD,
         titleResId = com.example.upad.R.string.nav_home,
         icon = Icons.Default.Dashboard
     )
 
     object Analytics : BottomBarScreen(
-        route = "analytics",
+        route = Routes.ANALYTICS,
         titleResId = com.example.upad.R.string.nav_analytics,
         icon = Icons.Default.Analytics
     )
 
     object Profile : BottomBarScreen(
-        route = "profile",
+        route = Routes.PROFILE,
         titleResId = com.example.upad.R.string.nav_profile,
         icon = Icons.Default.Person
     )
 
     object Settings : BottomBarScreen(
-        route = "settings",
+        route = Routes.SETTINGS,
         titleResId = com.example.upad.R.string.nav_settings,
         icon = Icons.Default.Settings
     )
 
     // 🌟 Exclusivos Premium
     object Calendario : BottomBarScreen(
-        route = "today_calendar",
+        route = Routes.TODAY_CALENDAR,
         titleResId = com.example.upad.R.string.nav_calendar,
         icon = Icons.Default.CalendarMonth
     )
 
     object Emociones : BottomBarScreen(
-        route = "emotions_track",
+        route = Routes.EMOTIONS_TRACK,
         titleResId = com.example.upad.R.string.nav_emotions,
         icon = Icons.Default.EmojiEmotions
     )
 
     object Notificaciones : BottomBarScreen(
-        route = "notifications",
+        route = Routes.NOTIFICATIONS,
         titleResId = com.example.upad.R.string.nav_alerts,
         icon = Icons.Default.Notifications
     )
