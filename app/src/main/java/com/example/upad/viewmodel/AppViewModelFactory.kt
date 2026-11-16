@@ -19,6 +19,7 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
             arasaacRepository = container.arasaacRepository
         )
         modelClass.isAssignableFrom(AiViewModel::class.java) -> AiViewModel(container.aiRepository)
+        modelClass.isAssignableFrom(TrackingViewModel::class.java) -> TrackingViewModel(container.deviceRepository)
         else -> throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
     } as T
 }

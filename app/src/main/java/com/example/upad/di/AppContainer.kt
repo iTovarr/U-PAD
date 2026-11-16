@@ -6,6 +6,7 @@ import com.example.upad.data.AiRepository
 import com.example.upad.data.AiService
 import com.example.upad.data.ArasaacRepository
 import com.example.upad.data.DataStoreManager
+import com.example.upad.data.DeviceRepository
 import com.example.upad.data.FirebaseRepository
 import com.example.upad.data.LanguageDataStore
 import com.example.upad.data.SessionRepository
@@ -25,6 +26,7 @@ class AppContainer(context: Context) {
 
     val sessionRepository: SessionRepository by lazy { SessionRepository() }
     val firebaseRepository: FirebaseRepository by lazy { FirebaseRepository() }
+    val deviceRepository: DeviceRepository by lazy { DeviceRepository() }
     val arasaacRepository: ArasaacRepository by lazy { ArasaacRepository() }
     val aiRepository: AiService by lazy { AiRepository() }
 

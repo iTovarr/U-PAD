@@ -2,89 +2,57 @@ package com.example.upad.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.IgnoreExtraProperties
-import com.google.firebase.firestore.ListenerRegistration
+import androidx.lifecycle.viewModelScope
+import com.example.upad.dashboard.DispositivoVinculado
+import com.example.upad.data.DeviceLocation
+import com.example.upad.data.DeviceRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import com.example.upad.dashboard.DispositivoVinculado
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 private const val TAG = "TrackingViewModel"
 
-// ✅ Anotación para ignorar campos como 'ultimaActualizacion' si Firebase los maneja como Timestamp
-@IgnoreExtraProperties
-data class UbicacionHijo(
-    val latitud: Double = 0.0,
-    val longitud: Double = 0.0
-)
+/** Estado del mapa de seguimiento: dispositivos del tutor y ubicación del seleccionado. */
+class TrackingViewModel(private val deviceRepository: DeviceRepository) : ViewModel() {
 
-class TrackingViewModel : ViewModel() {
+    private var ubicacionJob: Job? = null
+    private var dispositivosJob: Job? = null
 
-    private val firestore = FirebaseFirestore.getInstance()
-    private var ubicacionListener: ListenerRegistration? = null
-    private var dispositivosListener: ListenerRegistration? = null
-
-    private val _ubicacion = MutableStateFlow<UbicacionHijo?>(null)
-    val ubicacion: StateFlow<UbicacionHijo?> = _ubicacion
+    private val _ubicacion = MutableStateFlow<DeviceLocation?>(null)
+    val ubicacion: StateFlow<DeviceLocation?> = _ubicacion
 
     private val _dispositivosConectados = MutableStateFlow<List<DispositivoVinculado>>(emptyList())
     val dispositivosConectados: StateFlow<List<DispositivoVinculado>> = _dispositivosConectados
 
-    // Escucha en tiempo real la ubicación del niño desde la colección correcta
+    /** Escucha en tiempo real la ubicación del dispositivo indicado (sustituye a la escucha anterior). */
     fun iniciarRastreoHijo(hijoId: String) {
-        // Cancelamos un listener previo si existía para evitar duplicados o fugas de memoria
-        ubicacionListener?.remove()
-
-        // ✅ Apuntando perfectamente a "dispositivos_niños"
-        ubicacionListener = firestore.collection("dispositivos_niños")
-            .document(hijoId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e(TAG, "Error en iniciarRastreoHijo", error)
-                    return@addSnapshotListener
-                }
-
-                if (snapshot != null && snapshot.exists()) {
-                    // Mapea automáticamente el documento al objeto Kotlin seguro
-                    val data = snapshot.toObject(UbicacionHijo::class.java)
-                    _ubicacion.value = data
-                }
-            }
+        ubicacionJob?.cancel()
+        ubicacionJob = viewModelScope.launch {
+            deviceRepository.observeLocation(hijoId)
+                .catch { error -> Log.e(TAG, "Error en iniciarRastreoHijo", error) }
+                .collect { _ubicacion.value = it }
+        }
     }
 
-    // Escucha en tiempo real la lista de dispositivos vinculados al padre
+    /** Escucha en tiempo real la lista de dispositivos vinculados al tutor. */
     fun escucharDispositivosVinculados(padreId: String) {
-        dispositivosListener?.remove()
+        dispositivosJob?.cancel()
         if (padreId.isEmpty()) {
             _dispositivosConectados.value = emptyList()
             return
         }
 
-        dispositivosListener = firestore.collection("dispositivos_niños")
-            .whereEqualTo("padreId", padreId)
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e(TAG, "Error en escucharDispositivosVinculados", error)
-                    return@addSnapshotListener
+        dispositivosJob = viewModelScope.launch {
+            deviceRepository.observeDevicesOf(padreId)
+                .catch { error -> Log.e(TAG, "Error en escucharDispositivosVinculados", error) }
+                .collect { dispositivos ->
+                    _dispositivosConectados.value = dispositivos.map {
+                        DispositivoVinculado(id = it.id, modelo = it.modelo ?: "Dispositivo")
+                    }
                 }
-
-                val lista = mutableListOf<DispositivoVinculado>()
-                snapshot?.documents?.forEach { doc ->
-                    lista.add(
-                        DispositivoVinculado(
-                            id = doc.id,
-                            modelo = doc.getString("modelo") ?: "Dispositivo"
-                        )
-                    )
-                }
-                _dispositivosConectados.value = lista
-            }
+        }
     }
-
-    // Limpieza al destruir el ciclo de vida de la pantalla
-    override fun onCleared() {
-        super.onCleared()
-        ubicacionListener?.remove()
-        dispositivosListener?.remove()
-    }
+    // Las escuchas se cancelan solas con viewModelScope al destruirse el ViewModel.
 }

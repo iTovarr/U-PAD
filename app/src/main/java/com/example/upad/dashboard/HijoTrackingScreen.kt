@@ -54,7 +54,7 @@ fun HijoTrackingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {},
-    trackingViewModel: TrackingViewModel = viewModel()
+    trackingViewModel: TrackingViewModel
 ) {
     // 📨 1. RECOLECCIÓN DE ESTADOS GLOBALES (Cabecera del componente)
     val isPremiumUser by routineViewModel.isUserPremium.collectAsState(initial = false)

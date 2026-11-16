@@ -586,7 +586,9 @@ fun UPadNavigation(
                     arguments = listOf(navArgument(Routes.ARG_HIJO_ID) { type = NavType.StringType })
                 ) { backStackEntry ->
                     val hijoId = backStackEntry.arguments?.getString(Routes.ARG_HIJO_ID) ?: ""
-                    val trackingViewModel: com.example.upad.viewmodel.TrackingViewModel = viewModel()
+                    val trackingViewModel: com.example.upad.viewmodel.TrackingViewModel = viewModel(
+                        factory = AppViewModelFactory(LocalAppContainer.current)
+                    )
                     HijoTrackingScreen(
                         routineViewModel = routineViewModel,
                         hijoId = hijoId,

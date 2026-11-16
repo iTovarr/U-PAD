@@ -12,7 +12,6 @@
 -keep class com.example.upad.data.ArasaacPictogram { *; }
 -keep class com.example.upad.data.Keyword { *; }
 
-# Modelos que Firestore convierte por reflexión (set() con objetos y toObject()):
-# si R8 renombra sus propiedades, los campos se guardan o leen con otro nombre.
+# Modelo que Firestore convierte por reflexión al guardar las rutinas (set() con
+# objetos): si R8 renombra sus propiedades, los campos se guardan con otro nombre.
 -keep class com.example.upad.viewmodel.TaskItem { *; }
--keep class com.example.upad.viewmodel.UbicacionHijo { *; }
