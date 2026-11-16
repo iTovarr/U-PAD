@@ -25,8 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.upad.di.LocalAppContainer
-import com.example.upad.utils.PairingCode
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.upad.data.PairingResult
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +56,8 @@ fun DevicePairingScreen(
     var mensajeError by remember { mutableStateOf("") }
     var estaConectando by remember { mutableStateOf(false) }
  
-    val firestore = remember { FirebaseFirestore.getInstance() }
+    val deviceRepository = LocalAppContainer.current.deviceRepository
+    val scope = rememberCoroutineScope()
     val pantallaPequeña = configuration.screenHeightDp < 650
 
     // --- PALETA DE COLORES ADAPTATIVA MULTI-TEMA ---
@@ -241,39 +243,20 @@ fun DevicePairingScreen(
                             mensajeError = ""
                             estaConectando = true
 
-                            firestore.collection("codigos_vinculacion").document(pairingCode)
-                                .get()
-                                .addOnSuccessListener { snapshot ->
-                                    val codigoCanjeable = snapshot.exists() && PairingCode.esCanjeable(
-                                        estado = snapshot.getString("estado"),
-                                        creadoEnMillis = snapshot.getTimestamp("creadoEn")?.toDate()?.time,
-                                        ahoraMillis = System.currentTimeMillis()
-                                    )
-                                    if (codigoCanjeable) {
-                                        val actualizaciones = mapOf(
-                                            "estado" to PairingCode.ESTADO_ENLAZADO,
-                                            "padreId" to currentParentId
-                                        )
-
-                                        firestore.collection("codigos_vinculacion").document(pairingCode)
-                                            .update(actualizaciones)
-                                            .addOnSuccessListener {
-                                                estaConectando = false
-                                                isPaired = true
-                                            }
-                                            .addOnFailureListener { error ->
-                                                estaConectando = false
-                                                mensajeError = "Error al vincular: ${error.message}"
-                                            }
-                                    } else {
-                                        estaConectando = false
-                                        mensajeError = "El código no existe o ha expirado."
+                            scope.launch {
+                                try {
+                                    when (deviceRepository.redeemPairingCode(pairingCode, currentParentId)) {
+                                        PairingResult.VINCULADO -> isPaired = true
+                                        PairingResult.CODIGO_INVALIDO -> mensajeError = "El código no existe o ha expirado."
                                     }
-                                }
-                                .addOnFailureListener { error ->
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (e: Exception) {
+                                    mensajeError = "Error de red: ${e.message}"
+                                } finally {
                                     estaConectando = false
-                                    mensajeError = "Error de red: ${error.message}"
                                 }
+                            }
                         } else {
                             mensajeError = "Introduce los 6 números obligatorios."
                         }
