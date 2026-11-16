@@ -14,14 +14,14 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class AiRepository {
+class AiRepository : AiService {
     private val client = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(45, TimeUnit.SECONDS)
         .writeTimeout(15, TimeUnit.SECONDS)
         .build()
 
-    suspend fun getRoutineSuggestions(routineTurn: String): List<String> {
+    override suspend fun getRoutineSuggestions(routineTurn: String): List<String> {
         val rawText = chat(
             systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). Sugiere exactamente 3 actividades, una por linea, empezando con numero y punto. Maximo 4 palabras cada una. Sin saludos ni explicaciones.",
             userPrompt = "Dame 3 actividades para la rutina de la $routineTurn de un nino con TEA.",
@@ -30,7 +30,7 @@ class AiRepository {
         return parsearSugerencias(rawText)
     }
 
-    suspend fun getPersonalizedAnalysis(tasksReport: String): String {
+    override suspend fun getPersonalizedAnalysis(tasksReport: String): String {
         return chat(
             systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). En base al reporte de actividades y emociones del niño que se te proporciona, realiza un análisis personalizado de máximo 3 párrafos cortos (100 palabras en total). Sugiere recomendaciones empáticas y concretas para mejorar su bienestar y rutinas. Sé empático, claro y estructurado.",
             userPrompt = tasksReport,
@@ -38,7 +38,7 @@ class AiRepository {
         ).trim()
     }
 
-    suspend fun getCustomRoutineAndReinforcements(need: String): Pair<List<String>, List<String>> {
+    override suspend fun getCustomRoutineAndReinforcements(need: String): Pair<List<String>, List<String>> {
         val rawText = chat(
             systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). Diseña una rutina de máximo 5 actividades extremadamente cortas, puntuales y simples (máximo de 3 palabras por actividad) para que un niño con autismo aprenda o logre lo solicitado por el padre. Cada actividad debe ser una acción física directa y fácil de entender. Genera también 3 mensajes muy cortos de refuerzo positivo dirigidos directamente al niño al completar las tareas. Responde estrictamente con el siguiente formato, sin saludos ni comentarios:\nRUTINA:\n1. Tarea muy corta\n2. Tarea muy corta\n3. Tarea muy corta\nREFUERZOS:\n- Mensaje 1\n- Mensaje 2\n- Mensaje 3",
             userPrompt = need,
