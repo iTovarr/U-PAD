@@ -22,26 +22,27 @@ class AiRepository : AiService {
         .writeTimeout(15, TimeUnit.SECONDS)
         .build()
 
-    override suspend fun getRoutineSuggestions(routineTurn: String): List<String> {
+    override suspend fun getRoutineSuggestions(routineTurn: String, languageCode: String): List<String> {
         val rawText = chat(
-            systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). Sugiere exactamente 3 actividades, una por linea, empezando con numero y punto. Maximo 4 palabras cada una. Sin saludos ni explicaciones.",
+            systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). Sugiere exactamente 3 actividades, una por linea, empezando con numero y punto. Maximo 4 palabras cada una. Sin saludos ni explicaciones." + instruccionIdioma(languageCode),
             userPrompt = "Dame 3 actividades para la rutina de la $routineTurn de un nino con TEA.",
             maxTokens = 200
         )
         return parsearSugerencias(rawText)
     }
 
-    override suspend fun getPersonalizedAnalysis(tasksReport: String): String {
+    override suspend fun getPersonalizedAnalysis(tasksReport: String, languageCode: String): String {
         return chat(
-            systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). En base al reporte de actividades y emociones del niño que se te proporciona, realiza un análisis personalizado de máximo 3 párrafos cortos (100 palabras en total). Sugiere recomendaciones empáticas y concretas para mejorar su bienestar y rutinas. Sé empático, claro y estructurado.",
+            systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). En base al reporte de actividades y emociones del niño que se te proporciona, realiza un análisis personalizado de máximo 3 párrafos cortos (100 palabras en total). Sugiere recomendaciones empáticas y concretas para mejorar su bienestar y rutinas. Sé empático, claro y estructurado." + instruccionIdioma(languageCode),
             userPrompt = tasksReport,
             maxTokens = 400
         ).trim()
     }
 
-    override suspend fun getCustomRoutineAndReinforcements(need: String): Pair<List<String>, List<String>> {
+    override suspend fun getCustomRoutineAndReinforcements(need: String, languageCode: String): Pair<List<String>, List<String>> {
         val rawText = chat(
-            systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). Diseña una rutina de máximo 5 actividades extremadamente cortas, puntuales y simples (máximo de 3 palabras por actividad) para que un niño con autismo aprenda o logre lo solicitado por el padre. Cada actividad debe ser una acción física directa y fácil de entender. Genera también 3 mensajes muy cortos de refuerzo positivo dirigidos directamente al niño al completar las tareas. Responde estrictamente con el siguiente formato, sin saludos ni comentarios:\nRUTINA:\n1. Tarea muy corta\n2. Tarea muy corta\n3. Tarea muy corta\nREFUERZOS:\n- Mensaje 1\n- Mensaje 2\n- Mensaje 3",
+            systemPrompt = "Eres un psicopedagogo experto en autismo (TEA). Diseña una rutina de máximo 5 actividades extremadamente cortas, puntuales y simples (máximo de 3 palabras por actividad) para que un niño con autismo aprenda o logre lo solicitado por el padre. Cada actividad debe ser una acción física directa y fácil de entender. Genera también 3 mensajes muy cortos de refuerzo positivo dirigidos directamente al niño al completar las tareas. Responde estrictamente con el siguiente formato, sin saludos ni comentarios:\nRUTINA:\n1. Tarea muy corta\n2. Tarea muy corta\n3. Tarea muy corta\nREFUERZOS:\n- Mensaje 1\n- Mensaje 2\n- Mensaje 3" +
+                instruccionIdioma(languageCode, conservarEtiquetas = true),
             userPrompt = need,
             maxTokens = 500
         )
@@ -143,6 +144,30 @@ class AiRepository : AiService {
 
         private const val MAX_INTENTOS = 3
         private const val ESPERA_ENTRE_INTENTOS_MS = 1_000L
+
+        private val NOMBRES_IDIOMA = mapOf(
+            "en" to "inglés",
+            "fr" to "francés",
+            "de" to "alemán",
+            "pt" to "portugués",
+            "ru" to "ruso"
+        )
+
+        /**
+         * Frase que se añade al prompt para que la IA responda en el idioma de la app.
+         * En español (o un idioma desconocido) no añade nada. Las etiquetas RUTINA: y
+         * REFUERZOS: deben quedarse en español porque el parser las busca literalmente.
+         */
+        internal fun instruccionIdioma(languageCode: String, conservarEtiquetas: Boolean = false): String {
+            val idioma = languageCode.trim().lowercase().substringBefore('-').substringBefore('_')
+            val nombre = NOMBRES_IDIOMA[idioma] ?: return ""
+            val etiquetas = if (conservarEtiquetas) {
+                " Mantén las etiquetas RUTINA: y REFUERZOS: exactamente así, sin traducirlas."
+            } else {
+                ""
+            }
+            return " Responde en $nombre.$etiquetas"
+        }
 
         private val PREFIJO_NUMERADO = Regex("^[0-9]+\\.\\s*")
         private val PREFIJO_VINETA = Regex("^[-*•]\\s*")

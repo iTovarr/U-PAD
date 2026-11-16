@@ -3,6 +3,7 @@ package com.example.upad.viewmodel
 import com.example.upad.data.AiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -21,31 +22,37 @@ class AiViewModelTest {
     /** Doble de [AiService]: devuelve respuestas fijas o lanza el error configurado. */
     private class FakeAiService(var error: Exception? = null) : AiService {
         var ultimoReporte: String? = null
+        var ultimoIdioma: String? = null
 
-        override suspend fun getRoutineSuggestions(routineTurn: String): List<String> {
+        override suspend fun getRoutineSuggestions(routineTurn: String, languageCode: String): List<String> {
             error?.let { throw it }
+            ultimoIdioma = languageCode
             return listOf("Desayunar", "Vestirse", "Peinarse")
         }
 
-        override suspend fun getPersonalizedAnalysis(tasksReport: String): String {
+        override suspend fun getPersonalizedAnalysis(tasksReport: String, languageCode: String): String {
             error?.let { throw it }
             ultimoReporte = tasksReport
             return "Buen progreso hoy."
         }
 
-        override suspend fun getCustomRoutineAndReinforcements(need: String): Pair<List<String>, List<String>> {
+        override suspend fun getCustomRoutineAndReinforcements(
+            need: String,
+            languageCode: String
+        ): Pair<List<String>, List<String>> {
             error?.let { throw it }
             return listOf("Abrir el grifo") to listOf("¡Muy bien!")
         }
     }
 
     private val servicio = FakeAiService()
+    private val idiomaApp = MutableStateFlow("es")
     private lateinit var viewModel: AiViewModel
 
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = AiViewModel(servicio)
+        viewModel = AiViewModel(servicio, idiomaApp)
     }
 
     @After
@@ -60,6 +67,16 @@ class AiViewModelTest {
         assertEquals(listOf("Desayunar", "Vestirse", "Peinarse"), viewModel.aiSuggestions.value)
         assertFalse(viewModel.isAiLoading.value)
         assertNull(viewModel.aiError.value)
+    }
+
+    @Test
+    fun `pide las respuestas en el idioma actual de la app`() {
+        viewModel.obtenerSugerenciasIA("MAÑANA")
+        assertEquals("es", servicio.ultimoIdioma)
+
+        idiomaApp.value = "fr"
+        viewModel.obtenerSugerenciasIA("MAÑANA")
+        assertEquals("fr", servicio.ultimoIdioma)
     }
 
     @Test

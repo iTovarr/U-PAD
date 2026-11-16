@@ -26,7 +26,10 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
             themePreferences = container.themePreferences,
             repository = container.firebaseRepository
         )
-        modelClass.isAssignableFrom(AiViewModel::class.java) -> AiViewModel(container.aiRepository)
+        modelClass.isAssignableFrom(AiViewModel::class.java) -> AiViewModel(
+            aiService = container.aiRepository,
+            languageFlow = container.languageDataStore.languageFlow
+        )
         modelClass.isAssignableFrom(TrackingViewModel::class.java) -> TrackingViewModel(container.deviceRepository)
         else -> throw IllegalArgumentException("ViewModel desconocido: ${modelClass.name}")
     } as T

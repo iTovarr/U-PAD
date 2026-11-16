@@ -29,6 +29,26 @@ class AiRepositoryParsingTest {
     }
 
     @Test
+    fun `en español no se añade ninguna instruccion de idioma`() {
+        assertEquals("", AiRepository.instruccionIdioma("es"))
+        assertEquals("", AiRepository.instruccionIdioma("xx"))
+    }
+
+    @Test
+    fun `en otro idioma pide responder en ese idioma`() {
+        assertEquals(" Responde en inglés.", AiRepository.instruccionIdioma("en"))
+        assertEquals(" Responde en portugués.", AiRepository.instruccionIdioma("pt-BR"))
+    }
+
+    @Test
+    fun `la rutina a medida conserva sus etiquetas en español`() {
+        val instruccion = AiRepository.instruccionIdioma("de", conservarEtiquetas = true)
+
+        assertTrue(instruccion.startsWith(" Responde en alemán."))
+        assertTrue(instruccion.contains("RUTINA:") && instruccion.contains("REFUERZOS:"))
+    }
+
+    @Test
     fun `separa la rutina de los mensajes de refuerzo`() {
         val respuesta = """
             RUTINA:

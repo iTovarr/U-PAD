@@ -4,13 +4,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.upad.data.AiService
 import com.example.upad.utils.RoutineProgressCalculator
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /** Estado y acciones del asistente de IA: sugerencias, análisis del día y rutinas a medida. */
-class AiViewModel(private val aiService: AiService) : ViewModel() {
+class AiViewModel(
+    private val aiService: AiService,
+    languageFlow: Flow<String>
+) : ViewModel() {
+
+    /** Idioma de la app: la IA responde en este idioma. */
+    private var idioma = "es"
+
+    init {
+        viewModelScope.launch {
+            languageFlow.collect { idioma = it }
+        }
+    }
 
     // Sugerencias rápidas por turno
     private val _aiSuggestions = MutableStateFlow<List<String>>(emptyList())
@@ -62,7 +75,7 @@ class AiViewModel(private val aiService: AiService) : ViewModel() {
             _aiError.value = null
             _aiSuggestions.value = emptyList()
             try {
-                _aiSuggestions.value = aiService.getRoutineSuggestions(routineTurn)
+                _aiSuggestions.value = aiService.getRoutineSuggestions(routineTurn, idioma)
             } catch (e: Exception) {
                 _aiError.value = e.localizedMessage ?: "Error al obtener sugerencias de la IA"
             } finally {
@@ -84,7 +97,7 @@ class AiViewModel(private val aiService: AiService) : ViewModel() {
                 val reporte = construirReporte(
                     RoutineProgressCalculator.obtenerDiaDeHoy(), tasksManana, tasksTarde, tasksNoche
                 )
-                _aiAnalysis.value = aiService.getPersonalizedAnalysis(reporte)
+                _aiAnalysis.value = aiService.getPersonalizedAnalysis(reporte, idioma)
             } catch (e: Exception) {
                 _aiError.value = e.localizedMessage ?: "Error al generar análisis personalizado de la IA"
             } finally {
@@ -100,7 +113,7 @@ class AiViewModel(private val aiService: AiService) : ViewModel() {
             _aiCustomRoutine.value = emptyList()
             _aiRefuerzos.value = emptyList()
             try {
-                val (rutina, refuerzos) = aiService.getCustomRoutineAndReinforcements(need)
+                val (rutina, refuerzos) = aiService.getCustomRoutineAndReinforcements(need, idioma)
                 _aiCustomRoutine.value = rutina
                 _aiRefuerzos.value = refuerzos
             } catch (e: Exception) {
