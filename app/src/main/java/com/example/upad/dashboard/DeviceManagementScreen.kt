@@ -21,12 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import coil.request.ImageRequest
 import androidx.compose.ui.res.stringResource
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.utils.BiometricHelper
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 // Usamos un modelo consistente con los datos reales guardados en Firebase
@@ -49,7 +49,8 @@ fun DeviceManagementScreen(
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current
-    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = remember { session.currentUser }
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -86,7 +87,7 @@ fun DeviceManagementScreen(
     var cargando by remember { mutableStateOf(true) }
 
     val firestore = remember { FirebaseFirestore.getInstance() }
-    val idPadre = remember { FirebaseAuth.getInstance().currentUser?.uid ?: "" }
+    val idPadre = remember { session.currentUserId }
 
     // 📡 ESCUCHA EN ESPEJO
     DisposableEffect(idPadre) {
