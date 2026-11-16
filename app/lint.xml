@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <!--
+        Los layouts de los widgets se inflan con RemoteViews, que no admite
+        atributos de AppCompat: ahí android:tint es correcto y app:tint no funciona.
+    -->
+    <issue id="UseAppTint">
+        <ignore regexp="res/layout/widget_.*\.xml" />
+    </issue>
+</lint>
