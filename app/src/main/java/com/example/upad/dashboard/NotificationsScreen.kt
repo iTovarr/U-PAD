@@ -30,7 +30,7 @@ import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CancellationException
 
 private const val TAG = "NotificationsScreen"
 
@@ -46,9 +46,9 @@ enum class NotificationType {
     SUCCESS, WARNING, INFO
 }
 
-fun formatRelativeTime(timestamp: com.google.firebase.Timestamp?): String {
+fun formatRelativeTime(timestamp: java.util.Date?): String {
     if (timestamp == null) return "Hace un momento"
-    val diff = System.currentTimeMillis() - timestamp.toDate().time
+    val diff = System.currentTimeMillis() - timestamp.time
     val seconds = diff / 1000
     val minutes = seconds / 60
     val hours = minutes / 60
@@ -105,48 +105,40 @@ fun NotificationsScreen(
     }
 
     val padreId = remember { session.currentUserId }
-    val firestore = remember { FirebaseFirestore.getInstance() }
+    val parentProfileRepository = LocalAppContainer.current.parentProfileRepository
     val notificationsList = remember { mutableStateListOf<NotificationItem>() }
     var loadingNotifications by remember { mutableStateOf(true) }
 
     LaunchedEffect(padreId) {
         if (padreId.isNotEmpty()) {
-            firestore.collection("users")
-                .document(padreId)
-                .collection("notifications")
-                .orderBy("timestamp", com.google.firebase.firestore.Query.Direction.DESCENDING)
-                .addSnapshotListener { snapshot, error ->
+            // La recolección se cancela al salir de la pantalla; antes el listener de
+            // Firestore se quedaba registrado para siempre.
+            try {
+                parentProfileRepository.observeNotifications(padreId).collect { avisos ->
                     loadingNotifications = false
-                    if (error != null) {
-                        Log.e(TAG, "Error en NotificationsScreen", error)
-                        return@addSnapshotListener
-                    }
-                    if (snapshot != null) {
-                        notificationsList.clear()
-                        for (doc in snapshot.documents) {
-                            val title = doc.getString("title") ?: ""
-                            val description = doc.getString("description") ?: ""
-                            val typeStr = doc.getString("type") ?: "INFO"
-                            val type = try {
-                                NotificationType.valueOf(typeStr.uppercase())
-                            } catch (e: Exception) {
-                                NotificationType.INFO
-                            }
-                            val timestamp = doc.getTimestamp("timestamp")
-                            val relativeTime = formatRelativeTime(timestamp)
-
-                            notificationsList.add(
-                                NotificationItem(
-                                    id = doc.id,
-                                    title = title,
-                                    description = description,
-                                    time = relativeTime,
-                                    type = type
-                                )
+                    notificationsList.clear()
+                    notificationsList.addAll(
+                        avisos.map { aviso ->
+                            NotificationItem(
+                                id = aviso.id,
+                                title = aviso.title,
+                                description = aviso.description,
+                                time = formatRelativeTime(aviso.timestamp),
+                                type = try {
+                                    NotificationType.valueOf(aviso.type.uppercase())
+                                } catch (e: IllegalArgumentException) {
+                                    NotificationType.INFO
+                                }
                             )
                         }
-                    }
+                    )
                 }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                loadingNotifications = false
+                Log.e(TAG, "Error en NotificationsScreen", e)
+            }
         } else {
             loadingNotifications = false
         }
