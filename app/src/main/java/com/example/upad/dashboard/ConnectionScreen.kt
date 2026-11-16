@@ -50,6 +50,9 @@ fun ConnectionScreen(
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current
+    val msgErrorRed = stringResource(id = R.string.network_error_linking)
+    val msgCodigoInvalido = stringResource(id = R.string.code_invalid_expired)
+    val msgIngresa6Numeros = stringResource(id = R.string.enter_6_numbers)
     val currentUser = remember { FirebaseAuth.getInstance().currentUser }
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -273,17 +276,17 @@ fun ConnectionScreen(
                                                                     onLinkSuccess()
                                                                 }
                                                                 .addOnFailureListener {
-                                                                    mensajeError = context.getString(R.string.network_error_linking)
+                                                                    mensajeError = msgErrorRed
                                                                 }
                                                         } else {
-                                                            mensajeError = context.getString(R.string.code_invalid_expired)
+                                                            mensajeError = msgCodigoInvalido
                                                         }
                                                     }
                                                     .addOnFailureListener {
-                                                        mensajeError = context.getString(R.string.network_error_linking)
+                                                        mensajeError = msgErrorRed
                                                     }
                                             } else {
-                                                mensajeError = context.getString(R.string.enter_6_numbers)
+                                                mensajeError = msgIngresa6Numeros
                                             }
                                         },
                                         colors = ButtonDefaults.buttonColors(containerColor = colorVerdePremium),
@@ -363,7 +366,7 @@ fun ConnectionScreen(
 
                                         Column(modifier = Modifier.weight(1f)) {
                                             val displayModelo = if (dispositivo.modelo == "Dispositivo del Niño") {
-                                                when (java.util.Locale.getDefault().language) {
+                                                when (androidx.compose.ui.platform.LocalConfiguration.current.locales[0].language) {
                                                     "en" -> "Child's Device"
                                                     "fr" -> "Appareil de l'enfant"
                                                     "de" -> "Gerät des Kindes"
