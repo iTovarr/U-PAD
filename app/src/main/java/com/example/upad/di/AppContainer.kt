@@ -12,6 +12,7 @@ import com.example.upad.data.LanguageDataStore
 import com.example.upad.data.ParentProfileRepository
 import com.example.upad.data.SessionRepository
 import com.example.upad.data.ThemePreferences
+import com.example.upad.notifications.PushTokenManager
 import com.example.upad.utils.NetworkMonitor
 import com.example.upad.widget.WidgetUpdater
 
@@ -38,6 +39,7 @@ class AppContainer(context: Context) {
     val themePreferences: ThemePreferences by lazy { ThemePreferences(appContext) }
 
     val widgetUpdater: WidgetUpdater by lazy { WidgetUpdater(appContext) }
+    val pushTokenManager: PushTokenManager by lazy { PushTokenManager(parentProfileRepository) }
     val networkMonitor: NetworkMonitor by lazy { NetworkMonitor(appContext) }
 
     /** Identificador del dispositivo: es el ID del documento en `dispositivos_niños`. */
