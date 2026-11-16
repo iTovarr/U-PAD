@@ -24,19 +24,23 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
+import com.example.upad.data.SessionRepository
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 // --- 1. LÓGICA DE AUTENTICACIÓN CON GOOGLE Y FIREBASE ---
-fun iniciarSesionConGoogle(context: Context, coroutineScope: CoroutineScope, onResultado: (Boolean) -> Unit) {
+fun iniciarSesionConGoogle(
+    context: Context,
+    coroutineScope: CoroutineScope,
+    session: SessionRepository,
+    onResultado: (Boolean) -> Unit
+) {
     val credentialManager = CredentialManager.create(context)
-    val auth = FirebaseAuth.getInstance()
-
     val webClientId = com.example.upad.BuildConfig.GOOGLE_CLIENT_ID
 
     val googleIdOption = GetGoogleIdOption.Builder()
@@ -58,18 +62,19 @@ fun iniciarSesionConGoogle(context: Context, coroutineScope: CoroutineScope, onR
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val idToken = googleIdTokenCredential.idToken
 
-                val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
-                auth.signInWithCredential(firebaseCredential)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d("GoogleAuth", "Login exitoso: ${auth.currentUser?.displayName}")
-                            onResultado(true)
-                        } else {
-                            Log.e("GoogleAuth", "Fallo al conectar con Firebase", task.exception)
-                            onResultado(false)
-                        }
-                    }
+                try {
+                    session.signInWithGoogleIdToken(idToken)
+                    Log.d("GoogleAuth", "Login exitoso")
+                    onResultado(true)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Log.e("GoogleAuth", "Fallo al conectar con Firebase", e)
+                    onResultado(false)
+                }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: GetCredentialException) {
             Log.e("GoogleAuth", "Error del Credential Manager: ${e.message}")
             onResultado(false)
@@ -93,6 +98,7 @@ fun WelcomeScreen(
     // Herramientas necesarias para lanzar la hoja flotante de Android
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val session = LocalAppContainer.current.sessionRepository
 
     Column(
         modifier = Modifier
@@ -172,7 +178,7 @@ fun WelcomeScreen(
             OutlinedButton(
                 onClick = {
                     // Ejecutamos la función de la línea 33 al hacer clic
-                    iniciarSesionConGoogle(context, coroutineScope) { exitoso ->
+                    iniciarSesionConGoogle(context, coroutineScope, session) { exitoso ->
                         if (exitoso) {
                             onLoginExitoso() // Cambia de pantalla si el login fue correcto
                         }
