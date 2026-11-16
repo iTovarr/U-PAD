@@ -14,6 +14,7 @@ import android.graphics.RectF
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
+import com.example.upad.data.TaskItemMapper
 import com.example.upad.MainActivity
 import com.example.upad.R
 import com.example.upad.utils.RoutineProgressCalculator
@@ -177,39 +178,7 @@ class ParentRoutineWidgetProvider : AppWidgetProvider() {
                 .get()
                 .await()
 
-            val tareas = mutableListOf<TaskItem>()
-            if (document.exists()) {
-                val tasksList = document.get("tasks") as? List<*> ?: emptyList<Any>()
-                for (taskItem in tasksList) {
-                    if (taskItem is Map<*, *>) {
-                        try {
-                            val actividad = taskItem["actividad"] as? String ?: ""
-                            val palabraClave = taskItem["palabraClave"] as? String ?: ""
-                            val imageUrl = taskItem["imageUrl"] as? String ?: ""
-                            val rawDias = taskItem["dias"] as? List<*> ?: emptyList<Any>()
-                            val dias = rawDias.mapNotNull { it?.toString() }
-                            val durationNum = taskItem["duration"] as? Number ?: 15
-                            val rawEstados = taskItem["estadosPorDia"] as? Map<*, *> ?: emptyMap<Any, Any>()
-                            val estadosPorDia = rawEstados.entries.associate {
-                                it.key.toString() to (it.value as? Boolean ?: false)
-                            }
-                            tareas.add(
-                                TaskItem(
-                                    actividad = actividad,
-                                    palabraClave = palabraClave,
-                                    imageUrl = imageUrl,
-                                    dias = dias,
-                                    duration = durationNum.toInt(),
-                                    estadosPorDia = estadosPorDia,
-                                )
-                            )
-                        } catch (e: Exception) {
-                            Log.e(TAG, "Error en obtenerTareasDeTurno", e)
-                        }
-                    }
-                }
-            }
-            return tareas
+            return TaskItemMapper.fromFirestoreList(document.get("tasks"))
         }
 
         private fun calcularPorcentaje(tareas: List<TaskItem>, prefijoDia: String): Int {
