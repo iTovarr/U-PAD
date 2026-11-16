@@ -15,9 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -27,8 +26,9 @@ fun PaymentViewScreen(
     onPaymentConfirmed: () -> Unit // 👶 Callback definitivo que te lleva a ChildProfileSetupScreen
 ) {
     val scope = rememberCoroutineScope()
-    val auth = remember { FirebaseAuth.getInstance() }
-    val firestore = remember { FirebaseFirestore.getInstance() }
+    val container = LocalAppContainer.current
+    val session = container.sessionRepository
+    val parentProfileRepository = container.parentProfileRepository
 
     var procesandoPago by remember { mutableStateOf(false) }
 
@@ -95,15 +95,9 @@ fun PaymentViewScreen(
                         delay(2500) // Simulación elegante de verificación bancaria
 
                         // 1. 🌟 Actualizamos la base de datos de Firebase con la suscripción Premium Activa
-                        val uid = auth.currentUser?.uid
+                        val uid = session.currentUser?.uid
                         if (uid != null) {
-                            val datosPremium = hashMapOf(
-                                "planSuscripcion" to "premium",
-                                "estadoSuscripcion" to "Activo",
-                                "fechaSeleccionPlan" to com.google.firebase.Timestamp.now()
-                            )
-                            firestore.collection("usuarios").document(uid)
-                                .set(datosPremium, com.google.firebase.firestore.SetOptions.merge())
+                            parentProfileRepository.saveSubscriptionPlan(uid, plan = "premium", estado = "Activo")
                         }
 
                         // 2. 🔥 Cambiamos el estado reactivo global en el ViewModel a Premium
