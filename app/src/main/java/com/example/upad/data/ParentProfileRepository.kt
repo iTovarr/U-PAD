@@ -3,6 +3,7 @@ package com.example.upad.data
 import android.net.Uri
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -32,6 +33,11 @@ class ParentProfileRepository(
 ) {
 
     private fun usuario(uid: String) = firestore.collection("usuarios").document(uid)
+
+    private companion object {
+        /** Campo de `users/{uid}` que lee la Cloud Function notifyParent. */
+        const val CAMPO_TOKENS_PUSH = "fcmTokens"
+    }
 
     /**
      * Registra el plan elegido. No espera la confirmación del servidor: Firestore
@@ -93,6 +99,20 @@ class ParentProfileRepository(
                 "timestamp" to Timestamp.now()
             )
         )
+    }
+
+    /** Añade un token push (FCM) a la lista de dispositivos del tutor. */
+    suspend fun addPushToken(uid: String, token: String) {
+        firestore.collection("users").document(uid)
+            .set(mapOf(CAMPO_TOKENS_PUSH to FieldValue.arrayUnion(token)), SetOptions.merge())
+            .await()
+    }
+
+    /** Quita un token push de la lista de dispositivos del tutor. */
+    suspend fun removePushToken(uid: String, token: String) {
+        firestore.collection("users").document(uid)
+            .set(mapOf(CAMPO_TOKENS_PUSH to FieldValue.arrayRemove(token)), SetOptions.merge())
+            .await()
     }
 
     /** Emite el estado premium del tutor cada vez que cambia su documento en `users`. */
