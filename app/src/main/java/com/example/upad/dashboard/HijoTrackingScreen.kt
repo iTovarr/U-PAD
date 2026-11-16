@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.request.ImageRequest
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper // 🛠️ Importamos el contenedor unificado
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel // 🛠️ Importamos el ViewModel de estado Premium/Tema
@@ -43,7 +44,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.maps.android.compose.*
-import com.google.firebase.auth.FirebaseAuth
 
 private const val TAG = "HijoTrackingScreen"
 
@@ -62,7 +62,8 @@ fun HijoTrackingScreen(
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current
-    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = remember { session.currentUser }
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -94,7 +95,7 @@ fun HijoTrackingScreen(
         if (isDarkMode) Color(0xFF1E1E1E) else Color.White
     }
 
-    val idPadre = remember { FirebaseAuth.getInstance().currentUser?.uid ?: "" }
+    val idPadre = remember { session.currentUserId }
 
     val dispositivosConectados by trackingViewModel.dispositivosConectados.collectAsState()
     var dispositivoSeleccionado by remember { mutableStateOf<DispositivoVinculado?>(null) }
