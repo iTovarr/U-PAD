@@ -14,6 +14,9 @@ import kotlinx.coroutines.launch
 import com.example.upad.data.ArasaacPictogram
 import com.example.upad.data.DataStoreManager
 import com.example.upad.data.LanguageDataStore
+import com.example.upad.data.ThemePreferences
+import com.example.upad.widget.WidgetProgress
+import com.example.upad.widget.WidgetUpdater
 import com.example.upad.widget.ChildSessionMonitorWidgetProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,8 +51,11 @@ class RoutineViewModel(
     private val repository: FirebaseRepository,
     private val dataStoreManager: DataStoreManager,
     private val languageDataStore: LanguageDataStore,
-    private val arasaacRepository: ArasaacRepository = ArasaacRepository(),
-    private val aiRepository: AiRepository = AiRepository()
+    private val themePreferences: ThemePreferences,
+    private val widgetUpdater: WidgetUpdater,
+    private val deviceIdProvider: () -> String,
+    private val arasaacRepository: ArasaacRepository,
+    private val aiRepository: AiRepository
 ) : ViewModel() {
 
     private var listenerManana: ListenerRegistration? = null
@@ -231,23 +237,13 @@ class RoutineViewModel(
                 _appLanguage.value = lang
             }
         }
-        // 🌓 CARGAR EL TEMA GUARDADO AUTOMÁTICAMENTE AL ARRANCAR
-        viewModelScope.launch {
-            // Buscamos si hay un registro guardado en la misma SharedPreferences compartida de la app "UPadPrefs"
-            val context = com.example.upad.UPadApplication.appContext
-            val sharedPrefs = context.getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE)
-            _isDarkMode.value = sharedPrefs.getBoolean("pref_tema_oscuro", false)
-        }
+        // 🌓 Cargar el tema guardado al arrancar
+        _isDarkMode.value = themePreferences.isDarkMode()
     }
 
-    // 🔄 SE MODIFICA ESTA FUNCIÓN: Ahora guarda inmediatamente en el almacenamiento local al cambiar el switch
     fun setDarkMode(enabled: Boolean) {
         _isDarkMode.value = enabled
-        viewModelScope.launch {
-            val context = com.example.upad.UPadApplication.appContext
-            val sharedPrefs = context.getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE)
-            sharedPrefs.edit().putBoolean("pref_tema_oscuro", enabled).apply()
-        }
+        themePreferences.setDarkMode(enabled)
     }
 
     // 🚀 ÚNICO CAMBIO: Se añade la función requerida por tus vistas de pago para evitar el error en rojo
@@ -525,49 +521,19 @@ class RoutineViewModel(
 
     private fun notificarCambioAlWidget() {
         try {
-            val context = com.example.upad.UPadApplication.appContext
-            val prefs = context.getSharedPreferences("WIDGET_PREFS", Context.MODE_PRIVATE)
-            val diaDeHoy = RoutineProgressCalculator.obtenerDiaDeHoy()
-            val prefijoDia = RoutineProgressCalculator.obtenerPrefijoDia(diaDeHoy)
-
-            val progManana = calcularPorcentaje(_tasksManana.value, prefijoDia)
-            val progTarde  = calcularPorcentaje(_tasksTarde.value, prefijoDia)
-            val progNoche  = calcularPorcentaje(_tasksNoche.value, prefijoDia)
-
-            val (totalManana, compManana) = RoutineProgressCalculator.calcularProgreso(_tasksManana.value, prefijoDia)
-            val (totalTarde, compTarde) = RoutineProgressCalculator.calcularProgreso(_tasksTarde.value, prefijoDia)
-            val (totalNoche, compNoche) = RoutineProgressCalculator.calcularProgreso(_tasksNoche.value, prefijoDia)
-
-            val totalTareasDia = totalManana + totalTarde + totalNoche
-            val completadasTareasDia = compManana + compTarde + compNoche
-            val pendientesTareasDia = totalTareasDia - completadasTareasDia
-            val porcentajeGlobal = if (totalTareasDia > 0) (completadasTareasDia * 100) / totalTareasDia else 0
-
-            prefs.edit().apply {
-                putInt("PROGRESO_MANANA", progManana)
-                putInt("PROGRESO_TARDE", progTarde)
-                putInt("PROGRESO_NOCHE", progNoche)
-                
-                // Nuevas estadísticas para el widget Premium
-                putInt("TOTAL_TAREAS_DIA", totalTareasDia)
-                putInt("COMPLETADAS_TAREAS_DIA", completadasTareasDia)
-                putInt("PENDIENTES_TAREAS_DIA", pendientesTareasDia)
-                putInt("PORCENTAJE_GLOBAL", porcentajeGlobal)
-                putBoolean("IS_PREMIUM", _isPremiumManual.value)
-
-                putLong("ULTIMO_FETCH", System.currentTimeMillis())
-                apply()
-            }
-            com.example.upad.widget.ParentRoutineWidgetProvider.notificarCambioDatos(context)
-            com.example.upad.widget.PremiumProgressWidgetProvider.notificarCambioDatos(context)
+            val prefijoDia = RoutineProgressCalculator.obtenerPrefijoDia(RoutineProgressCalculator.obtenerDiaDeHoy())
+            widgetUpdater.publicar(
+                WidgetProgress.calcular(
+                    tareasManana = _tasksManana.value,
+                    tareasTarde = _tasksTarde.value,
+                    tareasNoche = _tasksNoche.value,
+                    prefijoDia = prefijoDia,
+                    isPremium = _isPremiumManual.value
+                )
+            )
         } catch (e: Exception) {
             Log.e(TAG, "Error en notificarCambioAlWidget", e)
         }
-    }
-
-    private fun calcularPorcentaje(tareas: List<TaskItem>, prefijoDia: String): Int {
-        val (total, completadas) = RoutineProgressCalculator.calcularProgreso(tareas, prefijoDia)
-        return if (total > 0) (completadas * 100) / total else 0
     }
 
     fun searchArasaac(query: String) {
@@ -718,8 +684,7 @@ class RoutineViewModel(
             }
             if (finalUid.isEmpty()) {
                 try {
-                    val context = com.example.upad.UPadApplication.appContext
-                    val deviceId = android.provider.Settings.Secure.getString(context.contentResolver, android.provider.Settings.Secure.ANDROID_ID)
+                    val deviceId = deviceIdProvider()
                     val doc = com.google.firebase.firestore.FirebaseFirestore.getInstance()
                         .collection("dispositivos_niños")
                         .document(deviceId)

@@ -53,7 +53,6 @@ import com.example.upad.dashboard.ActivityDetailsScreen
 import com.example.upad.dashboard.NotificationsScreen
 import com.example.upad.dashboard.RoutineDashboardScreen
 import com.example.upad.dashboard.DeviceManagementScreen
-import com.example.upad.data.FirebaseRepository
 import com.example.upad.routines.CreateRoutineScreen
 import com.example.upad.routines.PictogramSelectionScreen
 import com.example.upad.setup.ChildProfileSetupScreen
@@ -113,9 +112,9 @@ class MainActivity : AppCompatActivity() {
             }
 
         setContent {
-            val repository = remember { FirebaseRepository() }
+            val container = (application as UPadApplication).container
             val routineViewModel: RoutineViewModel = viewModel(
-                factory = com.example.upad.viewmodel.RoutineViewModelFactory(repository)
+                factory = com.example.upad.viewmodel.RoutineViewModelFactory(container)
             )
 
             // El listener se registra una sola vez y se retira al salir de la composición;
