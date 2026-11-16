@@ -75,6 +75,7 @@ import com.example.upad.dashboard.AnalyticsScreen
 import com.example.upad.premium.PaymentViewScreen
 import android.content.Context
 import android.content.Intent
+import com.example.upad.components.OfflineBanner
 import com.example.upad.components.UPADBottomBar
 import com.example.upad.data.SessionRepository
 import com.example.upad.di.LocalAppContainer
@@ -297,8 +298,14 @@ fun UPadNavigation(
         windowInsetsController.isAppearanceLightStatusBars = !isDarkMode
     }
 
+    // En el modo niño no se muestra: la interfaz del niño debe mantenerse estable.
+    val hayConexion by LocalAppContainer.current.networkMonitor.isOnline.collectAsState(initial = true)
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        topBar = {
+            if (!hayConexion && !estaEnSeccionNiño) OfflineBanner()
+        },
         bottomBar = {
             UPADBottomBar(navController = navController, settingsViewModel = settingsViewModel)
         }
