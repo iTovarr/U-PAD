@@ -27,9 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
 import com.example.upad.utils.BiometricHelper
-import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun RoleSelectionScreen(
@@ -41,7 +41,8 @@ fun RoleSelectionScreen(
 
     val context = LocalContext.current
     val activity = context as? androidx.fragment.app.FragmentActivity
-    val usuarioFirebase = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val usuarioFirebase = remember { session.currentUser }
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -144,7 +145,7 @@ fun RoleSelectionScreen(
 @Composable
 private fun TutorCard(
     modifier: Modifier,
-    usuarioFirebase: com.google.firebase.auth.FirebaseUser?,
+    usuarioFirebase: com.example.upad.data.SessionUser?,
     activity: androidx.fragment.app.FragmentActivity?,
     context: android.content.Context,
     colorMoradoTutor: Color,
