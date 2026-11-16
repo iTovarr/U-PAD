@@ -71,7 +71,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,7 +78,7 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("androidx.compose.material:material-icons-extended:1.6.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.appcompat:appcompat:1.6.1")
 
@@ -109,12 +108,6 @@ dependencies {
     // Dependencias necesarias para DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.datastore:datastore-preferences-core:1.1.1")
-    // 🚨 ESTA ES LA LÍNEA CRUCIAL PARA MATERIAL 3:
-    implementation("androidx.compose.material3:material3:1.2.1")
-
-    // También asegúrate de tener las dependencias base de Compose actualizadas
-    implementation("androidx.compose.ui:ui:1.6.7")
-    implementation("androidx.compose.material:material-icons-extended:1.6.7")
 /// Pega esta línea:gemini
     // Cambia la versión 0.9.0 por la 0.10.0 (o superior si usas un catálogo de versiones)
 // Cambia el 0.10.0 problemático por la versión verificada de producción
