@@ -20,6 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.R
+import com.example.upad.utils.CredentialValidator
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -139,9 +141,14 @@ fun LoginScreen(
 
                     if (isLoading) return@Button
 
-                    if (email.isNotBlank() && password.isNotBlank()) {
+                    if (email.isBlank() || password.isBlank()) {
+                        Toast.makeText(context, context.getString(R.string.error_fill_all_fields), Toast.LENGTH_SHORT).show()
+                    } else if (!CredentialValidator.esEmailValido(email)) {
+                        Toast.makeText(context, context.getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show()
+                    } else {
                         isLoading = true
-                        auth.signInWithEmailAndPassword(email.trim(), password.trim())
+                        // La contraseña se envía tal cual: recortarla la haría distinta de la que escribió el usuario.
+                        auth.signInWithEmailAndPassword(email.trim(), password)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     // 🔥 CORREGIDO: Guardamos el nombre en SharedPreferences antes de disparar la navegación
@@ -156,8 +163,6 @@ fun LoginScreen(
                                     Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
                                 }
                             }
-                    } else {
-                        Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
