@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,9 @@ fun RegisterScreen(
     var isLoading by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+    val msgCamposVacios = stringResource(id = R.string.error_fill_all_fields)
+    val msgEmailInvalido = stringResource(id = R.string.error_invalid_email)
+    val msgPasswordCorta = stringResource(id = R.string.error_password_too_short, CredentialValidator.MIN_PASSWORD_LENGTH)
     val auth = FirebaseAuth.getInstance()
     val scope = rememberCoroutineScope()
     val repository = remember { FirebaseRepository() }
@@ -149,15 +153,11 @@ fun RegisterScreen(
                     if (isLoading) return@Button
 
                     if (email.isBlank() || password.isBlank() || name.isBlank()) {
-                        Toast.makeText(context, context.getString(R.string.error_fill_all_fields), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, msgCamposVacios, Toast.LENGTH_SHORT).show()
                     } else if (!CredentialValidator.esEmailValido(email)) {
-                        Toast.makeText(context, context.getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, msgEmailInvalido, Toast.LENGTH_SHORT).show()
                     } else if (!CredentialValidator.esPasswordValida(password)) {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.error_password_too_short, CredentialValidator.MIN_PASSWORD_LENGTH),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(context, msgPasswordCorta, Toast.LENGTH_SHORT).show()
                     } else {
                         isLoading = true
 
