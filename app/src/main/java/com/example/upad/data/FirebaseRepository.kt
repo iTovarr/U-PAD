@@ -1,7 +1,9 @@
 package com.example.upad.data
 
 import android.net.Uri
+import com.example.upad.utils.PairingCode
 import com.example.upad.viewmodel.TaskItem
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ListenerRegistration
@@ -9,6 +11,10 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 
 class FirebaseRepository {
+    private companion object {
+        const val MAX_INTENTOS_CODIGO = 5
+    }
+
     private val firestore = FirebaseFirestore.getInstance()
     private val storage = FirebaseStorage.getInstance().reference
 
@@ -300,13 +306,37 @@ class FirebaseRepository {
             .addSnapshotListener(onSnapshot)
     }
 
-    fun createPairingCode(code: String, deviceId: String) {
-        firestore.collection("codigos_vinculacion").document(code)
-            .set(mapOf(
-                "deviceId" to deviceId,
-                "estado" to "esperando",
-                "padreId" to ""
-            ))
+    /**
+     * Reserva un código de vinculación que no esté en uso y lo devuelve.
+     *
+     * La comprobación y la escritura van en una transacción para que dos
+     * dispositivos no puedan quedarse con el mismo código. Un código existente
+     * solo se reutiliza si ya expiró.
+     */
+    suspend fun createUniquePairingCode(deviceId: String): String {
+        repeat(MAX_INTENTOS_CODIGO) {
+            val code = PairingCode.generar()
+            val ref = firestore.collection("codigos_vinculacion").document(code)
+            val reservado = firestore.runTransaction { transaction ->
+                val existente = transaction.get(ref)
+                val creadoEn = existente.getTimestamp("creadoEn")?.toDate()?.time
+                val ocupado = existente.exists() &&
+                    !PairingCode.haExpirado(creadoEn, System.currentTimeMillis())
+                if (ocupado) {
+                    false
+                } else {
+                    transaction.set(ref, mapOf(
+                        "deviceId" to deviceId,
+                        "estado" to PairingCode.ESTADO_ESPERANDO,
+                        "padreId" to "",
+                        "creadoEn" to FieldValue.serverTimestamp()
+                    ))
+                    true
+                }
+            }.await()
+            if (reservado) return code
+        }
+        throw IllegalStateException("No se pudo reservar un código de vinculación libre")
     }
 
     fun listenToPairingCode(code: String, onSnapshot: (com.google.firebase.firestore.DocumentSnapshot?, com.google.firebase.firestore.FirebaseFirestoreException?) -> Unit): ListenerRegistration {

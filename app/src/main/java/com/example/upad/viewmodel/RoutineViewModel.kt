@@ -17,6 +17,7 @@ import com.example.upad.widget.ChildSessionMonitorWidgetProvider
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.asStateFlow
 import com.google.firebase.firestore.ListenerRegistration
+import com.example.upad.utils.PairingCode
 import com.example.upad.utils.RoutineProgressCalculator
 import kotlinx.coroutines.tasks.await
 
@@ -298,25 +299,29 @@ class RoutineViewModel(
 
                 if (!codigoGeneradoEnSesion) {
                     codigoGeneradoEnSesion = true
-                    val nuevoCodigo = (100000..999999).random().toString()
-                    _codigoNiño.value = nuevoCodigo
+                    viewModelScope.launch {
+                        try {
+                            val nuevoCodigo = repository.createUniquePairingCode(deviceId)
+                            _codigoNiño.value = nuevoCodigo
 
-                    repository.createPairingCode(nuevoCodigo, deviceId)
-
-                    pairingCodeListener?.remove()
-                    pairingCodeListener = repository.listenToPairingCode(nuevoCodigo) { codeSnapshot, codeError ->
-                        if (codeError != null) return@listenToPairingCode
-                        if (codeSnapshot != null && codeSnapshot.exists()) {
-                            val estado = codeSnapshot.getString("estado")
-                            val pId = codeSnapshot.getString("padreId")
-                            if (estado == "enlazado" && !pId.isNullOrEmpty()) {
-                                repository.linkDeviceToParent(deviceId, pId)
-                                repository.deletePairingCode(nuevoCodigo)
+                            pairingCodeListener?.remove()
+                            pairingCodeListener = repository.listenToPairingCode(nuevoCodigo) { codeSnapshot, codeError ->
+                                if (codeError != null) return@listenToPairingCode
+                                if (codeSnapshot != null && codeSnapshot.exists()) {
+                                    val estado = codeSnapshot.getString("estado")
+                                    val pId = codeSnapshot.getString("padreId")
+                                    if (estado == PairingCode.ESTADO_ENLAZADO && !pId.isNullOrEmpty()) {
+                                        repository.linkDeviceToParent(deviceId, pId)
+                                        repository.deletePairingCode(nuevoCodigo)
+                                    }
+                                }
                             }
+                        } catch (e: Exception) {
+                            // Sin red o sin código libre: se permite reintentar en el próximo evento.
+                            e.printStackTrace()
+                            codigoGeneradoEnSesion = false
                         }
                     }
-                } else if (_codigoNiño.value == "------") {
-                    codigoGeneradoEnSesion = false
                 }
 
                 _cargandoChild.value = false
