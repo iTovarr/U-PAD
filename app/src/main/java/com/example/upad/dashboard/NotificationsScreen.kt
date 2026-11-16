@@ -26,10 +26,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.request.ImageRequest
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 private const val TAG = "NotificationsScreen"
@@ -74,7 +74,8 @@ fun NotificationsScreen(
 
     // --- NUEVOS ESTADOS Y CONFIGURACIÓN REQUERIDA ---
     val context = LocalContext.current
-    val currentUser = remember { FirebaseAuth.getInstance().currentUser }
+    val session = LocalAppContainer.current.sessionRepository
+    val currentUser = remember { session.currentUser }
     val sharedPreferences = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 
@@ -103,7 +104,7 @@ fun NotificationsScreen(
         if (isDarkMode) Color(0xFF1E1E1E) else Color.White
     }
 
-    val padreId = remember { FirebaseAuth.getInstance().currentUser?.uid ?: "" }
+    val padreId = remember { session.currentUserId }
     val firestore = remember { FirebaseFirestore.getInstance() }
     val notificationsList = remember { mutableStateListOf<NotificationItem>() }
     var loadingNotifications by remember { mutableStateOf(true) }
