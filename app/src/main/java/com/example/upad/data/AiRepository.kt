@@ -3,6 +3,7 @@ package com.example.upad.data
 import com.example.upad.BuildConfig
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -72,24 +73,50 @@ class AiRepository : AiService {
                 .addHeader("Authorization", "Bearer ${credencial()}")
                 .build()
 
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    throw IOException("Error de API: ${response.code}")
+            // Los fallos pasajeros (sin red, límite de peticiones, error del servidor) se
+            // reintentan con una espera creciente antes de mostrar el error al tutor.
+            var ultimoError: IOException? = null
+            repeat(MAX_INTENTOS) { intento ->
+                if (intento > 0) delay(ESPERA_ENTRE_INTENTOS_MS * intento)
+                try {
+                    return@withContext ejecutar(request)
+                } catch (e: ErrorReintentable) {
+                    ultimoError = e
                 }
-                val jsonObj = JSONObject(response.body?.string() ?: "")
-
-                if (jsonObj.has("error")) {
-                    val errorMsg = jsonObj.getJSONObject("error").optString("message", "Error desconocido")
-                    throw IOException(errorMsg)
-                }
-
-                jsonObj
-                    .getJSONArray("choices")
-                    .getJSONObject(0)
-                    .getJSONObject("message")
-                    .getString("content")
             }
+            throw ultimoError ?: IOException("Error desconocido")
         }
+
+    /** Fallo que merece otro intento: problema de red, 429 o error 5xx. */
+    private class ErrorReintentable(message: String, cause: Throwable? = null) : IOException(message, cause)
+
+    private fun ejecutar(request: Request): String {
+        val response = try {
+            client.newCall(request).execute()
+        } catch (e: IOException) {
+            throw ErrorReintentable(e.message ?: "Error de red", e)
+        }
+
+        response.use {
+            if (!response.isSuccessful) {
+                val mensaje = "Error de API: ${response.code}"
+                if (response.code == 429 || response.code >= 500) throw ErrorReintentable(mensaje)
+                throw IOException(mensaje)
+            }
+            val jsonObj = JSONObject(response.body?.string() ?: "")
+
+            if (jsonObj.has("error")) {
+                val errorMsg = jsonObj.getJSONObject("error").optString("message", "Error desconocido")
+                throw IOException(errorMsg)
+            }
+
+            return jsonObj
+                .getJSONArray("choices")
+                .getJSONObject(0)
+                .getJSONObject("message")
+                .getString("content")
+        }
+    }
 
     private fun usaProxy(): Boolean = BuildConfig.AI_PROXY_URL.isNotBlank()
 
@@ -113,6 +140,9 @@ class AiRepository : AiService {
         private const val GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
         private const val MODEL = "llama-3.3-70b-versatile"
         private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
+
+        private const val MAX_INTENTOS = 3
+        private const val ESPERA_ENTRE_INTENTOS_MS = 1_000L
 
         private val PREFIJO_NUMERADO = Regex("^[0-9]+\\.\\s*")
         private val PREFIJO_VINETA = Regex("^[-*•]\\s*")
