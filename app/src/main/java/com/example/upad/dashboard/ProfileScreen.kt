@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import android.util.Log
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -42,6 +43,8 @@ import com.example.upad.components.UPADBackgroundWrapper
 import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.viewmodel.RoutineViewModel
 import com.google.firebase.auth.FirebaseAuth
+
+private const val TAG = "ProfileScreen"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -382,7 +385,7 @@ fun ProfileScreen(
                                             val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                                             context.contentResolver.takePersistableUriPermission(uri, takeFlags)
                                         } catch (e: Exception) {
-                                            e.printStackTrace()
+                                            Log.e(TAG, "Error en ProfileScreen", e)
                                         }
                                     }
                                 }
