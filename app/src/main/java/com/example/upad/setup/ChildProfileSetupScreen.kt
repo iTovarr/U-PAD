@@ -34,10 +34,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,10 +49,11 @@ fun ChildProfileSetupScreen(
     val configuration = LocalConfiguration.current
     val pantallaPequeña = configuration.screenHeightDp < 650
 
-    // 🔐 Instancias globales de Firebase
-    val auth = remember { FirebaseAuth.getInstance() }
-    val firestore = remember { FirebaseFirestore.getInstance() }
-    val storage = remember { FirebaseStorage.getInstance() }
+    // 🔐 Repositorios de sesión y de datos del tutor
+    val container = LocalAppContainer.current
+    val session = container.sessionRepository
+    val parentProfileRepository = container.parentProfileRepository
+    val scope = rememberCoroutineScope()
 
     // Estado para controlar la pantalla de carga durante la subida a la red
     var cargando by remember { mutableStateOf(false) }
@@ -297,7 +298,7 @@ fun ChildProfileSetupScreen(
                     val nombreFinal = name.ifBlank { "Mateo" }
                     val edadFinal = age.ifBlank { "6" }
                     val interesesFinal = interests.ifBlank { "Dinosaurios, Rompecabezas" }
-                    val uidPadre = auth.currentUser?.uid
+                    val uidPadre = session.currentUser?.uid
 
                     if (uidPadre != null) {
                         cargando = true
@@ -310,46 +311,40 @@ fun ChildProfileSetupScreen(
                             apply()
                         }
 
-                        // Lógica de guardado en la nube
-                        val guardarDatosEnFirestore = { urlDescarga: String ->
-                            val perfilHijoMap = hashMapOf(
-                                "nombre" to nombreFinal,
-                                "edad" to edadFinal,
-                                "intereses" to interesesFinal,
-                                "fotoUrl" to urlDescarga,
-                                "fechaRegistro" to com.google.firebase.Timestamp.now()
-                            )
-
-                            firestore.collection("usuarios").document(uidPadre)
-                                .collection("hijos").document("perfil")
-                                .set(perfilHijoMap, com.google.firebase.firestore.SetOptions.merge())
-                                .addOnSuccessListener {
-                                    cargando = false
-                                    onSaveClick()
-                                }
-                                .addOnFailureListener { e ->
-                                    cargando = false
-                                    Toast.makeText(context, "Error al guardar perfil: ${e.message}", Toast.LENGTH_LONG).show()
-                                }
-                        }
-
-                        if (imageUri != null) {
-                            // Subir archivo real a Firebase Storage estructurado en la ruta: /usuarios/{uid}/perfil_hijo.jpg
-                            val storageRef = storage.reference.child("usuarios/$uidPadre/perfil_hijo.jpg")
-                            storageRef.putFile(imageUri!!)
-                                .addOnSuccessListener {
-                                    // Conseguir el enlace HTTPS persistente
-                                    storageRef.downloadUrl.addOnSuccessListener { uriDescarga ->
-                                        guardarDatosEnFirestore(uriDescarga.toString())
-                                    }
-                                }
-                                .addOnFailureListener { e ->
+                        // Guardado en la nube: primero la foto (si hay) y después el perfil
+                        val fotoLocal = imageUri
+                        scope.launch {
+                            val fotoUrl = if (fotoLocal != null) {
+                                try {
+                                    parentProfileRepository.uploadChildPhoto(uidPadre, fotoLocal)
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (e: Exception) {
                                     cargando = false
                                     Toast.makeText(context, "Error al subir imagen: ${e.message}", Toast.LENGTH_LONG).show()
+                                    return@launch
                                 }
-                        } else {
-                            // Si el usuario no cargó foto propia, guardamos una cadena vacía o URL predeterminada
-                            guardarDatosEnFirestore("")
+                            } else {
+                                // Sin foto propia se guarda una cadena vacía
+                                ""
+                            }
+
+                            try {
+                                parentProfileRepository.saveChildProfile(
+                                    uid = uidPadre,
+                                    nombre = nombreFinal,
+                                    edad = edadFinal,
+                                    intereses = interesesFinal,
+                                    fotoUrl = fotoUrl
+                                )
+                                cargando = false
+                                onSaveClick()
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
+                                cargando = false
+                                Toast.makeText(context, "Error al guardar perfil: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
                         }
                     } else {
                         Toast.makeText(context, "Sesión no válida. Inicia sesión de nuevo.", Toast.LENGTH_LONG).show()
