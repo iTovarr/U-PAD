@@ -281,7 +281,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun iniciarEscuchaNotificacionesPadre(userId: String) {
         notificationsListener?.remove()
-        if (userId.isEmpty() || userId == "PADRE_TEST") return
+        if (userId.isEmpty()) return
 
         notificationsListener = firestore.collection("users")
             .document(userId)
@@ -348,7 +348,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun iniciarEscuchaPremiumPadre(userId: String, routineViewModel: RoutineViewModel) {
         parentPremiumListener?.remove()
-        if (userId.isEmpty() || userId == "PADRE_TEST") return
+        if (userId.isEmpty()) return
 
         parentPremiumListener = firestore.collection("users")
             .document(userId)
@@ -835,7 +835,7 @@ fun UPadNavigation(
                         activityName = activityName,
                         onFeedbackSelected = { emocion ->
                             val idPadre = padreIdDelHijo.ifEmpty {
-                                FirebaseAuth.getInstance().currentUser?.uid ?: "PADRE_TEST"
+                                FirebaseAuth.getInstance().currentUser?.uid ?: ""
                             }
                             val horaActual = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
                             val turnoActual = when {

@@ -82,7 +82,7 @@ fun CreateRoutineScreen(
     }
 
     val currentUserId = remember {
-        FirebaseAuth.getInstance().currentUser?.uid ?: "PADRE_TEST"
+        FirebaseAuth.getInstance().currentUser?.uid ?: ""
     }
 
     var routineName by remember(routineTurn) { mutableStateOf("Rutina de la $routineTurn") }

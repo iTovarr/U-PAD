@@ -431,7 +431,7 @@ class RoutineViewModel(
     fun changeLanguage(userId: String?, languageCode: String) {
         viewModelScope.launch {
             languageDataStore.saveLanguage(languageCode)
-            if (!userId.isNullOrEmpty() && userId != "PADRE_TEST") {
+            if (!userId.isNullOrEmpty()) {
                 try {
                     repository.saveUserLanguage(userId, languageCode)
                 } catch (e: Exception) {
@@ -443,7 +443,7 @@ class RoutineViewModel(
 
     fun iniciarEscuchaIdioma(userId: String) {
         languageListener?.remove()
-        if (userId.isEmpty() || userId == "PADRE_TEST") return
+        if (userId.isEmpty()) return
 
         languageListener = repository.listenUserLanguage(userId) { nuevoIdioma ->
             viewModelScope.launch {
@@ -486,7 +486,7 @@ class RoutineViewModel(
     }
 
     fun cargarRutinasPorDia(userId: String, dia: String) {
-        if (userId.isNotEmpty() && userId != "PADRE_TEST") {
+        if (userId.isNotEmpty()) {
             padreIdActual = userId
         }
         val uidValido = obtenerUidSeguro(userId)
@@ -595,7 +595,7 @@ class RoutineViewModel(
     }
 
     private fun obtenerUidSeguro(userId: String): String {
-        return if (userId == "PADRE_TEST" || userId.isBlank()) {
+        return if (userId.isBlank()) {
             com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
         } else {
             userId
@@ -713,10 +713,10 @@ class RoutineViewModel(
         viewModelScope.launch {
             // Resolver el padreId real (uidValido) de forma robusta
             var finalUid = uidValido
-            if (finalUid.isEmpty() || finalUid == "PADRE_TEST") {
+            if (finalUid.isEmpty()) {
                 finalUid = padreIdActual
             }
-            if (finalUid.isEmpty() || finalUid == "PADRE_TEST") {
+            if (finalUid.isEmpty()) {
                 try {
                     val context = com.example.upad.UPadApplication.appContext
                     val deviceId = android.provider.Settings.Secure.getString(context.contentResolver, android.provider.Settings.Secure.ANDROID_ID)
@@ -761,7 +761,7 @@ class RoutineViewModel(
                 try {
                     repository.saveRoutinePorDia(finalUid, turnoValido, diaFull, listaActual)
 
-                    if (finalUid.isNotEmpty() && finalUid != "PADRE_TEST") {
+                    if (finalUid.isNotEmpty()) {
                         val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
                         val lang = appLanguage.value
 

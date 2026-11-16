@@ -41,7 +41,7 @@ fun TaskExecutionScreen(
 
     val currentUserId = remember {
         padreId.ifEmpty {
-            FirebaseAuth.getInstance().currentUser?.uid ?: "PADRE_TEST"
+            FirebaseAuth.getInstance().currentUser?.uid ?: ""
         }
     }
 

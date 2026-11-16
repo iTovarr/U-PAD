@@ -37,7 +37,7 @@ fun ActivityDetailsScreen(
 
     // Forzamos la recarga de las rutinas de la base de datos al abrir la pantalla
     LaunchedEffect(Unit) {
-        viewModel.cargarRutinasDesdeFirebase("PADRE_TEST")
+        viewModel.cargarRutinasDesdeFirebase("")
     }
 
     // --- 📅 DETECTOR AUTOMÁTICO DEL DÍA DE HOY ---

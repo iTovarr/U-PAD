@@ -133,7 +133,7 @@ fun RoutineDashboardScreen(
     var mostrarCalendarioCompleto by remember { mutableStateOf(false) }
     var showTurnSelectionDialog by remember { mutableStateOf(false) }
 
-    val currentUserId = remember(currentUser) { currentUser?.uid ?: "PADRE_TEST" }
+    val currentUserId = remember(currentUser) { currentUser?.uid ?: "" }
 
     LaunchedEffect(diaSeleccionado, currentUserId) {
         routineViewModel.cargarRutinasPorDia(currentUserId, diaSeleccionado)
