@@ -23,7 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.upad.R
 import com.example.upad.data.FirebaseRepository
+import com.example.upad.utils.CredentialValidator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -146,22 +148,29 @@ fun RegisterScreen(
 
                     if (isLoading) return@Button
 
-                    Log.d("UPAD_DEBUG", "BOTÓN PRESIONADO - Email: $email")
-
-                    if (email.isNotBlank() && password.isNotBlank() && name.isNotBlank()) {
+                    if (email.isBlank() || password.isBlank() || name.isBlank()) {
+                        Toast.makeText(context, context.getString(R.string.error_fill_all_fields), Toast.LENGTH_SHORT).show()
+                    } else if (!CredentialValidator.esEmailValido(email)) {
+                        Toast.makeText(context, context.getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show()
+                    } else if (!CredentialValidator.esPasswordValida(password)) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.error_password_too_short, CredentialValidator.MIN_PASSWORD_LENGTH),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
                         isLoading = true
 
-                        auth.createUserWithEmailAndPassword(email.trim(), password.trim())
+                        // La contraseña se envía tal cual: recortarla la haría distinta de la que escribió el usuario.
+                        auth.createUserWithEmailAndPassword(email.trim(), password)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     val userId = auth.currentUser?.uid
-                                    Log.d("UPAD_DEBUG", "AUTH EXITOSO: $userId")
 
                                     if (userId != null) {
                                         scope.launch {
                                             try {
                                                 repository.saveUserData(userId, name)
-                                                Log.d("UPAD_DEBUG", "DATOS GUARDADOS EN FIREBASE")
                                                 onRegisterComplete(email, password)
                                             } catch (e: Exception) {
                                                 Log.e("UPAD_DEBUG", "ERROR AL GUARDAR EN DB: ${e.message}")
@@ -176,8 +185,6 @@ fun RegisterScreen(
                                     Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
                                 }
                             }
-                    } else {
-                        Toast.makeText(context, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier
