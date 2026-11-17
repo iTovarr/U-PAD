@@ -63,7 +63,7 @@
         <receiver
             android:name=".widget.ParentRoutineWidgetProvider"
             android:exported="true"
-            android:label="Progreso de Hoy">
+            android:label="@string/widget_label_progress">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.upad.widget.ACTION_REFRESH" />
@@ -76,7 +76,7 @@
         <receiver
             android:name=".widget.ChildSessionMonitorWidgetProvider"
             android:exported="true"
-            android:label="Monitor de Sesión U-pad">
+            android:label="@string/widget_label_session">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.upad.widget.session.ACTION_REFRESH" />
@@ -90,7 +90,7 @@
         <receiver
             android:name=".widget.PremiumProgressWidgetProvider"
             android:exported="true"
-            android:label="Progreso de Hoy (Premium)">
+            android:label="@string/widget_label_progress_premium">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.example.upad.widget.premium.ACTION_REFRESH" />
