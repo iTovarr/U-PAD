@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import android.content.res.Configuration
@@ -88,7 +89,7 @@ fun RoleSelectionScreen(
                 Text(
                     text = stringResource(id = R.string.role_question),
                     fontSize = if (isLandscape) 15.sp else 18.sp,
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center
                 )
