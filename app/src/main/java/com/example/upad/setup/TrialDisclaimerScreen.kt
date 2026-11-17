@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,7 +44,7 @@ fun TrialDisclaimerScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "COMIENZA TU PRUEBA",
+                text = stringResource(id = R.string.trial_overline),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -51,7 +52,7 @@ fun TrialDisclaimerScreen(
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Tu primer paso hacia una rutina exitosa",
+                text = stringResource(id = R.string.trial_title),
                 fontSize = 16.sp,
                 color = Color.Gray,
                 fontWeight = FontWeight.Medium
@@ -75,7 +76,7 @@ fun TrialDisclaimerScreen(
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.upad_icono), // Asegúrate de tener esta imagen
-                    contentDescription = "Ilustración de inicio",
+                    contentDescription = stringResource(id = R.string.cd_start_illustration),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Fit
                 )
@@ -84,7 +85,7 @@ fun TrialDisclaimerScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             Text(
-                text = "Esta prueba te dará un punto de partida para la intervención y el apoyo adecuado para las rutinas de tu hijo.",
+                text = stringResource(id = R.string.trial_description),
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
                 color = Color(0xFF555555),
@@ -112,7 +113,7 @@ fun TrialDisclaimerScreen(
                 elevation = ButtonDefaults.buttonElevation(8.dp)
             ) {
                 Text(
-                    text = "VALE, EMPECEMOS",
+                    text = stringResource(id = R.string.trial_start),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
                     color = Color.White
@@ -122,7 +123,7 @@ fun TrialDisclaimerScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Más información",
+                text = stringResource(id = R.string.trial_more_info),
                 color = colorAzulTEA,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
