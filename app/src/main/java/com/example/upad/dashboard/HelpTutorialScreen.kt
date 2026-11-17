@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -133,7 +134,7 @@ fun HelpTutorialScreen(
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { pestañaSeleccionada = 0 },
+                            .clickable(role = Role.Tab) { pestañaSeleccionada = 0 },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -158,7 +159,7 @@ fun HelpTutorialScreen(
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable { pestañaSeleccionada = 1 },
+                            .clickable(role = Role.Tab) { pestañaSeleccionada = 1 },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -222,7 +223,7 @@ fun HelpTutorialScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(210.dp)
-                            .clickable {
+                            .clickable(role = Role.Button) {
                                 val intent = android.content.Intent(
                                     android.content.Intent.ACTION_VIEW,
                                     android.net.Uri.parse("https://youtu.be/fVQU3RGt8KI")
