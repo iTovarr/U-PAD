@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -90,7 +92,7 @@ fun DevicePairingScreen(
                 )
         ) {
             Text(
-                text = "SINCRONIZACIÓN REALTIME",
+                text = stringResource(id = R.string.pairing_overline),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
@@ -157,7 +159,7 @@ fun DevicePairingScreen(
                                 mensajeError = ""
                             }
                         },
-                        label = { Text("Código de vinculación", color = colorTextoSecundario) },
+                        label = { Text(stringResource(id = R.string.pairing_code_label), color = colorTextoSecundario) },
                         placeholder = { Text("000000", color = colorTextoSecundario.copy(alpha = 0.5f)) },
                         enabled = !estaConectando,
                         modifier = Modifier
@@ -208,7 +210,7 @@ fun DevicePairingScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
-                        text = "¡Enlace Completado!",
+                        text = stringResource(id = R.string.pairing_done),
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Black,
                         color = colorTextoPrincipal
@@ -297,7 +299,7 @@ fun DevicePairingScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "Configurar más tarde y omitir",
+                        text = stringResource(id = R.string.pairing_skip),
                         color = colorTextoSecundario,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold
