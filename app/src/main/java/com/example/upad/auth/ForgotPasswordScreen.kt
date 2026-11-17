@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import com.example.upad.R
@@ -29,7 +30,7 @@ fun ForgotPasswordScreen(
     var showDialog by remember { mutableStateOf(false) }
 
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorFondoBase = LightBackground
 
     Column(
         modifier = Modifier
