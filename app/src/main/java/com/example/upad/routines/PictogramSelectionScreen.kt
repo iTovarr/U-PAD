@@ -1,5 +1,7 @@
 package com.example.upad.routines
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -65,7 +67,7 @@ fun PictogramSelectionScreen(
                 text = stringResource(id = R.string.pictogram_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
-                color = Color.LightGray,
+                color = TextoTenueClaro,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
@@ -89,7 +91,7 @@ fun PictogramSelectionScreen(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(id = R.string.pictogram_placeholder), color = Color.Gray) },
+                placeholder = { Text(stringResource(id = R.string.pictogram_placeholder), color = TextoSecundarioClaro) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = colorAzulTEA) },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
