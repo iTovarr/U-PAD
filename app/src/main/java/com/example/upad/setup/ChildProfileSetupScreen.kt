@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
@@ -110,11 +111,11 @@ fun ChildProfileSetupScreen(
                 )
         ) {
             IconButton(onClick = onBackClick, enabled = !cargando) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorAzulTEA)
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorAzulTEA)
             }
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "CONFIGURACIÓN INICIAL",
+                text = stringResource(id = R.string.child_setup_overline),
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
@@ -122,7 +123,7 @@ fun ChildProfileSetupScreen(
                 letterSpacing = 1.5.sp
             )
             Text(
-                text = "¿Quién es el pequeño héroe?",
+                text = stringResource(id = R.string.child_setup_title),
                 fontSize = if (pantallaPequeña) 22.sp else 26.sp,
                 fontWeight = FontWeight.Black,
                 color = colorTextoPrincipal,
@@ -159,14 +160,14 @@ fun ChildProfileSetupScreen(
                     if (imageUri != null) {
                         Image(
                             painter = rememberAsyncImagePainter(imageUri),
-                            contentDescription = "Foto de perfil",
+                            contentDescription = stringResource(id = R.string.cd_profile_photo),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
                     } else {
                         Image(
                             painter = painterResource(id = R.drawable.icon),
-                            contentDescription = "Foto por defecto",
+                            contentDescription = stringResource(id = R.string.cd_default_photo),
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
@@ -183,7 +184,7 @@ fun ChildProfileSetupScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.CameraAlt,
-                        contentDescription = "Cambiar Foto",
+                        contentDescription = stringResource(id = R.string.child_change_photo),
                         tint = Color.White,
                         modifier = Modifier.padding(if (pantallaPequeña) 8.dp else 10.dp)
                     )
@@ -201,7 +202,7 @@ fun ChildProfileSetupScreen(
                 Column(modifier = Modifier.padding(if (pantallaPequeña) 16.dp else 20.dp)) {
 
                     Text(
-                        text = "INFORMACIÓN PERSONAL",
+                        text = stringResource(id = R.string.child_personal_info),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorAzulTEA,
@@ -213,7 +214,7 @@ fun ChildProfileSetupScreen(
                         value = name,
                         onValueChange = { name = it },
                         enabled = !cargando,
-                        label = { Text("Nombre del niño", color = colorTextoSecundario) },
+                        label = { Text(stringResource(id = R.string.child_name_label), color = colorTextoSecundario) },
                         leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = colorTextoSecundario) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
@@ -234,7 +235,7 @@ fun ChildProfileSetupScreen(
                         value = age,
                         onValueChange = { age = it },
                         enabled = !cargando,
-                        label = { Text("Edad", color = colorTextoSecundario) },
+                        label = { Text(stringResource(id = R.string.child_age_label), color = colorTextoSecundario) },
                         leadingIcon = { Icon(Icons.Default.Face, contentDescription = null, tint = colorTextoSecundario) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(16.dp),
@@ -254,7 +255,7 @@ fun ChildProfileSetupScreen(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
-                        text = "GUSTOS Y PREFERENCIAS",
+                        text = stringResource(id = R.string.child_preferences),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorAzulTEA,
@@ -266,7 +267,7 @@ fun ChildProfileSetupScreen(
                         value = interests,
                         onValueChange = { interests = it },
                         enabled = !cargando,
-                        label = { Text("¿Qué cosas le encantan?", color = colorTextoSecundario) },
+                        label = { Text(stringResource(id = R.string.child_interests_label), color = colorTextoSecundario) },
                         leadingIcon = { Icon(Icons.Default.Favorite, contentDescription = null, tint = colorTextoSecundario) },
                         modifier = Modifier.fillMaxWidth(),
                         minLines = 2,
@@ -362,7 +363,7 @@ fun ChildProfileSetupScreen(
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                 } else {
                     Text(
-                        text = "CONTINUAR CONFIGURACIÓN ➡️",
+                        text = stringResource(id = R.string.child_continue),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Black,
                         color = if (esTemaOscuro) Color.Black else Color.White
