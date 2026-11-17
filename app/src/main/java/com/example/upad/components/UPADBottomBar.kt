@@ -1,5 +1,7 @@
 package com.example.upad.components
 
+import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.UPadColors
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,14 +45,14 @@ fun UPADBottomBar(
     // 🎯 Elegimos de manera reactiva qué lista usar
     val activeScreens = if (isPremiumUser) premiumScreens else basicScreens
 
-    val colorAcabadoPrincipal = if (isPremiumUser) Color(0xFFC5A059) else MaterialTheme.colorScheme.primary
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
+    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
+    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
 
     val colorFondoBarra = if (isPremiumUser) {
         if (isDarkMode) Color.White.copy(alpha = 0.05f) else Color.White.copy(alpha = 0.80f)
     } else {
-        if (isDarkMode) Color(0xFF1E1E1E) else Color.White
+        if (isDarkMode) DarkSurface else Color.White
     }
 
     // Comprobar si la pantalla actual pertenece a la lista activa para decidir si renderizar la barra
