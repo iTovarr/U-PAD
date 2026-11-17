@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -88,7 +89,7 @@ fun RoutineCompletedScreen(
                 Text(
                     text = if (esFinDeRutina) stringResource(R.string.no_pending_tasks) else stringResource(R.string.activity_completed_success),
                     fontSize = 17.sp,
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -175,7 +176,7 @@ fun RoutineCompletedScreen(
                     text = if (esFinDeRutina) stringResource(R.string.time_to_rest_or_play) else stringResource(R.string.keep_it_up),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(top = 4.dp)
                 )
