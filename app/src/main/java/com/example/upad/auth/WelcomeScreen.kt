@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -95,7 +96,7 @@ fun WelcomeScreen(
     onLoginExitoso: () -> Unit // Callback para cuando Google dice "OK"
 ) {
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorFondoBase = LightBackground
 
     // Herramientas necesarias para lanzar la hoja flotante de Android
     val context = LocalContext.current
