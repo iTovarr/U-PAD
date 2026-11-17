@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -166,7 +167,7 @@ fun PlanCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
-            .clickable { onClick() },
+            .clickable(role = Role.Button) { onClick() },
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 12.dp else 2.dp),
