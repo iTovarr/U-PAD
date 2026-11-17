@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +42,7 @@ fun AchievementReportScreen(
     Scaffold(
         topBar = {
             UpadTopAppBar(
-                title = "Reporte de Logros",
+                title = stringResource(id = R.string.report_title),
                 imageUri = null,
                 colorFondo = colorFondoSolido,
                 showBackButton = true,
@@ -78,7 +80,7 @@ fun AchievementReportScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Actividad Semanal",
+                            text = stringResource(id = R.string.report_weekly_activity),
                             fontWeight = FontWeight.Bold,
                             color = Color.DarkGray
                         )
@@ -91,7 +93,7 @@ fun AchievementReportScreen(
                     ) {
                         // Aquí integrarás tu librería de gráficos más adelante
                         Text(
-                            "Espacio para Gráfico de Barras",
+                            stringResource(id = R.string.report_chart_placeholder),
                             color = Color.LightGray,
                             fontSize = 14.sp,
                             textAlign = TextAlign.Center
@@ -102,8 +104,8 @@ fun AchievementReportScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        LegendItem(label = "Autónomo", color = colorVerdeLogro)
-                        LegendItem(label = "Con Ayuda", color = Color(0xFFFFD54F))
+                        LegendItem(label = stringResource(id = R.string.report_autonomous), color = colorVerdeLogro)
+                        LegendItem(label = stringResource(id = R.string.report_with_help), color = Color(0xFFFFD54F))
                     }
                 }
             }
@@ -130,13 +132,13 @@ fun AchievementReportScreen(
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
-                            text = "85% Autonomía",
+                            text = stringResource(id = R.string.report_autonomy_sample),
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Black,
                             color = Color(0xFF2E7D32)
                         )
                         Text(
-                            text = "¡Gran avance esta semana, Laura!",
+                            text = stringResource(id = R.string.report_weekly_praise),
                             fontSize = 14.sp,
                             color = Color(0xFF455A64),
                             lineHeight = 18.sp
@@ -158,7 +160,7 @@ fun AchievementReportScreen(
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
             ) {
                 Text(
-                    "DETALLES POR ACTIVIDAD",
+                    stringResource(id = R.string.report_details_button),
                     color = colorAzulTEA,
                     fontWeight = FontWeight.Black,
                     fontSize = 15.sp
