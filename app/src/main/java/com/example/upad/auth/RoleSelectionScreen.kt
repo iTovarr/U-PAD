@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import androidx.compose.ui.res.stringResource
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -75,7 +76,7 @@ fun RoleSelectionScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "BIENVENIDO A U-PAD",
+                    text = stringResource(id = R.string.welcome_title),
                     fontSize = if (isLandscape) 24.sp else 28.sp,
                     fontWeight = FontWeight.Black,
                     color = colorAzulTEA,
@@ -84,7 +85,7 @@ fun RoleSelectionScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "¿Quién usará el dispositivo hoy?",
+                    text = stringResource(id = R.string.role_question),
                     fontSize = if (isLandscape) 15.sp else 18.sp,
                     color = Color.Gray,
                     fontWeight = FontWeight.Medium,
@@ -153,7 +154,7 @@ private fun TutorCard(
 ) {
     RoleOptionCard(
         modifier = modifier,
-        title = "SOY PADRE\nO TUTOR",
+        title = stringResource(id = R.string.role_parent),
         imageRes = R.drawable.tutor,
         colorTheme = colorMoradoTutor,
         onClick = {
@@ -185,7 +186,7 @@ private fun MenorCard(
 ) {
     RoleOptionCard(
         modifier = modifier,
-        title = "SOY EL\nMENOR",
+        title = stringResource(id = R.string.role_child),
         imageRes = R.drawable.menor,
         colorTheme = colorAzulTEA,
         onClick = { onRoleSelected("menor") }
