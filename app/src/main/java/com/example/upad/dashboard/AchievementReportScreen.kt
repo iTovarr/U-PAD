@@ -1,5 +1,8 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.LightBackground
+import com.example.upad.ui.theme.UPadColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -28,16 +31,12 @@ fun AchievementReportScreen(
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorAzulTEA = ColorAzulTEA
+    val colorFondoBase = LightBackground
     val colorVerdeLogro = Color(0xFF81C784)
 
     // Lógica obligatoria para calcular el fondo sólido del componente
-    val colorFondoSolido = if (isPremiumUser) {
-        if (isDarkMode) Color(0xFF0F0C29) else Color(0xFFFBE9E7)
-    } else {
-        if (isDarkMode) Color(0xFF121212) else Color.White
-    }
+    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
 
     Scaffold(
         topBar = {
