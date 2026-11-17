@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import androidx.compose.ui.semantics.Role
 import android.util.Log
 import android.provider.Settings
 import android.Manifest
@@ -604,7 +605,7 @@ fun ItemActividadContenedor(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = isHabilitada && !isCompletada) { onClick() },
+            .clickable(enabled = isHabilitada && !isCompletada, role = Role.Button) { onClick() },
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = colorContenedor),
         border = BorderStroke(2.5.dp, colorBorde),
