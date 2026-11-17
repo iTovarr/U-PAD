@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -91,11 +93,11 @@ fun ExperienceSetupScreen(
                     )
                 ) {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorTextoPrincipal)
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorTextoPrincipal)
                     }
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
-                        text = "PERSONALIZACIÓN",
+                        text = stringResource(id = R.string.experience_overline),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Black,
                         color = colorTextoSecundario,
@@ -103,7 +105,7 @@ fun ExperienceSetupScreen(
                         letterSpacing = 1.5.sp
                     )
                     Text(
-                        text = "Prepara la experiencia",
+                        text = stringResource(id = R.string.experience_title),
                         fontSize = if (pantallaPequeña) 24.sp else 28.sp,
                         fontWeight = FontWeight.Black,
                         color = colorTextoPrincipal,
@@ -124,7 +126,7 @@ fun ExperienceSetupScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "APARIENCIA VISUAL",
+                    text = stringResource(id = R.string.experience_appearance),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorTextoSecundario
@@ -185,7 +187,7 @@ fun ExperienceSetupScreen(
                 Spacer(modifier = Modifier.height(28.dp))
 
                 Text(
-                    text = "AUDIO Y VOZ (ENTORNO DEL NIÑO)",
+                    text = stringResource(id = R.string.experience_audio),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorTextoSecundario
@@ -208,8 +210,8 @@ fun ExperienceSetupScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text("Voz en pictogramas", fontWeight = FontWeight.Bold, color = colorTextoPrincipal)
-                                Text("Lee las tareas en voz alta", fontSize = 12.sp, color = colorTextoSecundario)
+                                Text(stringResource(id = R.string.experience_voice), fontWeight = FontWeight.Bold, color = colorTextoPrincipal)
+                                Text(stringResource(id = R.string.experience_voice_hint), fontSize = 12.sp, color = colorTextoSecundario)
                             }
                             Switch(
                                 checked = voiceEnabled,
@@ -297,7 +299,7 @@ fun ExperienceSetupScreen(
                         elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                     ) {
                         Text(
-                            text = "GUARDAR Y CONTINUAR",
+                            text = stringResource(id = R.string.experience_save),
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Black,
                             color = if (isDarkMode) Color.White else Color.Black
