@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -73,7 +75,7 @@ fun SubscriptionPlansScreen(
             Text(
                 text = stringResource(id = R.string.choose_a_plan_desc),
                 fontSize = 16.sp,
-                color = Color.Gray,
+                color = TextoSecundarioClaro,
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp
             )
@@ -145,7 +147,7 @@ fun SubscriptionPlansScreen(
                 },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Text(stringResource(id = R.string.other_moment), color = Color.LightGray, fontWeight = FontWeight.Bold)
+                Text(stringResource(id = R.string.other_moment), color = TextoTenueClaro, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -205,7 +207,7 @@ fun PlanCard(
                     Text(
                         text = stringResource(id = R.string.unlimited_pictograms),
                         fontSize = 12.sp,
-                        color = Color.Gray
+                        color = TextoSecundarioClaro
                     )
                 }
             }
