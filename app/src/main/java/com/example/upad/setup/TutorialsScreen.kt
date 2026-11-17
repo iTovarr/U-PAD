@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -52,7 +54,7 @@ fun TutorialsScreen(
                 text = stringResource(id = R.string.tutorials_overline),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Black,
-                color = Color.LightGray,
+                color = TextoTenueClaro,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
@@ -139,7 +141,7 @@ fun TutorialCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayCircleFilled,
-                    contentDescription = null,
+                    contentDescription = stringResource(id = R.string.cd_play),
                     tint = colorAzulTEA,
                     modifier = Modifier.size(40.dp)
                 )
@@ -157,7 +159,7 @@ fun TutorialCard(
                 Text(
                     text = description,
                     fontSize = 12.sp,
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     lineHeight = 16.sp
                 )
                 TextButton(
