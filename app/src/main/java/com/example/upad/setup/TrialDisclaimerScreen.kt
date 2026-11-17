@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
@@ -55,7 +56,7 @@ fun TrialDisclaimerScreen(
             Text(
                 text = stringResource(id = R.string.trial_title),
                 fontSize = 16.sp,
-                color = Color.Gray,
+                color = TextoSecundarioClaro,
                 fontWeight = FontWeight.Medium
             )
         }
