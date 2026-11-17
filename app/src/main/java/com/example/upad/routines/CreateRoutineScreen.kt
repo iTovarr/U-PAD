@@ -1,5 +1,6 @@
 package com.example.upad.routines
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -461,7 +462,7 @@ fun CreateRoutineScreen(
                                                     if (estaSeleccionado) colorAcabadoPrincipal
                                                     else if (isDarkMode) Color.White.copy(alpha = 0.05f) else Color(0xFFEEEEEE)
                                                 )
-                                                .clickable {
+                                                .clickable(role = Role.Button) {
                                                     if (estaSeleccionado) diasSeleccionados.remove(dia)
                                                     else diasSeleccionados.add(dia)
                                                 }
@@ -694,7 +695,7 @@ fun CreateRoutineScreen(
                                                 else -> colorSuperficieTarjetas
                                             }
                                         )
-                                        .clickable {
+                                        .clickable(role = Role.Button) {
                                             diaFiltroSeleccionado = dia
                                             viewModel.cargarRutinasPorDia(currentUserId, dia)
                                         }
@@ -842,7 +843,7 @@ fun AIOptionsDialog(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { onOpcionSelected(opcion) },
+                            .clickable(role = Role.Button) { onOpcionSelected(opcion) },
                         shape = RoundedCornerShape(14.dp),
                         colors = CardDefaults.cardColors(containerColor = colorFondo),
                         border = BorderStroke(1.2.dp, colorAccion.copy(alpha = 0.35f))
