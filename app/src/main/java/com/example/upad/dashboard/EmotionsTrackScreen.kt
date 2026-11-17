@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -83,7 +85,7 @@ fun EmotionsTrackScreen(
             containerColor = Color.Transparent,
             topBar = {
                 UpadTopAppBar(
-                    title = "Bitácora de Emociones ✨",
+                    title = stringResource(id = R.string.emotions_title),
                     imageUri = imageUri,
                     colorFondo = colorFondoSolido,
                     colorIconos = colorTextoPrincipal,
@@ -117,7 +119,7 @@ fun EmotionsTrackScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No hay actividades registradas para el día de hoy.",
+                            text = stringResource(id = R.string.no_activities_today),
                             color = colorTextoSecundario,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium
@@ -126,7 +128,7 @@ fun EmotionsTrackScreen(
                 } else {
                     if (tasksManana.isNotEmpty()) {
                         TurnEmotionsBlock(
-                            title = "🌅 Mañana",
+                            title = stringResource(id = R.string.turn_morning_emoji),
                             tasks = tasksManana,
                             diaDeHoy = diaDeHoy,
                             colorSuperficie = colorSuperficieTarjetas,
@@ -137,7 +139,7 @@ fun EmotionsTrackScreen(
 
                     if (tasksTarde.isNotEmpty()) {
                         TurnEmotionsBlock(
-                            title = "☀️ Tarde",
+                            title = stringResource(id = R.string.turn_afternoon_emoji),
                             tasks = tasksTarde,
                             diaDeHoy = diaDeHoy,
                             colorSuperficie = colorSuperficieTarjetas,
@@ -148,7 +150,7 @@ fun EmotionsTrackScreen(
 
                     if (tasksNoche.isNotEmpty()) {
                         TurnEmotionsBlock(
-                            title = "🌙 Noche",
+                            title = stringResource(id = R.string.turn_night_emoji),
                             tasks = tasksNoche,
                             diaDeHoy = diaDeHoy,
                             colorSuperficie = colorSuperficieTarjetas,
