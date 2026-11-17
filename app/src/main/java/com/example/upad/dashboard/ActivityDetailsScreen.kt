@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -84,7 +86,7 @@ fun ActivityDetailsScreen(
                 text = stringResource(id = R.string.details_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
-                color = Color.LightGray,
+                color = TextoTenueClaro,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
@@ -101,7 +103,7 @@ fun ActivityDetailsScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
                     text = stringResource(id = R.string.details_empty),
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -118,7 +120,7 @@ fun ActivityDetailsScreen(
                         text = "ESTADO DE LA AGENDA HOY (${diaActualTexto})",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Gray,
+                        color = TextoSecundarioClaro,
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }
@@ -214,7 +216,7 @@ fun DetailRow(icon: ImageVector, label: String, value: String, color: Color) {
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(text = label, fontSize = 11.sp, color = Color.Gray)
+            Text(text = label, fontSize = 11.sp, color = TextoSecundarioClaro)
             Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.DarkGray)
         }
     }
