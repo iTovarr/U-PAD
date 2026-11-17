@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -129,7 +130,7 @@ fun TrialDisclaimerScreen(
                 fontWeight = FontWeight.Bold,
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
-                    .clickable { onMoreInfoClick() }
+                    .clickable(role = Role.Button) { onMoreInfoClick() }
                     .padding(8.dp)
             )
         }
