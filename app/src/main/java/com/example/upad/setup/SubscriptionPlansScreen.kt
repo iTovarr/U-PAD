@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
@@ -34,9 +36,9 @@ fun SubscriptionPlansScreen(
     onDirectToProfile: () -> Unit      // 🚀 Te lleva directo a ChildProfileSetupScreen (Plan Básico)
 
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
+    val colorAzulTEA = ColorAzulTEA
     val colorAmarilloTEA = Color(0xFFFFD54F)
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorFondoBase = LightBackground
 
     val container = LocalAppContainer.current
     val session = container.sessionRepository
@@ -163,7 +165,7 @@ fun PlanCard(
     colorTheme: Color,
     onClick: () -> Unit
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
+    val colorAzulTEA = ColorAzulTEA
 
     Card(
         modifier = Modifier
