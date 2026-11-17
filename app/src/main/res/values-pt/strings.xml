@@ -404,4 +404,5 @@
     <string name="error_upload_image">Erro ao enviar a imagem: %1$s</string>
     <string name="error_save_profile">Erro ao salvar o perfil: %1$s</string>
     <string name="error_invalid_session">Sessão inválida. Entre novamente.</string>
+    <string name="arasaac_attribution">Os símbolos pictográficos utilizados são propriedade do Governo de Aragão e foram criados por Sergio Palao para o ARASAAC (arasaac.org), que os distribui sob a Licença Creative Commons BY-NC-SA.</string>
 </resources>

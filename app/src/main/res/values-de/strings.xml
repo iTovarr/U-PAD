@@ -404,4 +404,5 @@
     <string name="error_upload_image">Fehler beim Hochladen des Bildes: %1$s</string>
     <string name="error_save_profile">Fehler beim Speichern des Profils: %1$s</string>
     <string name="error_invalid_session">Ungültige Sitzung. Bitte melde dich erneut an.</string>
+    <string name="arasaac_attribution">Die verwendeten Piktogramme sind Eigentum der Regierung von Aragonien und wurden von Sergio Palao für ARASAAC (arasaac.org) erstellt, das sie unter der Creative-Commons-Lizenz BY-NC-SA verbreitet.</string>
 </resources>

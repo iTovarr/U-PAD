@@ -404,4 +404,5 @@
     <string name="error_upload_image">Ошибка загрузки изображения: %1$s</string>
     <string name="error_save_profile">Ошибка сохранения профиля: %1$s</string>
     <string name="error_invalid_session">Сеанс недействителен. Войдите снова.</string>
+    <string name="arasaac_attribution">Используемые пиктограммы являются собственностью Правительства Арагона и созданы Серхио Палао для ARASAAC (arasaac.org), который распространяет их по лицензии Creative Commons BY-NC-SA.</string>
 </resources>

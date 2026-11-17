@@ -404,4 +404,5 @@
     <string name="error_upload_image">Erreur lors de l\'envoi de l\'image : %1$s</string>
     <string name="error_save_profile">Erreur lors de l\'enregistrement du profil : %1$s</string>
     <string name="error_invalid_session">Session non valide. Reconnectez-vous.</string>
+    <string name="arasaac_attribution">Les symboles pictographiques utilisés sont la propriété du Gouvernement d\'Aragon et ont été créés par Sergio Palao pour ARASAAC (arasaac.org), qui les distribue sous licence Creative Commons BY-NC-SA.</string>
 </resources>
