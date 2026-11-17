@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import com.example.upad.R
@@ -36,8 +38,8 @@ fun ActivityDetailsScreen(
     viewModel: RoutineViewModel,
     onBack: () -> Unit
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorAzulTEA = ColorAzulTEA
+    val colorFondoBase = LightBackground
 
     // Forzamos la recarga de las rutinas de la base de datos al abrir la pantalla
     LaunchedEffect(Unit) {
