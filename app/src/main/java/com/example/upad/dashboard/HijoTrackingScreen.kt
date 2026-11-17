@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import com.example.upad.viewmodel.SettingsViewModel
@@ -314,7 +315,7 @@ fun HijoTrackingScreen(
                                 ),
                                 border = if (isPremiumUser && !esElSeleccionado) androidx.compose.foundation.BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.25f)) else null,
                                 elevation = CardDefaults.cardElevation(defaultElevation = if (isPremiumUser) 0.dp else 6.dp),
-                                modifier = Modifier.clickable { dispositivoSeleccionado = dispositivo }
+                                modifier = Modifier.clickable(role = Role.Button) { dispositivoSeleccionado = dispositivo }
                             ) {
                                 Row(
                                     modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp),
