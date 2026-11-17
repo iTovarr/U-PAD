@@ -1,5 +1,7 @@
 package com.example.upad.child
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import android.util.Log
 import android.provider.Settings
@@ -344,7 +346,7 @@ fun ChildStartScreen(
                     Text(
                         text = stringResource(R.string.parent_confirmation_desc),
                         fontSize = 14.sp,
-                        color = Color.Gray
+                        color = TextoSecundarioClaro
                     )
                     OutlinedTextField(
                         value = emailPadre,
@@ -458,7 +460,7 @@ fun SeccionTurnoTitulo(titulo: String, activo: Boolean, horasTexto: String) {
                 fontWeight = FontWeight.Black,
                 color = if (activo) Color(0xFF1A1A1A) else Color(0xFF90A4AE)
             )
-            Text(text = horasTexto, fontSize = 11.sp, color = Color.Gray, fontWeight = FontWeight.Bold)
+            Text(text = horasTexto, fontSize = 11.sp, color = TextoSecundarioClaro, fontWeight = FontWeight.Bold)
         }
         if (activo) {
             SuggestionChip(
@@ -502,7 +504,7 @@ fun BloqueListaTareas(
         Text(
             stringResource(R.string.no_activities_for_turn),
             fontSize = 14.sp,
-            color = Color.Gray,
+            color = TextoSecundarioClaro,
             modifier = Modifier.padding(8.dp)
         )
     } else {
@@ -639,7 +641,7 @@ fun ItemActividadContenedor(
                                 text = nombre.take(1).uppercase(),
                                 fontSize = 26.sp,
                                 fontWeight = FontWeight.Black,
-                                color = Color.LightGray
+                                color = TextoTenueClaro
                             )
                         }
                     }
