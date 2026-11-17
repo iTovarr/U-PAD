@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
@@ -214,7 +215,7 @@ fun ChildStartScreen(
                             val digit = codeStr.getOrNull(i)?.toString() ?: "-"
                             Card(
                                 shape = RoundedCornerShape(12.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F4F8)),
+                                colors = CardDefaults.cardColors(containerColor = LightBackground),
                                 border = BorderStroke(2.5.dp, Color(0xFF0D47A1)),
                                 modifier = Modifier.size(width = 44.dp, height = 62.dp)
                             ) {
