@@ -1,5 +1,6 @@
 package com.example.upad.components
 
+import com.example.upad.ui.theme.DarkBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +24,7 @@ fun UPADBackgroundWrapper(
             colors = listOf(
                 Color(0xFF0F0C29),
                 Color(0xFF302B63),
-                Color(0xFF121212)
+                DarkBackground
             )
         )
     } else {
@@ -37,7 +38,7 @@ fun UPADBackgroundWrapper(
     }
 
     // Color plano si el usuario está en el plan básico
-    val colorFondoBase = if (isDarkMode) Color(0xFF121212) else MaterialTheme.colorScheme.background
+    val colorFondoBase = if (isDarkMode) DarkBackground else MaterialTheme.colorScheme.background
 
     Box(
         modifier = modifier
