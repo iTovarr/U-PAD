@@ -383,4 +383,25 @@
     <string name="tutorials_edit_text">Passe jedes Detail an, damit es perfekt zu den Bedürfnissen passt.</string>
     <string name="tutorials_finish">EINRICHTUNG ABSCHLIESSEN</string>
     <string name="tutorials_watch_video">VIDEO ANSEHEN</string>
+    <string name="widget_label_progress">Heutiger Fortschritt</string>
+    <string name="widget_label_session">U-Pad-Sitzungsmonitor</string>
+    <string name="widget_label_progress_premium">Heutiger Fortschritt (Premium)</string>
+    <string name="notification_channel_name">Routinen-Benachrichtigungen</string>
+    <string name="notification_channel_description">Hinweise zum Stand der Routinen des Kindes</string>
+    <string name="biometric_not_recognized">Fingerabdruck nicht erkannt.</string>
+    <string name="biometric_parent_title">Schnellzugriff für Eltern</string>
+    <string name="biometric_parent_subtitle">Lege deinen Finger auf, um fortzufahren</string>
+    <string name="biometric_use_password">Passwort verwenden</string>
+    <string name="biometric_device_locked">Kindergerät gesperrt! 🔒</string>
+    <string name="biometric_device_unlocked">Kindergerät entsperrt! 🔓</string>
+    <string name="error_connection">Verbindungsfehler. Bitte versuche es erneut.</string>
+    <string name="biometric_error">Fingerabdruckfehler: %1$s</string>
+    <string name="biometric_lock_title">Kindersperre bestätigen</string>
+    <string name="biometric_unlock_title">Entsperren bestätigen</string>
+    <string name="biometric_lock_subtitle">Scanne deinen Fingerabdruck, um das Gerät zu sperren</string>
+    <string name="biometric_unlock_subtitle">Scanne deinen Fingerabdruck, um das Gerät zu entsperren</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="error_upload_image">Fehler beim Hochladen des Bildes: %1$s</string>
+    <string name="error_save_profile">Fehler beim Speichern des Profils: %1$s</string>
+    <string name="error_invalid_session">Ungültige Sitzung. Bitte melde dich erneut an.</string>
 </resources>

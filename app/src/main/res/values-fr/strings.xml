@@ -383,4 +383,25 @@
     <string name="tutorials_edit_text">Ajustez chaque détail pour qu\'il s\'adapte parfaitement à ses besoins.</string>
     <string name="tutorials_finish">TERMINER LA CONFIGURATION</string>
     <string name="tutorials_watch_video">VOIR LA VIDÉO</string>
+    <string name="widget_label_progress">Progression du jour</string>
+    <string name="widget_label_session">Suivi de session U-Pad</string>
+    <string name="widget_label_progress_premium">Progression du jour (Premium)</string>
+    <string name="notification_channel_name">Notifications de routine</string>
+    <string name="notification_channel_description">Alertes sur l\'état des routines de l\'enfant</string>
+    <string name="biometric_not_recognized">Empreinte non reconnue.</string>
+    <string name="biometric_parent_title">Accès rapide pour les parents</string>
+    <string name="biometric_parent_subtitle">Posez votre doigt pour continuer</string>
+    <string name="biometric_use_password">Utiliser le mot de passe</string>
+    <string name="biometric_device_locked">Appareil de l\'enfant verrouillé ! 🔒</string>
+    <string name="biometric_device_unlocked">Appareil de l\'enfant déverrouillé ! 🔓</string>
+    <string name="error_connection">Erreur de connexion. Veuillez réessayer.</string>
+    <string name="biometric_error">Erreur d\'empreinte : %1$s</string>
+    <string name="biometric_lock_title">Confirmer le verrouillage enfant</string>
+    <string name="biometric_unlock_title">Confirmer le déverrouillage</string>
+    <string name="biometric_lock_subtitle">Scannez votre empreinte pour verrouiller l\'appareil</string>
+    <string name="biometric_unlock_subtitle">Scannez votre empreinte pour déverrouiller l\'appareil</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="error_upload_image">Erreur lors de l\'envoi de l\'image : %1$s</string>
+    <string name="error_save_profile">Erreur lors de l\'enregistrement du profil : %1$s</string>
+    <string name="error_invalid_session">Session non valide. Reconnectez-vous.</string>
 </resources>

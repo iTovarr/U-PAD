@@ -383,4 +383,25 @@
     <string name="tutorials_edit_text">Ajuste cada detalhe para que se adapte perfeitamente às necessidades dele.</string>
     <string name="tutorials_finish">FINALIZAR CONFIGURAÇÃO</string>
     <string name="tutorials_watch_video">VER VÍDEO</string>
+    <string name="widget_label_progress">Progresso de Hoje</string>
+    <string name="widget_label_session">Monitor de Sessão U-Pad</string>
+    <string name="widget_label_progress_premium">Progresso de Hoje (Premium)</string>
+    <string name="notification_channel_name">Notificações de Rotina</string>
+    <string name="notification_channel_description">Alertas sobre o estado das rotinas da criança</string>
+    <string name="biometric_not_recognized">Impressão digital não reconhecida.</string>
+    <string name="biometric_parent_title">Acesso rápido para Pais</string>
+    <string name="biometric_parent_subtitle">Coloque sua digital para continuar</string>
+    <string name="biometric_use_password">Usar Senha</string>
+    <string name="biometric_device_locked">Dispositivo infantil bloqueado! 🔒</string>
+    <string name="biometric_device_unlocked">Dispositivo infantil liberado! 🔓</string>
+    <string name="error_connection">Erro de conexão. Tente novamente.</string>
+    <string name="biometric_error">Erro de impressão digital: %1$s</string>
+    <string name="biometric_lock_title">Confirmar Bloqueio Infantil</string>
+    <string name="biometric_unlock_title">Confirmar Desbloqueio</string>
+    <string name="biometric_lock_subtitle">Escaneie sua digital para bloquear o dispositivo</string>
+    <string name="biometric_unlock_subtitle">Escaneie sua digital para liberar o dispositivo</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="error_upload_image">Erro ao enviar a imagem: %1$s</string>
+    <string name="error_save_profile">Erro ao salvar o perfil: %1$s</string>
+    <string name="error_invalid_session">Sessão inválida. Entre novamente.</string>
 </resources>

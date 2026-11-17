@@ -383,4 +383,25 @@
     <string name="tutorials_edit_text">Ajusta cada detalle para que se adapte perfectamente a sus necesidades.</string>
     <string name="tutorials_finish">FINALIZAR CONFIGURACIÓN</string>
     <string name="tutorials_watch_video">VER VIDEO</string>
+    <string name="widget_label_progress">Progreso de Hoy</string>
+    <string name="widget_label_session">Monitor de Sesión U-Pad</string>
+    <string name="widget_label_progress_premium">Progreso de Hoy (Premium)</string>
+    <string name="notification_channel_name">Notificaciones de Rutina</string>
+    <string name="notification_channel_description">Alertas sobre el estado de las rutinas del niño</string>
+    <string name="biometric_not_recognized">Huella no reconocida.</string>
+    <string name="biometric_parent_title">Acceso rápido para Padres</string>
+    <string name="biometric_parent_subtitle">Coloca tu huella para continuar</string>
+    <string name="biometric_use_password">Usar Contraseña</string>
+    <string name="biometric_device_locked">¡Dispositivo infantil Bloqueado! 🔒</string>
+    <string name="biometric_device_unlocked">¡Dispositivo infantil Liberado! 🔓</string>
+    <string name="error_connection">Error de conexión. Inténtalo de nuevo.</string>
+    <string name="biometric_error">Error de huella: %1$s</string>
+    <string name="biometric_lock_title">Confirmar Bloqueo Infantil</string>
+    <string name="biometric_unlock_title">Confirmar Desbloqueo</string>
+    <string name="biometric_lock_subtitle">Escanea tu huella para congelar el dispositivo</string>
+    <string name="biometric_unlock_subtitle">Escanea tu huella para liberar el dispositivo</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="error_upload_image">Error al subir imagen: %1$s</string>
+    <string name="error_save_profile">Error al guardar perfil: %1$s</string>
+    <string name="error_invalid_session">Sesión no válida. Inicia sesión de nuevo.</string>
 </resources>

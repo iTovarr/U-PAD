@@ -383,4 +383,25 @@
     <string name="tutorials_edit_text">Adjust every detail so it fits their needs perfectly.</string>
     <string name="tutorials_finish">FINISH SETUP</string>
     <string name="tutorials_watch_video">WATCH VIDEO</string>
+    <string name="widget_label_progress">Today\'s Progress</string>
+    <string name="widget_label_session">U-Pad Session Monitor</string>
+    <string name="widget_label_progress_premium">Today\'s Progress (Premium)</string>
+    <string name="notification_channel_name">Routine Notifications</string>
+    <string name="notification_channel_description">Alerts about the status of the child\'s routines</string>
+    <string name="biometric_not_recognized">Fingerprint not recognized.</string>
+    <string name="biometric_parent_title">Quick access for Parents</string>
+    <string name="biometric_parent_subtitle">Place your finger to continue</string>
+    <string name="biometric_use_password">Use Password</string>
+    <string name="biometric_device_locked">Child device locked! 🔒</string>
+    <string name="biometric_device_unlocked">Child device unlocked! 🔓</string>
+    <string name="error_connection">Connection error. Please try again.</string>
+    <string name="biometric_error">Fingerprint error: %1$s</string>
+    <string name="biometric_lock_title">Confirm Child Lock</string>
+    <string name="biometric_unlock_title">Confirm Unlock</string>
+    <string name="biometric_lock_subtitle">Scan your fingerprint to lock the device</string>
+    <string name="biometric_unlock_subtitle">Scan your fingerprint to unlock the device</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="error_upload_image">Error uploading image: %1$s</string>
+    <string name="error_save_profile">Error saving profile: %1$s</string>
+    <string name="error_invalid_session">Invalid session. Please sign in again.</string>
 </resources>
