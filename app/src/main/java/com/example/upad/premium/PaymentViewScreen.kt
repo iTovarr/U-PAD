@@ -1,5 +1,7 @@
 package com.example.upad.premium
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -52,7 +54,7 @@ fun PaymentViewScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Desbloquea UPad Gold",
+                text = stringResource(id = R.string.payment_title),
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
@@ -61,7 +63,7 @@ fun PaymentViewScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Estás a un paso de automatizar las rutinas de tus hijos usando modelos de Inteligencia Artificial.",
+                text = stringResource(id = R.string.payment_subtitle),
                 color = Color.LightGray,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
@@ -82,7 +84,7 @@ fun PaymentViewScreen(
                     Icon(Icons.Default.CreditCard, contentDescription = null, tint = Color.White)
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
-                        Text("Tarjeta de Crédito / Débito", color = Color.White, fontWeight = FontWeight.Bold)
+                        Text(stringResource(id = R.string.payment_card), color = Color.White, fontWeight = FontWeight.Bold)
                         Text("•••• •••• •••• 4321", color = Color.Gray, fontSize = 12.sp)
                     }
                 }
@@ -115,13 +117,13 @@ fun PaymentViewScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
                 shape = RoundedCornerShape(28.dp)
             ) {
-                Text("Confirmar Pago Simulado", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(stringResource(id = R.string.payment_confirm_simulated), color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
         } else {
             CircularProgressIndicator(color = Color(0xFFD4AF37))
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Procesando pago seguro...", color = Color.White, fontWeight = FontWeight.Medium)
-            Text("Configurando entorno Premium...", color = Color.Gray, fontSize = 12.sp)
+            Text(stringResource(id = R.string.payment_processing), color = Color.White, fontWeight = FontWeight.Medium)
+            Text(stringResource(id = R.string.payment_setting_up), color = Color.Gray, fontSize = 12.sp)
         }
     }
 }
