@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -154,7 +155,7 @@ fun ExperienceSetupScreen(
                                     .padding(vertical = 4.dp)
                                     .clip(RoundedCornerShape(14.dp))
                                     .background(if (estaSeleccionado) colorSuperficieSeleccionada else Color.Transparent)
-                                    .clickable {
+                                    .clickable(role = Role.Button) {
                                         selectedTheme = theme
                                         val cambiarAOscuro = theme == "Modo oscuro"
                                         settingsViewModel.setDarkMode(cambiarAOscuro)
