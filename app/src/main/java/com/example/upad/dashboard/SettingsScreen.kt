@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import androidx.compose.ui.semantics.Role
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -242,7 +243,7 @@ fun SettingsScreen(
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { expandedLanguage = true },
+                            .clickable(role = Role.Button) { expandedLanguage = true },
                         shape = RoundedCornerShape(20.dp),
                         color = colorSuperficieTarjetas,
                         border = if (isPremiumUser) BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.25f)) else null,
