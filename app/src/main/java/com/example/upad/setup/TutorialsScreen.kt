@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.net.Uri
@@ -133,7 +134,7 @@ fun TutorialCard(
                     .size(80.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(colorAzulTEA.copy(alpha = 0.1f))
-                    .clickable { onWatchClick() },
+                    .clickable(role = Role.Button) { onWatchClick() },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
