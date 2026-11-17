@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -76,17 +78,17 @@ fun ActivityDetailsScreen(
                 .padding(top = 40.dp, bottom = 24.dp, start = 16.dp, end = 24.dp)
         ) {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorAzulTEA)
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorAzulTEA)
             }
             Text(
-                text = "MONITOR EN TIEMPO REAL",
+                text = stringResource(id = R.string.details_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
-                text = "Progreso de Actividades",
+                text = stringResource(id = R.string.details_title),
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -98,7 +100,7 @@ fun ActivityDetailsScreen(
         if (todasLasTareas.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
-                    text = "Aún no hay actividades guardadas o asignadas.",
+                    text = stringResource(id = R.string.details_empty),
                     color = Color.Gray,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium
@@ -149,7 +151,7 @@ fun ActivityDetailsScreen(
                                 if (estaCompletada) {
                                     SuggestionChip(
                                         onClick = {},
-                                        label = { Text("¡HECHO! ✅", fontWeight = FontWeight.Bold) },
+                                        label = { Text(stringResource(id = R.string.details_done), fontWeight = FontWeight.Bold) },
                                         colors = SuggestionChipDefaults.suggestionChipColors(
                                             containerColor = Color(0xFFE8F5E9),
                                             labelColor = Color(0xFF2E7D32)
@@ -158,7 +160,7 @@ fun ActivityDetailsScreen(
                                 } else {
                                     SuggestionChip(
                                         onClick = {},
-                                        label = { Text("Pendiente ⏳", fontWeight = FontWeight.Bold) },
+                                        label = { Text(stringResource(id = R.string.details_pending), fontWeight = FontWeight.Bold) },
                                         colors = SuggestionChipDefaults.suggestionChipColors(
                                             containerColor = Color(0xFFFFF3E0),
                                             labelColor = Color(0xFFE65100)
@@ -174,7 +176,7 @@ fun ActivityDetailsScreen(
                             // Fila de tiempo recomendada o registrada
                             DetailRow(
                                 icon = Icons.Default.Timer,
-                                label = "Tiempo asignado",
+                                label = stringResource(id = R.string.details_assigned_time),
                                 value = "${task.duration} minutos",
                                 color = colorAzulTEA
                             )
@@ -184,7 +186,7 @@ fun ActivityDetailsScreen(
                             // Fila dinámica con icono interactivo
                             DetailRow(
                                 icon = if (estaCompletada) Icons.Default.CheckCircle else Icons.Default.PendingActions,
-                                label = "Estado del paso",
+                                label = stringResource(id = R.string.details_step_status),
                                 value = if (estaCompletada) "El niño completó la actividad con éxito" else "Esperando a que el niño termine",
                                 color = if (estaCompletada) Color(0xFF81C784) else Color(0xFFFFB74D)
                             )
