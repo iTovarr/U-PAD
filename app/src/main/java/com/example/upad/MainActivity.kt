@@ -151,23 +151,13 @@ class MainActivity : AppCompatActivity() {
                 evaluarYAplicarIdioma(appLanguage)
             }
 
-            val sharedPrefs = remember { getSharedPreferences("UPadPrefs", Context.MODE_PRIVATE) }
-            val sistemaEstaEnOscuro = isSystemInDarkTheme()
-
-            val isDarkModeFlow by settingsViewModel.isDarkMode.collectAsState()
-            var estadoTemaOscuroReal by remember {
-                mutableStateOf(sharedPrefs.getBoolean("pref_tema_oscuro", sistemaEstaEnOscuro))
-            }
-
-            LaunchedEffect(isDarkModeFlow) {
-                estadoTemaOscuroReal = isDarkModeFlow
-                sharedPrefs.edit().putBoolean("pref_tema_oscuro", isDarkModeFlow).apply()
-            }
+            // SettingsViewModel es la única fuente del tema: lo lee y lo guarda con ThemePreferences.
+            val isDarkTheme by settingsViewModel.isDarkMode.collectAsState()
 
             val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = null)
 
             CompositionLocalProvider(LocalAppContainer provides container) {
-                UPadTheme(darkTheme = estadoTemaOscuroReal, isPremium = isPremiumUser ?: false) {
+                UPadTheme(darkTheme = isDarkTheme, isPremium = isPremiumUser ?: false) {
                     UPadNavigation(
                         bloqueoActivo = ordenBloqueoPadreActiva,
                         routineViewModel = routineViewModel,
