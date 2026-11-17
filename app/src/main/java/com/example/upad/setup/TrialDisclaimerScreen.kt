@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
@@ -28,8 +30,8 @@ fun TrialDisclaimerScreen(
     onStartTrialClick: () -> Unit,
     onMoreInfoClick: () -> Unit
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorAzulTEA = ColorAzulTEA
+    val colorFondoBase = LightBackground
 
     Column(
         modifier = Modifier
