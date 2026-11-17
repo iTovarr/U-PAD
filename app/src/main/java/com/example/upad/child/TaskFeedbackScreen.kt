@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.BorderStroke
@@ -34,7 +35,7 @@ fun TaskFeedbackScreen(
     val colorAzulTEA = Color(0xFF0288D1)
     // Degradado suave y feliz para el fondo de la app
     val fondoDegradado = Brush.verticalGradient(
-        colors = listOf(Color(0xFFE1F5FE), Color(0xFFF0F4F8))
+        colors = listOf(Color(0xFFE1F5FE), LightBackground)
     )
 
     Column(
