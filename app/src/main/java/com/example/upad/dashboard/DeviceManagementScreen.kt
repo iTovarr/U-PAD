@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.UPadColors
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -66,21 +68,17 @@ fun DeviceManagementScreen(
     }
 
     val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = if (isPremiumUser) {
-        if (isDarkMode) Color(0xFF0F0C29) else Color(0xFFFBE9E7)
-    } else {
-        if (isDarkMode) Color(0xFF121212) else Color.White
-    }
+    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
 
     // 🎨 PALETA DE COLORES RE-ACOPLADA AL DISEÑO DEL CONTENEDOR
-    val colorAcabadoPrincipal = if (isPremiumUser) Color(0xFFC5A059) else MaterialTheme.colorScheme.primary
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
+    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
+    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
 
     val colorSuperficieTarjetas = if (isPremiumUser) {
         if (isDarkMode) Color.White.copy(alpha = 0.1f) else Color.White.copy(alpha = 0.7f)
     } else {
-        if (isDarkMode) Color(0xFF1E1E1E) else Color(0xFFF7F7F7)
+        if (isDarkMode) DarkSurface else Color(0xFFF7F7F7)
     }
 
     val activity = context as FragmentActivity
