@@ -102,7 +102,7 @@ fun DashboardDrawerContent(
                     if (imageUri != null) {
                         AsyncImage(
                             model = imageUri,
-                            contentDescription = "Foto de perfil",
+                            contentDescription = stringResource(id = R.string.cd_profile_photo),
                             modifier = Modifier
                                 .fillMaxSize()
                                 .clip(CircleShape),
@@ -174,7 +174,7 @@ fun DashboardDrawerContent(
         if (esPremium) {
             NavigationDrawerItem(
                 icon = {
-                    Icon(Icons.Default.LocationOn, contentDescription = "Ubicar hijo")
+                    Icon(Icons.Default.LocationOn, contentDescription = stringResource(id = R.string.cd_locate_child))
                 },
                 label = {
                     Text(
