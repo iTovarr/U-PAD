@@ -256,7 +256,7 @@ fun RoutineDashboardScreen(
                         shape = CircleShape
                     ) {
                         if (esPremium) {
-                            Icon(Icons.Default.Map, contentDescription = "Ver mapa", modifier = Modifier.size(28.dp))
+                            Icon(Icons.Default.Map, contentDescription = stringResource(id = R.string.cd_view_map), modifier = Modifier.size(28.dp))
                         } else {
                             Icon(Icons.Default.Add, contentDescription = stringResource(R.string.create_new_routine), modifier = Modifier.size(30.dp))
                         }
