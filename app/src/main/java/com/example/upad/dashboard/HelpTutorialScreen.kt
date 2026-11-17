@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -87,7 +89,7 @@ fun HelpTutorialScreen(
             containerColor = Color.Transparent,
             topBar = {
                 UpadTopAppBar(
-                    title = "Guía y Tutorial",
+                    title = stringResource(id = R.string.help_title),
                     imageUri = imageUri,
                     colorFondo = colorFondoSolido,
                     colorIconos = colorTextoPrincipal,
@@ -108,13 +110,13 @@ fun HelpTutorialScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "¿Cómo usar U-Pad? 🚀",
+                    text = stringResource(id = R.string.help_how_to_use),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Black,
                     color = colorTextoPrincipal
                 )
                 Text(
-                    text = "Bienvenido a la guía de usuario. Aquí aprenderás a sacarle el máximo provecho a la gestión de rutinas.",
+                    text = stringResource(id = R.string.help_intro),
                     fontSize = 14.sp,
                     color = colorTextoSecundario
                 )
@@ -135,7 +137,7 @@ fun HelpTutorialScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Instrucciones",
+                            text = stringResource(id = R.string.help_tab_instructions),
                             fontSize = 16.sp,
                             fontWeight = if (pestañaSeleccionada == 0) FontWeight.Bold else FontWeight.Normal,
                             color = if (pestañaSeleccionada == 0) colorAcabadoPrincipal else colorTextoSecundario.copy(alpha = 0.6f)
@@ -160,7 +162,7 @@ fun HelpTutorialScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Video Tutorial",
+                            text = stringResource(id = R.string.help_tab_video),
                             fontSize = 16.sp,
                             fontWeight = if (pestañaSeleccionada == 1) FontWeight.Bold else FontWeight.Normal,
                             color = if (pestañaSeleccionada == 1) colorAcabadoPrincipal else colorTextoSecundario.copy(alpha = 0.6f)
@@ -187,8 +189,8 @@ fun HelpTutorialScreen(
                 if (pestañaSeleccionada == 0) {
                     TutorialStepItem(
                         icon = Icons.Default.LibraryAdd,
-                        title = "1. Crear Rutinas",
-                        description = "Usa el botón '+' en la esquina inferior para asignar tareas divididas en los turnos de Mañana, Tarde y Noche.",
+                        title = stringResource(id = R.string.help_step1_title),
+                        description = stringResource(id = R.string.help_step1_text),
                         containerColor = colorSuperficieTarjetas,
                         colorPrincipal = colorAcabadoPrincipal,
                         colorTexto = colorTextoPrincipal,
@@ -197,8 +199,8 @@ fun HelpTutorialScreen(
 
                     TutorialStepItem(
                         icon = Icons.Default.CompassCalibration,
-                        title = "2. Monitoreo en Vivo",
-                        description = "Revisa las tarjetas de progreso global en el inicio para ver cuántas tareas del día han sido completadas por tu hijo.",
+                        title = stringResource(id = R.string.help_step2_title),
+                        description = stringResource(id = R.string.help_step2_text),
                         containerColor = colorSuperficieTarjetas,
                         colorPrincipal = colorAcabadoPrincipal,
                         colorTexto = colorTextoPrincipal,
@@ -207,8 +209,8 @@ fun HelpTutorialScreen(
 
                     TutorialStepItem(
                         icon = Icons.Default.Star,
-                        title = "3. Funciones Premium",
-                        description = "Si cuentas con el plan Pro, podrás acceder al posicionamiento satelital en tiempo real usando el botón de mapa.",
+                        title = stringResource(id = R.string.help_step3_title),
+                        description = stringResource(id = R.string.help_step3_text),
                         containerColor = colorSuperficieTarjetas,
                         colorPrincipal = colorAcabadoPrincipal,
                         colorTexto = colorTextoPrincipal,
@@ -238,13 +240,13 @@ fun HelpTutorialScreen(
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                 Icon(
                                     imageVector = Icons.Default.PlayCircleOutline,
-                                    contentDescription = "Reproducir",
+                                    contentDescription = stringResource(id = R.string.cd_play),
                                     tint = colorAcabadoPrincipal,
                                     modifier = Modifier.size(56.dp)
                                 )
                                 Spacer(modifier = Modifier.height(10.dp))
                                 Text(
-                                    text = "Reproducir Video Tutorial",
+                                    text = stringResource(id = R.string.help_play_video),
                                     color = colorTextoPrincipal,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 15.sp
