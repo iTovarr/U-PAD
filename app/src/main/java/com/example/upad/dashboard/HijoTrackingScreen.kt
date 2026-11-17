@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import com.example.upad.viewmodel.SettingsViewModel
 import android.util.Log
 import android.Manifest
@@ -213,7 +215,7 @@ fun HijoTrackingScreen(
             containerColor = Color.Transparent, // Fondo transparente para que funcione la estética Premium/Fondo unificado
             topBar = {
                 UpadTopAppBar(
-                    title = "Ubicar a mi Hijo",
+                    title = stringResource(id = R.string.tracking_title),
                     imageUri = imageUri,
                     colorFondo = colorFondoSolido,
                     colorIconos = colorAcabadoPrincipal,
@@ -241,7 +243,7 @@ fun HijoTrackingScreen(
                     miUbicacionReal?.let { posPadre ->
                         MarkerComposable(
                             state = MarkerState(position = posPadre),
-                            title = "Tu ubicación"
+                            title = stringResource(id = R.string.tracking_your_location)
                         ) {
                             Box(
                                 modifier = Modifier
