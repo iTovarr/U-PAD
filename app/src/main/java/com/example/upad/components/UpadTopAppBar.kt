@@ -1,5 +1,6 @@
 package com.example.upad.dashboard.components
 
+import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.net.Uri
@@ -123,7 +124,7 @@ fun UpadTopAppBar(
                     .size(36.dp)
                     .clip(CircleShape)
                     .background(colorIconos.copy(alpha = 0.1f))
-                    .clickable { onNavigateToProfile() },
+                    .clickable(role = Role.Button) { onNavigateToProfile() },
                 contentAlignment = Alignment.Center
             ) {
                 if (imageUri != null) {
