@@ -1,5 +1,6 @@
 package com.example.upad.dashboard.components
 
+import com.example.upad.ui.theme.DarkSurface
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -71,7 +72,7 @@ fun DashboardDrawerContent(
 ) {
     ModalDrawerSheet(
         drawerContainerColor = if (esPremium) Color.Transparent
-        else if (isDarkMode) Color(0xFF1E1E1E)
+        else if (isDarkMode) DarkSurface
         else MaterialTheme.colorScheme.surface,
         modifier = Modifier
             .width(300.dp)
