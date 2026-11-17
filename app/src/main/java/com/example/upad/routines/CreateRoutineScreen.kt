@@ -1,5 +1,8 @@
 package com.example.upad.routines
 
+import com.example.upad.ui.theme.ColorPremiumGold
+import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.UPadColors
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -74,17 +77,13 @@ fun CreateRoutineScreen(
 
     var customNeedText by remember { mutableStateOf("") }
 
-    val colorAcabadoPrincipal = if (isPremiumUser) Color(0xFFC5A059) else MaterialTheme.colorScheme.primary
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
+    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
+    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
     val colorFondoBase = Color.Transparent // 🔑 Deja ver el degradado del Wrapper trasero
 
     // Superficie limpia translúcida sin grises forzados automáticos de Material 3
-    val colorSuperficieTarjetas = if (isPremiumUser) {
-        if (isDarkMode) Color.White.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.65f)
-    } else {
-        if (isDarkMode) Color(0xFF1E1E1E) else Color.White
-    }
+    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
 
     val session = LocalAppContainer.current.sessionRepository
     val currentUserId = remember {
@@ -166,7 +165,7 @@ fun CreateRoutineScreen(
             routineTurn = routineTurn,
             childName = childName,
             isPremiumUser = isPremiumUser,
-            colorFondo = if (isDarkMode) Color(0xFF1E1E1E) else Color.White,
+            colorFondo = if (isDarkMode) DarkSurface else Color.White,
             colorTexto = colorTextoPrincipal,
             colorProgreso = colorAcabadoPrincipal,
             onDismiss = { showSendingDialog = false }
@@ -184,10 +183,10 @@ fun CreateRoutineScreen(
     if (mostrarPopUpSugerencias) {
         AIOptionsDialog(
             opciones = sugerenciasIAByMenu,
-            colorFondo = if (isDarkMode) Color(0xFF1E1E1E) else Color.White,
+            colorFondo = if (isDarkMode) DarkSurface else Color.White,
             colorTexto = colorTextoPrincipal,
             colorTextoSec = colorTextoSecundario,
-            colorAccion = Color(0xFFC5A059),
+            colorAccion = ColorPremiumGold,
             onDismiss = { mostrarPopUpSugerencias = false },
             onOpcionSelected = { actividadElegida ->
                 mostrarPopUpSugerencias = false
