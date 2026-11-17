@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import androidx.compose.ui.semantics.Role
 import com.example.upad.viewmodel.SettingsViewModel
 import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
@@ -405,7 +406,7 @@ fun RoutineDashboardScreen(
                                                 else if (esHoyReal) colorTextoPrincipal.copy(alpha = 0.12f)
                                                 else colorSuperficieTarjetas
                                             )
-                                            .clickable {
+                                            .clickable(role = Role.Button) {
                                                 diaSeleccionado = dia
                                                 diaNumeroSeleccionado = if (dia == diaDeHoy) numeroDeHoyReal else -1
                                             }
@@ -520,7 +521,7 @@ fun RoutineDashboardScreen(
                                                                         else -> Color.Transparent
                                                                     }
                                                                 )
-                                                                .clickable {
+                                                                .clickable(role = Role.Button) {
                                                                     diaSeleccionado = nombreDiaCompleto
                                                                     diaNumeroSeleccionado = numeroDia
                                                                     mostrarCalendarioCompleto = false
@@ -683,7 +684,7 @@ fun RoutineProgressCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .clickable { onClick() },
+            .clickable(role = Role.Button) { onClick() },
         shape = RoundedCornerShape(24.dp),
         color = colorSuperficie,
         border = BorderStroke(1.dp, colorTextoSec.copy(alpha = 0.1f)),
