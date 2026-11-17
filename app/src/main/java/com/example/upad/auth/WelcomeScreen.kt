@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -122,7 +123,7 @@ fun WelcomeScreen(
                 Box(contentAlignment = Alignment.Center) {
                     Image(
                         painter = painterResource(id = R.drawable.upad_icono),
-                        contentDescription = "U-Pad Logo",
+                        contentDescription = stringResource(id = R.string.cd_app_logo),
                         modifier = Modifier.size(90.dp),
                         contentScale = ContentScale.Fit
                     )
@@ -132,7 +133,7 @@ fun WelcomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "BIENVENIDO A U-PAD",
+                text = stringResource(id = R.string.welcome_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -140,7 +141,7 @@ fun WelcomeScreen(
             )
 
             Text(
-                text = "Tu guía de rutinas amigable",
+                text = stringResource(id = R.string.welcome_tagline),
                 fontSize = 16.sp,
                 color = Color.Gray,
                 fontWeight = FontWeight.Medium
@@ -166,7 +167,7 @@ fun WelcomeScreen(
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) {
                 Text(
-                    text = "EMPEZAR AHORA",
+                    text = stringResource(id = R.string.welcome_start),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Black
                 )
@@ -196,13 +197,13 @@ fun WelcomeScreen(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_menu_login),
-                        contentDescription = "Google Icon",
+                        contentDescription = stringResource(id = R.string.cd_google_icon),
                         tint = Color.Unspecified,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "CONTINUAR CON GOOGLE",
+                        text = stringResource(id = R.string.welcome_google),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = colorAzulTEA
@@ -221,10 +222,10 @@ fun WelcomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "¿Ya tienes una cuenta?", color = Color.Gray, fontSize = 15.sp)
+                Text(text = stringResource(id = R.string.welcome_have_account), color = Color.Gray, fontSize = 15.sp)
                 TextButton(onClick = onNavigateToLogin) {
                     Text(
-                        text = "Inicia sesión",
+                        text = stringResource(id = R.string.welcome_sign_in),
                         color = colorAzulTEA,
                         fontWeight = FontWeight.Black,
                         fontSize = 15.sp
