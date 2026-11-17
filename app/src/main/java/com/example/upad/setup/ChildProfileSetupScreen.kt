@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.net.Uri
@@ -151,7 +152,7 @@ fun ChildProfileSetupScreen(
             Box(
                 modifier = Modifier
                     .size(if (pantallaPequeña) 120.dp else 140.dp)
-                    .clickable(enabled = !cargando) { galleryLauncher.launch("image/*") },
+                    .clickable(enabled = !cargando, role = Role.Button) { galleryLauncher.launch("image/*") },
                 contentAlignment = Alignment.BottomEnd
             ) {
                 Surface(
