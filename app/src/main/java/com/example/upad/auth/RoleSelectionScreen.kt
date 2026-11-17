@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
@@ -39,7 +40,7 @@ fun RoleSelectionScreen(
     onRoleSelected: (String) -> Unit
 ) {
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorFondoBase = LightBackground
     val colorMoradoTutor = Color(0xFF9575CD)
 
     val context = LocalContext.current
