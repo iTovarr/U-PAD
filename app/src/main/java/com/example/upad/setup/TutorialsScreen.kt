@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
@@ -30,8 +32,8 @@ fun TutorialsScreen(
     onBackClick: () -> Unit,
     onFinishSetupClick: () -> Unit
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorAzulTEA = ColorAzulTEA
+    val colorFondoBase = LightBackground
     val uriHandler = LocalUriHandler.current // Manejador para abrir YouTube
 
     Column(
@@ -116,7 +118,7 @@ fun TutorialCard(
     description: String,
     onWatchClick: () -> Unit
 ) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
+    val colorAzulTEA = ColorAzulTEA
 
     Card(
         modifier = Modifier.fillMaxWidth(),
