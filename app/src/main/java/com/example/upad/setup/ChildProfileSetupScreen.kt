@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.ColorAzulTEA
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -86,7 +87,7 @@ fun ChildProfileSetupScreen(
     }
 
     // --- CONFIGURACIÓN DE COLORES MULTI-TEMA ---
-    val colorAzulTEA = Color(0xFF4FC3F7)
+    val colorAzulTEA = ColorAzulTEA
     val colorAmarilloTEA = Color(0xFFFFD54F)
 
     val colorFondoBase = if (esTemaOscuro) Color(0xFF0F172A) else Color(0xFFF8FAFC)
