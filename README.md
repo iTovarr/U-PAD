@@ -19,6 +19,10 @@ El proyecto está desarrollado nativamente para la plataforma Android utilizando
 * **Autenticación**: Firebase Authentication con soporte de Google Sign-In integrado
 * **Servicio de Ubicación y Mapas**: Google Maps SDK, Fused Location Provider Client
 * **Persistencia Local**: Preferences DataStore (gestión de idioma y suscripción)
+* **Notificaciones**: Firebase Cloud Messaging, con una Cloud Function que avisa al tutor aunque tenga la app cerrada
+* **Arquitectura**: ViewModels por funcionalidad, repositorios como único acceso a Firebase e inyección de dependencias manual (`AppContainer`)
+* **Idiomas**: español, inglés, francés, alemán, portugués y ruso
+* **Calidad**: tests unitarios con JUnit, Android Lint e integración continua con GitHub Actions
 
 ---
 
@@ -28,8 +32,19 @@ U-Pad integra de forma segura la API de **Groq AI** mediante el uso del modelo d
 
 ### ¿Cómo funciona en la aplicación?
 1. **Instrucciones de Contexto (System Prompt)**: Se entrena conceptualmente al modelo como un psicopedagogo experto en autismo, indicándole que retorne exactamente 3 sugerencias cortas (máximo 4 palabras cada una) por línea para garantizar la comprensión del menor.
-2. **Petición del Tutor**: Desde la vista de creación de rutinas, al hacer clic en "Sugerir con IA", el ViewModel invoca de forma asíncrona al `AiRepository.kt` para consultar el modelo con el turno de la rutina correspondiente.
-3. **Manejo de Errores Reactivo**: El sistema monitoriza los estados de red a través de flujos observables (`isAiLoading` y `aiError`). Si la API de Groq falla o hay problemas de conexión, la aplicación interrumpe la carga de inmediato y despliega un `AlertDialog` informativo al tutor, previniendo pantallas congeladas.
+2. **Petición del Tutor**: Desde la vista de creación de rutinas, al hacer clic en "Sugerir con IA", `AiViewModel` invoca de forma asíncrona a `AiRepository.kt` para consultar el modelo con el turno de la rutina correspondiente. La respuesta se pide en el idioma elegido en la app.
+3. **Manejo de Errores Reactivo**: El sistema monitoriza los estados de red a través de flujos observables (`isAiLoading` y `aiError`). Si la API de Groq falla o hay problemas de conexión, la aplicación reintenta la petición hasta tres veces y, si sigue fallando, interrumpe la carga y despliega un `AlertDialog` informativo al tutor, previniendo pantallas congeladas.
+4. **Clave protegida**: Con la Cloud Function `aiChat` desplegada, la app no contiene la clave de Groq: la petición pasa por el servidor, que solo atiende a tutores con sesión iniciada.
+
+---
+
+## 🧱 Arquitectura
+
+```
+Interfaz (Compose)  →  ViewModels  →  Repositorios (data/)  →  Firebase · ARASAAC · Groq
+```
+
+Las pantallas no usan el SDK de Firebase: hablan con ViewModels y repositorios. El detalle de los paquetes, el modelo de datos en Firestore y los flujos principales (vinculación, tareas, rastreo e IA) está en [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md).
 
 ---
 
@@ -131,3 +146,23 @@ El build de release usa R8 (código reducido y ofuscado). Para que salga firmado
 2. Abre el proyecto en **Android Studio**.
 3. Sincroniza los archivos de Gradle.
 4. Despliega la aplicación en un dispositivo emulador o físico con **API level 24 (Android 7.0) o superior**.
+
+---
+
+## 📚 Documentación
+
+| Documento | Contenido |
+|---|---|
+| [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md) | Capas, paquetes, modelo de datos y flujos principales. |
+| [docs/PRIVACIDAD.md](docs/PRIVACIDAD.md) | Borrador de la política de privacidad: qué datos trata la app y a quién los envía. |
+| [docs/LICENCIAS_DE_TERCEROS.md](docs/LICENCIAS_DE_TERCEROS.md) | Licencia de los pictogramas, servicios externos y librerías. |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Cómo preparar el entorno, convenciones de commits y de código. |
+
+---
+
+## 🙏 Créditos y licencias
+
+Los símbolos pictográficos utilizados son propiedad del Gobierno de Aragón y han sido creados por Sergio Palao para [ARASAAC](https://arasaac.org), que los distribuye bajo Licencia Creative Commons BY-NC-SA.
+
+Esa licencia no permite el uso comercial de los pictogramas. Mientras el plan Premium sea un pago simulado no hay conflicto, pero antes de cobrar por la app hay que resolverlo; las opciones están en [docs/LICENCIAS_DE_TERCEROS.md](docs/LICENCIAS_DE_TERCEROS.md).
+
