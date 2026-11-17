@@ -2,6 +2,8 @@
 
 U-Pad se apoya en contenidos y librerías de terceros. Este documento recoge sus licencias y lo que implican para el proyecto.
 
+El código propio de U-Pad se distribuye bajo la [licencia MIT](../LICENSE). Lo que sigue se refiere a lo que no es del proyecto y mantiene su propia licencia.
+
 ## Pictogramas de ARASAAC
 
 Los símbolos pictográficos utilizados son propiedad del Gobierno de Aragón y han sido creados por Sergio Palao para [ARASAAC](https://arasaac.org), que los distribuye bajo Licencia Creative Commons [BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es).

@@ -162,6 +162,8 @@ El build de release usa R8 (código reducido y ofuscado). Para que salga firmado
 
 ## 🙏 Créditos y licencias
 
+El código de U-Pad se distribuye bajo la [licencia MIT](LICENSE). Esa licencia cubre el código del proyecto, no los pictogramas ni los servicios de terceros, que conservan las suyas.
+
 Los símbolos pictográficos utilizados son propiedad del Gobierno de Aragón y han sido creados por Sergio Palao para [ARASAAC](https://arasaac.org), que los distribuye bajo Licencia Creative Commons BY-NC-SA.
 
 Esa licencia no permite el uso comercial de los pictogramas. Mientras el plan Premium sea un pago simulado no hay conflicto, pero antes de cobrar por la app hay que resolverlo; las opciones están en [docs/LICENCIAS_DE_TERCEROS.md](docs/LICENCIAS_DE_TERCEROS.md).
