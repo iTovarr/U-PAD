@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
@@ -217,6 +218,7 @@ fun RoleOptionCard(
         modifier = modifier
             .scale(scaleAnimated)
             .clickable(
+                role = Role.Button,
                 interactionSource = interactionSource,
                 indication = null
             ) { onClick() },
