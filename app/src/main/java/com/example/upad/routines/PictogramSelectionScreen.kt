@@ -1,5 +1,7 @@
 package com.example.upad.routines
 
+import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
@@ -39,8 +41,8 @@ fun PictogramSelectionScreen(
     // Escuchamos los resultados de la API que llegan al ViewModel
     val apiResults by viewModel.searchResults.collectAsState()
 
-    val colorAzulTEA = Color(0xFF4FC3F7)
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorAzulTEA = ColorAzulTEA
+    val colorFondoBase = LightBackground
 
     // Lanzar la búsqueda cada vez que cambia el texto (mínimo 3 letras)
     LaunchedEffect(searchQuery) {
@@ -146,7 +148,7 @@ fun PictogramSelectionScreen(
 
 @Composable
 fun PictogramCard(title: String, imageUrl: String, onClick: () -> Unit) {
-    val colorAzulTEA = Color(0xFF4FC3F7)
+    val colorAzulTEA = ColorAzulTEA
 
     Card(
         modifier = Modifier
