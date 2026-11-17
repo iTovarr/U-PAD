@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.UPadColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.util.Log
@@ -93,19 +95,15 @@ fun NotificationsScreen(
     }
 
     val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = if (isPremiumUser) {
-        if (isDarkMode) Color(0xFF0F0C29) else Color(0xFFFBE9E7)
-    } else {
-        if (isDarkMode) Color(0xFF121212) else Color.White
-    }
+    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
 
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
+    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
 
     val colorSuperficieTarjetas = if (isPremiumUser) {
         if (isDarkMode) Color.White.copy(alpha = 0.06f) else Color.White.copy(alpha = 0.7f)
     } else {
-        if (isDarkMode) Color(0xFF1E1E1E) else Color.White
+        if (isDarkMode) DarkSurface else Color.White
     }
 
     val padreId = remember { session.currentUserId }
