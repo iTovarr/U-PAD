@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.UPadColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -82,22 +84,18 @@ fun HijoTrackingScreen(
     }
 
     val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = if (isPremiumUser) {
-        if (isDarkMode) Color(0xFF0F0C29) else Color(0xFFFBE9E7)
-    } else {
-        if (isDarkMode) Color(0xFF121212) else Color.White
-    }
+    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
 
     // 🎨 PALETA DE COLORES ADAPTATIVA EN BASE AL ESTADO PREMIUM Y MODO VISUAL
-    val colorAcabadoPrincipal = if (isPremiumUser) Color(0xFFC5A059) else MaterialTheme.colorScheme.primary
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
+    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
+    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
 
     // Configuración para tarjetas flotantes y TopBar: Translúcido en Premium o sólido en Básico
     val colorSuperficieFlotante = if (isPremiumUser) {
         if (isDarkMode) Color.Black.copy(alpha = 0.65f) else Color.White.copy(alpha = 0.75f)
     } else {
-        if (isDarkMode) Color(0xFF1E1E1E) else Color.White
+        if (isDarkMode) DarkSurface else Color.White
     }
 
     val idPadre = remember { session.currentUserId }
