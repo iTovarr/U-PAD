@@ -66,19 +66,19 @@ fun LoginScreen(
                 )
         ) {
             Text(
-                text = "HOLA DE NUEVO",
+                text = stringResource(id = R.string.login_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray
             )
             Text(
-                text = "Inicia Sesión",
+                text = stringResource(id = R.string.login_title),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA
             )
             Text(
-                text = "Qué bueno verte por aquí",
+                text = stringResource(id = R.string.login_subtitle),
                 fontSize = 16.sp,
                 color = Color.Gray
             )
@@ -93,7 +93,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text(stringResource(id = R.string.field_email_short)) },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = colorAzulTEA) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
@@ -111,7 +111,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contraseña") },
+                label = { Text(stringResource(id = R.string.field_password)) },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = colorAzulTEA) },
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
@@ -131,7 +131,7 @@ fun LoginScreen(
                 enabled = !isLoading
             ) {
                 Text(
-                    "¿Olvidaste tu contraseña?",
+                    stringResource(id = R.string.forgot_password_question),
                     color = Color.Gray,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold
@@ -191,7 +191,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        text = "ENTRAR",
+                        text = stringResource(id = R.string.login_button),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Black
                     )
@@ -207,7 +207,7 @@ fun LoginScreen(
             enabled = !isLoading
         ) {
             Text(
-                "REGRESAR AL INICIO",
+                stringResource(id = R.string.login_back_to_start),
                 color = colorAzulTEA.copy(alpha = 0.6f),
                 fontWeight = FontWeight.Black,
                 fontSize = 13.sp
