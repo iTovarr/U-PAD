@@ -127,6 +127,18 @@ fun PictogramSelectionScreen(
                 }
             }
 
+            // Atribución exigida por la licencia de los pictogramas (CC BY-NC-SA)
+            Text(
+                text = stringResource(id = R.string.arasaac_attribution),
+                fontSize = 10.sp,
+                lineHeight = 13.sp,
+                color = TextoSecundarioClaro,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            )
+
             // BOTÓN DE CARGA (OPCIONAL)
             Button(
                 onClick = { /* Lógica propia */ },
