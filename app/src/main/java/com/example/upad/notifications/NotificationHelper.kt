@@ -28,10 +28,10 @@ class NotificationHelper(context: Context) {
 
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Notificaciones de Rutina",
+            appContext.getString(R.string.notification_channel_name),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = "Alertas sobre el estado de las rutinas del niño"
+            description = appContext.getString(R.string.notification_channel_description)
         }
         val manager = appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
