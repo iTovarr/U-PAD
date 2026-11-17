@@ -1,5 +1,7 @@
 package com.example.upad.routines
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -56,17 +58,17 @@ fun PictogramSelectionScreen(
                 .padding(top = 40.dp, bottom = 24.dp, start = 16.dp, end = 24.dp)
         ) {
             IconButton(onClick = onBackClick) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorAzulTEA)
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorAzulTEA)
             }
             Text(
-                text = "BIBLIOTECA ARASAAC",
+                text = stringResource(id = R.string.pictogram_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
-                text = "Busca un Pictograma",
+                text = stringResource(id = R.string.pictogram_title),
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -86,7 +88,7 @@ fun PictogramSelectionScreen(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Ej: Lavarse las manos...", color = Color.Gray) },
+                placeholder = { Text(stringResource(id = R.string.pictogram_placeholder), color = Color.Gray) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = colorAzulTEA) },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -133,7 +135,7 @@ fun PictogramSelectionScreen(
             ) {
                 Icon(Icons.Default.CloudUpload, contentDescription = null, tint = colorAzulTEA)
                 Spacer(modifier = Modifier.width(12.dp))
-                Text("AÑADIR FOTO PROPIA", color = colorAzulTEA, fontWeight = FontWeight.Black)
+                Text(stringResource(id = R.string.pictogram_add_photo), color = colorAzulTEA, fontWeight = FontWeight.Black)
             }
         }
     }
