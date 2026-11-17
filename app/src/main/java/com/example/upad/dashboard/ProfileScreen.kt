@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import androidx.compose.ui.semantics.Role
 import android.util.Log
 import android.content.Context
 import android.content.Intent
@@ -166,7 +167,7 @@ fun ProfileScreen(
                             .fillMaxSize()
                             .clip(CircleShape)
                             .background(colorAcabadoPrincipal.copy(alpha = 0.15f))
-                            .clickable(enabled = isEditingMode) { galleryLauncher.launch("image/*") },
+                            .clickable(enabled = isEditingMode, role = Role.Button) { galleryLauncher.launch("image/*") },
                         contentAlignment = Alignment.Center
                     ) {
                         if (imageUri != null) {
@@ -444,7 +445,7 @@ fun MenuOptionRow(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(18.dp))
-            .clickable { onClick() },
+            .clickable(role = Role.Button) { onClick() },
         shape = RoundedCornerShape(18.dp),
         color = colorSuperficie,
         border = BorderStroke(
