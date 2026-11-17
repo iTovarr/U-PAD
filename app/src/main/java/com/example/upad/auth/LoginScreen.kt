@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoTenueClaro
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import android.widget.Toast
@@ -48,7 +49,7 @@ fun LoginScreen(
     val focusManager = LocalFocusManager.current
 
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = Color(0xFFF0F4F8)
+    val colorFondoBase = LightBackground
 
     Column(
         modifier = Modifier
