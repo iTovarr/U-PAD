@@ -1,5 +1,7 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -69,7 +71,7 @@ fun LoginScreen(
                 text = stringResource(id = R.string.login_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
-                color = Color.LightGray
+                color = TextoTenueClaro
             )
             Text(
                 text = stringResource(id = R.string.login_title),
@@ -80,7 +82,7 @@ fun LoginScreen(
             Text(
                 text = stringResource(id = R.string.login_subtitle),
                 fontSize = 16.sp,
-                color = Color.Gray
+                color = TextoSecundarioClaro
             )
         }
 
@@ -132,7 +134,7 @@ fun LoginScreen(
             ) {
                 Text(
                     stringResource(id = R.string.forgot_password_question),
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold
                 )
