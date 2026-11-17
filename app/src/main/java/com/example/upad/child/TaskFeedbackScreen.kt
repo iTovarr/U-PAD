@@ -94,7 +94,7 @@ fun TaskFeedbackScreen(
                         if (imageUrl.isNotEmpty()) {
                             AsyncImage(
                                 model = imageUrl,
-                                contentDescription = "Actividad realizada",
+                                contentDescription = stringResource(id = R.string.cd_activity_done),
                                 modifier = Modifier.fillMaxSize().padding(12.dp),
                                 contentScale = ContentScale.Fit
                             )
