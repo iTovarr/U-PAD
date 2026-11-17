@@ -1,5 +1,6 @@
 package com.example.upad.utils // O com.example.upad.data según tu estructura
 
+import com.example.upad.R
 import android.content.Context
 import android.widget.Toast
 import androidx.biometric.BiometricPrompt
@@ -38,14 +39,14 @@ object BiometricHelper {
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                onError("Huella no reconocida.")
+                onError(activity.getString(R.string.biometric_not_recognized))
             }
         })
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Acceso rápido para Padres")
-            .setSubtitle("Coloca tu huella para continuar")
-            .setNegativeButtonText("Usar Contraseña")
+            .setTitle(activity.getString(R.string.biometric_parent_title))
+            .setSubtitle(activity.getString(R.string.biometric_parent_subtitle))
+            .setNegativeButtonText(activity.getString(R.string.biometric_use_password))
             .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
             .build()
 
@@ -70,13 +71,15 @@ object BiometricHelper {
                 activity.lifecycleScope.launch {
                     try {
                         deviceRepository.setKioskActive(idDispositivoNiño, debeBloquear)
-                        val mensaje = if (debeBloquear) "¡Dispositivo infantil Bloqueado! 🔒" else "¡Dispositivo infantil Liberado! 🔓"
+                        val mensaje = activity.getString(
+                            if (debeBloquear) R.string.biometric_device_locked else R.string.biometric_device_unlocked
+                        )
                         Toast.makeText(activity, mensaje, Toast.LENGTH_SHORT).show()
                         onResultado(true)
                     } catch (e: CancellationException) {
                         throw e
                     } catch (e: Exception) {
-                        Toast.makeText(activity, "Error de conexión con Firebase", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, activity.getString(R.string.error_connection), Toast.LENGTH_SHORT).show()
                         onResultado(false)
                     }
                 }
@@ -84,25 +87,29 @@ object BiometricHelper {
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
-                Toast.makeText(activity, "Error de huella: $errString", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, activity.getString(R.string.biometric_error, errString), Toast.LENGTH_SHORT).show()
                 onResultado(false)
             }
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                Toast.makeText(activity, "Huella no reconocida.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, activity.getString(R.string.biometric_not_recognized), Toast.LENGTH_SHORT).show()
                 onResultado(false)
             }
         })
 
         // Personalizamos los textos dinámicamente según la acción elegida por el padre
-        val tituloAccion = if (debeBloquear) "Confirmar Bloqueo Infantil" else "Confirmar Desbloqueo"
-        val subtituloAccion = if (debeBloquear) "Escanea tu huella para congelar el dispositivo" else "Escanea tu huella para liberar el dispositivo"
+        val tituloAccion = activity.getString(
+            if (debeBloquear) R.string.biometric_lock_title else R.string.biometric_unlock_title
+        )
+        val subtituloAccion = activity.getString(
+            if (debeBloquear) R.string.biometric_lock_subtitle else R.string.biometric_unlock_subtitle
+        )
 
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(tituloAccion)
             .setSubtitle(subtituloAccion)
-            .setNegativeButtonText("Cancelar")
+            .setNegativeButtonText(activity.getString(R.string.action_cancel))
             .build()
 
         biometricPrompt.authenticate(promptInfo)
