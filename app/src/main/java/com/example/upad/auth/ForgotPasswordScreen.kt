@@ -1,5 +1,7 @@
 package com.example.upad.auth
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,18 +43,18 @@ fun ForgotPasswordScreen(
                 .padding(start = 24.dp, top = 40.dp, end = 24.dp, bottom = 32.dp)
         ) {
             IconButton(onClick = onBackToLogin) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorAzulTEA)
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorAzulTEA)
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "RECUPERACIÓN",
+                text = stringResource(id = R.string.forgot_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
-                text = "¿Olvidaste tu contraseña?",
+                text = stringResource(id = R.string.forgot_password_question),
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -70,7 +72,7 @@ fun ForgotPasswordScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "No te preocupes, dinos tu correo y te enviaremos un enlace para que crees una nueva.",
+                text = stringResource(id = R.string.forgot_instructions),
                 fontSize = 15.sp,
                 color = Color.Gray,
                 textAlign = TextAlign.Center,
@@ -83,7 +85,7 @@ fun ForgotPasswordScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Tu correo electrónico") },
+                label = { Text(stringResource(id = R.string.forgot_email_label)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -107,7 +109,7 @@ fun ForgotPasswordScreen(
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) {
                 Text(
-                    text = "ENVIAR ENLACE",
+                    text = stringResource(id = R.string.forgot_send_link),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Black
                 )
@@ -131,14 +133,14 @@ fun ForgotPasswordScreen(
             },
             title = {
                 Text(
-                    text = "¡Revisa tu correo!",
+                    text = stringResource(id = R.string.forgot_check_email),
                     fontWeight = FontWeight.Black,
                     color = colorAzulTEA
                 )
             },
             text = {
                 Text(
-                    text = "Te enviamos las instrucciones para recuperar tu acceso. ¡Casi listo!",
+                    text = stringResource(id = R.string.forgot_sent_message),
                     textAlign = TextAlign.Center,
                     color = Color.DarkGray
                 )
@@ -152,7 +154,7 @@ fun ForgotPasswordScreen(
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA)
                 ) {
-                    Text("ENTENDIDO", fontWeight = FontWeight.Bold)
+                    Text(stringResource(id = R.string.action_understood), fontWeight = FontWeight.Bold)
                 }
             }
         )
