@@ -1,5 +1,7 @@
 package com.example.upad.dashboard.components
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -107,7 +109,7 @@ fun UpadTopAppBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.HelpOutline,
-                    contentDescription = "Ayuda",
+                    contentDescription = stringResource(id = R.string.cd_help),
                     tint = colorIconos,
                     modifier = Modifier.size(24.dp)
                 )
@@ -127,14 +129,14 @@ fun UpadTopAppBar(
                 if (imageUri != null) {
                     AsyncImage(
                         model = imageUri,
-                        contentDescription = "Mi perfil",
+                        contentDescription = stringResource(id = R.string.cd_my_profile),
                         modifier = Modifier.fillMaxSize().clip(CircleShape),
                         contentScale = ContentScale.Crop
                     )
                 } else {
                     Icon(
                         imageVector = Icons.Default.AccountCircle,
-                        contentDescription = "Mi perfil",
+                        contentDescription = stringResource(id = R.string.cd_my_profile),
                         tint = colorIconos,
                         modifier = Modifier.fillMaxSize()
                     )
