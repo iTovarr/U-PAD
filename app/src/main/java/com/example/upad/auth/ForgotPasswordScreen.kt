@@ -1,5 +1,7 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.TextoTenueClaro
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -50,7 +52,7 @@ fun ForgotPasswordScreen(
                 text = stringResource(id = R.string.forgot_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
-                color = Color.LightGray,
+                color = TextoTenueClaro,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
@@ -74,7 +76,7 @@ fun ForgotPasswordScreen(
             Text(
                 text = stringResource(id = R.string.forgot_instructions),
                 fontSize = 15.sp,
-                color = Color.Gray,
+                color = TextoSecundarioClaro,
                 textAlign = TextAlign.Center,
                 lineHeight = 22.sp
             )
