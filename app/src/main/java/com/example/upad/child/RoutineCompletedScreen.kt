@@ -117,7 +117,7 @@ fun RoutineCompletedScreen(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.celebracion),
-                        contentDescription = "Celebración",
+                        contentDescription = stringResource(id = R.string.cd_celebration),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(260.dp)
