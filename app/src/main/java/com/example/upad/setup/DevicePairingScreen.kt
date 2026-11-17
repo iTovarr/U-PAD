@@ -56,6 +56,9 @@ fun DevicePairingScreen(
     var pairingCode by remember { mutableStateOf("") }
     var isPaired by remember { mutableStateOf(false) }
     var mensajeError by remember { mutableStateOf("") }
+    val msgErrorRed = stringResource(id = R.string.network_error_linking)
+    val msgCodigoInvalido = stringResource(id = R.string.code_invalid_expired)
+    val msgIngresa6Numeros = stringResource(id = R.string.enter_6_numbers)
     var estaConectando by remember { mutableStateOf(false) }
  
     val deviceRepository = LocalAppContainer.current.deviceRepository
@@ -249,18 +252,18 @@ fun DevicePairingScreen(
                                 try {
                                     when (deviceRepository.redeemPairingCode(pairingCode, currentParentId)) {
                                         PairingResult.VINCULADO -> isPaired = true
-                                        PairingResult.CODIGO_INVALIDO -> mensajeError = "El código no existe o ha expirado."
+                                        PairingResult.CODIGO_INVALIDO -> mensajeError = msgCodigoInvalido
                                     }
                                 } catch (e: CancellationException) {
                                     throw e
                                 } catch (e: Exception) {
-                                    mensajeError = "Error de red: ${e.message}"
+                                    mensajeError = msgErrorRed
                                 } finally {
                                     estaConectando = false
                                 }
                             }
                         } else {
-                            mensajeError = "Introduce los 6 números obligatorios."
+                            mensajeError = msgIngresa6Numeros
                         }
                     } else {
                         onNavigateToDashboard()
