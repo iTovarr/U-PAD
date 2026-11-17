@@ -110,11 +110,11 @@ fun CreateRoutineScreen(
     if (aiError != null) {
         AlertDialog(
             onDismissRequest = { aiViewModel.clearAiError() },
-            title = { Text("Error de la IA") },
+            title = { Text(stringResource(id = R.string.ai_error_title)) },
             text = { Text(aiError ?: "") },
             confirmButton = {
                 TextButton(onClick = { aiViewModel.clearAiError() }) {
-                    Text("Aceptar")
+                    Text(stringResource(id = R.string.action_accept))
                 }
             }
         )
@@ -560,13 +560,13 @@ fun CreateRoutineScreen(
                                     Spacer(modifier = Modifier.height(12.dp))
 
                                     Text(
-                                        text = "Asistente de Rutinas y Refuerzos por IA ✨",
+                                        text = stringResource(id = R.string.ai_assistant_title),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 14.sp,
                                         color = colorTextoPrincipal
                                     )
                                     Text(
-                                        text = "Ingresa una meta o necesidad específica del niño para generar una rutina de tareas paso a paso y mensajes de refuerzo.",
+                                        text = stringResource(id = R.string.ai_assistant_hint),
                                         fontSize = 12.sp,
                                         color = colorTextoSecundario
                                     )
@@ -575,7 +575,7 @@ fun CreateRoutineScreen(
                                     OutlinedTextField(
                                         value = customNeedText,
                                         onValueChange = { customNeedText = it },
-                                        placeholder = { Text("Ej: preparar mochila, ordenar juguetes...", fontSize = 13.sp) },
+                                        placeholder = { Text(stringResource(id = R.string.ai_assistant_placeholder), fontSize = 13.sp) },
                                         modifier = Modifier.fillMaxWidth(),
                                         shape = RoundedCornerShape(12.dp),
                                         colors = OutlinedTextFieldDefaults.colors(
@@ -599,7 +599,7 @@ fun CreateRoutineScreen(
                                         if (isCustomRoutineLoading) {
                                             CircularProgressIndicator(modifier = Modifier.size(16.dp), color = Color.White)
                                         } else {
-                                            Text("Diseñar Actividades y Refuerzos", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                            Text(stringResource(id = R.string.ai_assistant_design), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                         }
                                     }
 
@@ -612,12 +612,12 @@ fun CreateRoutineScreen(
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
                                             Column(modifier = Modifier.padding(12.dp)) {
-                                                Text("Rutina Propuesta:", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = colorTextoPrincipal)
+                                                Text(stringResource(id = R.string.ai_proposed_routine), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = colorTextoPrincipal)
                                                 aiCustomRoutine.forEachIndexed { i, act ->
                                                     Text("${i + 1}. $act", fontSize = 12.sp, color = colorTextoPrincipal)
                                                 }
                                                 Spacer(modifier = Modifier.height(8.dp))
-                                                Text("Mensajes de Refuerzo para el niño:", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = colorTextoPrincipal)
+                                                Text(stringResource(id = R.string.ai_reinforcement_messages), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = colorTextoPrincipal)
                                                 aiRefuerzos.forEach { ref ->
                                                     Text("• \"$ref\"", fontSize = 12.sp, color = colorTextoSecundario)
                                                 }
@@ -644,7 +644,7 @@ fun CreateRoutineScreen(
                                                     shape = RoundedCornerShape(10.dp),
                                                     modifier = Modifier.fillMaxWidth()
                                                 ) {
-                                                    Text("Importar Actividades y Refuerzos", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                                    Text(stringResource(id = R.string.ai_import), color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                                                 }
                                             }
                                         }
