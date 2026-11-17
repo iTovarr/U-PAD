@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,17 +45,17 @@ fun TutorialsScreen(
                 .padding(top = 40.dp, bottom = 30.dp, start = 16.dp, end = 24.dp)
         ) {
             IconButton(onClick = onBackClick) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorAzulTEA)
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorAzulTEA)
             }
             Text(
-                text = "APRENDIZAJE",
+                text = stringResource(id = R.string.tutorials_overline),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
-                text = "Tutoriales rápidos",
+                text = stringResource(id = R.string.tutorials_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -70,15 +72,15 @@ fun TutorialsScreen(
         ) {
             // Tutorial 1: Crear Actividad
             TutorialCard(
-                title = "¿Cómo crear una actividad?",
-                description = "Aprende a organizar las rutinas diarias de Mateo en pocos pasos.",
+                title = stringResource(id = R.string.tutorials_create_title),
+                description = stringResource(id = R.string.tutorials_create_text),
                 onWatchClick = { uriHandler.openUri("https://www.youtube.com/watch?v=xvFZjo5PgG0") }
             )
 
             // Tutorial 2: Modificar Pasos
             TutorialCard(
-                title = "¿Cómo modificar los pasos?",
-                description = "Ajusta cada detalle para que se adapte perfectamente a sus necesidades.",
+                title = stringResource(id = R.string.tutorials_edit_title),
+                description = stringResource(id = R.string.tutorials_edit_text),
                 onWatchClick = { uriHandler.openUri("https://www.youtube.com/watch?v=xvFZjo5PgG0") }
             )
         }
@@ -99,7 +101,7 @@ fun TutorialsScreen(
                 shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA)
             ) {
-                Text("FINALIZAR CONFIGURACIÓN", fontSize = 18.sp, fontWeight = FontWeight.Black)
+                Text(stringResource(id = R.string.tutorials_finish), fontSize = 18.sp, fontWeight = FontWeight.Black)
             }
         }
     }
@@ -161,7 +163,7 @@ fun TutorialCard(
                     onClick = onWatchClick,
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text("VER VIDEO", color = colorAzulTEA, fontWeight = FontWeight.Black, fontSize = 12.sp)
+                    Text(stringResource(id = R.string.tutorials_watch_video), color = colorAzulTEA, fontWeight = FontWeight.Black, fontSize = 12.sp)
                 }
             }
         }
