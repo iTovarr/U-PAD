@@ -1,5 +1,7 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.UPadColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -57,18 +59,18 @@ fun ExperienceSetupScreen(
     var voiceEnabled by remember { mutableStateOf(prefs.getBoolean("VOICE_ENABLED", true)) }
 
     // --- ADAPTACIÓN DE TEXTOS Y CONTRASTES SEGÚN TU CONFIGURACIÓN DE SETTINGS ---
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF555555)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
+    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
 
     // 🌸 EXTRACTO FIEL DE SETTINGSSCREEN: Configuración translúcida sobre el Gradiente o Sólida en Básico
     val colorSuperficieTarjetas = if (isPremiumUser) {
         if (isDarkMode) Color.White.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.65f)
     } else {
-        if (isDarkMode) Color(0xFF1E1E1E) else Color(0xFFF7F7F7)
+        if (isDarkMode) DarkSurface else Color(0xFFF7F7F7)
     }
 
     // Acabado Oro (0xFFC5A059) para Premium (combina con el Rosita/Azul profundo) o Primario para Básico
-    val colorAcabadoPrincipal = if (isPremiumUser) Color(0xFFC5A059) else MaterialTheme.colorScheme.primary
+    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
     val colorSuperficieSeleccionada = if (isDarkMode) Color.White.copy(alpha = 0.12f) else colorAcabadoPrincipal.copy(alpha = 0.15f)
 
     UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
