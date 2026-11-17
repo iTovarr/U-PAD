@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.util.Log
@@ -143,7 +144,7 @@ fun WelcomeScreen(
             Text(
                 text = stringResource(id = R.string.welcome_tagline),
                 fontSize = 16.sp,
-                color = Color.Gray,
+                color = TextoSecundarioClaro,
                 fontWeight = FontWeight.Medium
             )
         }
@@ -222,7 +223,7 @@ fun WelcomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(id = R.string.welcome_have_account), color = Color.Gray, fontSize = 15.sp)
+                Text(text = stringResource(id = R.string.welcome_have_account), color = TextoSecundarioClaro, fontSize = 15.sp)
                 TextButton(onClick = onNavigateToLogin) {
                     Text(
                         text = stringResource(id = R.string.welcome_sign_in),
