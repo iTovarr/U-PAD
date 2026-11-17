@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.ui.theme.DarkBackground
+import com.example.upad.ui.theme.UPadColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.viewmodel.SettingsViewModel
 import android.content.Context
@@ -76,13 +78,13 @@ fun RoutineDashboardScreen(
     val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // ── PALETA DE COLORES ADAPTATIVA ─────────────────────────────────────────
-    val colorTextoPrincipal = if (isDarkMode) Color.White else Color(0xFF111111)
+    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
     val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF444444)
     val fuentePremium = FontFamily.SansSerif
 
     val gradienteFondoPremium = if (isDarkMode) {
         Brush.verticalGradient(
-            colors = listOf(Color(0xFF0F0C29), Color(0xFF302B63), Color(0xFF121212))
+            colors = listOf(Color(0xFF0F0C29), Color(0xFF302B63), DarkBackground)
         )
     } else {
         Brush.verticalGradient(
@@ -90,13 +92,13 @@ fun RoutineDashboardScreen(
         )
     }
 
-    val colorFondoBase = if (isDarkMode) Color(0xFF121212) else MaterialTheme.colorScheme.background
+    val colorFondoBase = if (isDarkMode) DarkBackground else MaterialTheme.colorScheme.background
     val colorSuperficieTarjetas = if (esPremium) {
         if (isDarkMode) Color.White.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.85f)
     } else {
         MaterialTheme.colorScheme.surface
     }
-    val colorDinamicoSuscripcion = if (esPremium) Color(0xFFC5A059) else MaterialTheme.colorScheme.primary
+    val colorDinamicoSuscripcion = UPadColors.acabadoPrincipal(esPremium)
 
     // ── DATOS DEL USUARIO ────────────────────────────────────────────────────
     val hijoVinculadoId = remember(currentUser) {
