@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.util.Log
 import android.content.Context
 import android.net.Uri
@@ -151,7 +153,7 @@ fun NotificationsScreen(
             containerColor = Color.Transparent,
             topBar = {
                 UpadTopAppBar(
-                    title = "Centro de Alertas 🔔",
+                    title = stringResource(id = R.string.alerts_title),
                     imageUri = imageUri,
                     colorFondo = colorFondoSolido,
                     colorIconos = colorTextoPrincipal,
@@ -172,7 +174,7 @@ fun NotificationsScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Mantente al tanto en tiempo real de los avances, estados y reportes del dispositivo de tu hijo.",
+                    text = stringResource(id = R.string.alerts_subtitle),
                     fontSize = 14.sp,
                     color = colorTextoSecundario,
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -204,7 +206,7 @@ fun NotificationsScreen(
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                             Text(
-                                text = "No tienes notificaciones por ahora",
+                                text = stringResource(id = R.string.alerts_empty),
                                 color = colorTextoSecundario,
                                 fontSize = 15.sp
                             )
