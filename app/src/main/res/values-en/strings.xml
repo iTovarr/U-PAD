@@ -3,7 +3,7 @@
     <string name="app_name">U Pad</string>
     <string name="widget_progreso">IN PROGRESS</string>
     <string name="widget_refrescar">Refresh</string>
-    <string name="widget_buscando">Looking for activity...</string>
+    <string name="widget_buscando">Looking for activity…</string>
     <string name="widget_siguiente_actividad">Next activity in: -- min</string>
     <string name="widget_registro_emocional">Emotional state log:</string>
     <string name="emoji_tranquilo">😊</string>
@@ -97,17 +97,17 @@
     <string name="edit_activities_title">Edit Activities</string>
     <string name="routine_name_label">Routine Name</string>
     <string name="add_activity_section">ADD ACTIVITY</string>
-    <string name="add_activity_placeholder">e.g. Study English, eat fruit...</string>
+    <string name="add_activity_placeholder">e.g. Study English, eat fruit…</string>
     <string name="scheduled_days_label">Scheduled days:</string>
     <string name="add_manually_btn">ADD MANUALLY ➕</string>
-    <string name="processing_ai">PROCESSING WITH AI...</string>
+    <string name="processing_ai">PROCESSING WITH AI…</string>
     <string name="suggest_activity_ai">SUGGEST ACTIVITY WITH AI ✨</string>
     <string name="view_weekly_schedule">VIEW WEEKLY SCHEDULE:</string>
     <string name="activities_of_day_count">ACTIVITIES FOR %1$s (%2$d)</string>
     <string name="no_activities_for_day">No activities for %1$s.</string>
     <string name="ai_recommendations">AI Recommendations</string>
     <string name="select_ai_activity_desc">Select the activity you want to add to your child\'s schedule:</string>
-    <string name="saving_routine_progress">Saving changes for shift\n%1$s...</string>
+    <string name="saving_routine_progress">Saving changes for shift\n%1$s…</string>
     <string name="days_label_prefix">Days: %1$s</string>
     <string name="days_all">Days: Every day</string>
     <string name="back">Back</string>
@@ -208,7 +208,7 @@
     <string name="understood_btn">GOT IT! ➔</string>
 
     <!-- TaskExecutionScreen -->
-    <string name="loading_activity">Loading your activity...</string>
+    <string name="loading_activity">Loading your activity…</string>
     <string name="mission_accomplished">MISSION ACCOMPLISHED!</string>
     <string name="focused_great_job">You did a great job focusing!</string>
     <string name="active_focus">🎯 ACTIVE FOCUS</string>
@@ -298,7 +298,7 @@
     <string name="details_pending">Pending ⏳</string>
     <string name="details_assigned_time">Assigned time</string>
     <string name="details_step_status">Step status</string>
-    <string name="analytics_analyzing">Analyzing today\'s behavior and emotional log...</string>
+    <string name="analytics_analyzing">Analyzing today\'s behavior and emotional log…</string>
     <string name="analytics_refresh">Refresh Analysis</string>
     <string name="analytics_ai_intro">U-Pad AI can analyze the behavior and emotional state your child logged today to give you tailored educational recommendations.</string>
     <string name="analytics_generate">Generate Smart Analysis</string>
@@ -332,20 +332,20 @@
     <string name="payment_subtitle">You\'re one step away from automating your children\'s routines using Artificial Intelligence models.</string>
     <string name="payment_card">Credit / Debit Card</string>
     <string name="payment_confirm_simulated">Confirm Simulated Payment</string>
-    <string name="payment_processing">Processing secure payment...</string>
-    <string name="payment_setting_up">Setting up Premium environment...</string>
+    <string name="payment_processing">Processing secure payment…</string>
+    <string name="payment_setting_up">Setting up Premium environment…</string>
     <string name="ai_error_title">AI Error</string>
     <string name="action_accept">OK</string>
     <string name="ai_assistant_title">AI Routine and Reinforcement Assistant ✨</string>
     <string name="ai_assistant_hint">Enter a specific goal or need of the child to generate a step-by-step task routine and reinforcement messages.</string>
-    <string name="ai_assistant_placeholder">E.g. pack the backpack, tidy up toys...</string>
+    <string name="ai_assistant_placeholder">E.g. pack the backpack, tidy up toys…</string>
     <string name="ai_assistant_design">Design Activities and Reinforcements</string>
     <string name="ai_proposed_routine">Proposed Routine:</string>
     <string name="ai_reinforcement_messages">Reinforcement messages for the child:</string>
     <string name="ai_import">Import Activities and Reinforcements</string>
     <string name="pictogram_overline">ARASAAC LIBRARY</string>
     <string name="pictogram_title">Search for a Pictogram</string>
-    <string name="pictogram_placeholder">E.g. Wash hands...</string>
+    <string name="pictogram_placeholder">E.g. Wash hands…</string>
     <string name="pictogram_add_photo">ADD YOUR OWN PHOTO</string>
     <string name="cd_view_map">View map</string>
     <string name="child_setup_overline">INITIAL SETUP</string>

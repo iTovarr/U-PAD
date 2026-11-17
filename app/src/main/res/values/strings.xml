@@ -3,7 +3,7 @@
     <string name="app_name">U Pad</string>
     <string name="widget_progreso">EN PROGRESO</string>
     <string name="widget_refrescar">Refrescar</string>
-    <string name="widget_buscando">Buscando actividad...</string>
+    <string name="widget_buscando">Buscando actividad…</string>
     <string name="widget_siguiente_actividad">Siguiente actividad en: -- min</string>
     <string name="widget_registro_emocional">Registro de estado emocional:</string>
     <string name="emoji_tranquilo">😊</string>
@@ -97,17 +97,17 @@
     <string name="edit_activities_title">Editar Actividades</string>
     <string name="routine_name_label">Nombre de la Rutina</string>
     <string name="add_activity_section">AÑADIR ACTIVIDAD</string>
-    <string name="add_activity_placeholder">Ej: Estudiar inglés, comer fruta...</string>
+    <string name="add_activity_placeholder">Ej: Estudiar inglés, comer fruta…</string>
     <string name="scheduled_days_label">Días programados:</string>
     <string name="add_manually_btn">AÑADIR MANUAL ➕</string>
-    <string name="processing_ai">PROCESANDO CON IA...</string>
+    <string name="processing_ai">PROCESANDO CON IA…</string>
     <string name="suggest_activity_ai">SUGERIR ACTIVIDAD IA ✨</string>
     <string name="view_weekly_schedule">VER AGENDA SEMANAL:</string>
     <string name="activities_of_day_count">ACTIVIDADES DEL %1$s (%2$d)</string>
     <string name="no_activities_for_day">No hay actividades para el día %1$s.</string>
     <string name="ai_recommendations">Recomendaciones IA</string>
     <string name="select_ai_activity_desc">Selecciona la actividad que deseas añadir a la agenda de tu hijo:</string>
-    <string name="saving_routine_progress">Guardando cambios en el turno\n%1$s...</string>
+    <string name="saving_routine_progress">Guardando cambios en el turno\n%1$s…</string>
     <string name="days_label_prefix">Días: %1$s</string>
     <string name="days_all">Días: Todos los días</string>
     <string name="back">Atrás</string>
@@ -208,7 +208,7 @@
     <string name="understood_btn">¡ENTENDIDO! ➔</string>
 
     <!-- TaskExecutionScreen -->
-    <string name="loading_activity">Cargando tu actividad...</string>
+    <string name="loading_activity">Cargando tu actividad…</string>
     <string name="mission_accomplished">¡MISIÓN CUMPLIDA!</string>
     <string name="focused_great_job">¡Hiciste un gran trabajo concentrándote!</string>
     <string name="active_focus">🎯 ENFOQUE ACTIVO</string>
@@ -298,7 +298,7 @@
     <string name="details_pending">Pendiente ⏳</string>
     <string name="details_assigned_time">Tiempo asignado</string>
     <string name="details_step_status">Estado del paso</string>
-    <string name="analytics_analyzing">Analizando el comportamiento y registro emocional de hoy...</string>
+    <string name="analytics_analyzing">Analizando el comportamiento y registro emocional de hoy…</string>
     <string name="analytics_refresh">Actualizar Análisis</string>
     <string name="analytics_ai_intro">U-Pad AI puede analizar el comportamiento y estado emocional registrado por tu hijo el día de hoy para darte recomendaciones psicopedagógicas a medida.</string>
     <string name="analytics_generate">Generar Análisis Inteligente</string>
@@ -332,20 +332,20 @@
     <string name="payment_subtitle">Estás a un paso de automatizar las rutinas de tus hijos usando modelos de Inteligencia Artificial.</string>
     <string name="payment_card">Tarjeta de Crédito / Débito</string>
     <string name="payment_confirm_simulated">Confirmar Pago Simulado</string>
-    <string name="payment_processing">Procesando pago seguro...</string>
-    <string name="payment_setting_up">Configurando entorno Premium...</string>
+    <string name="payment_processing">Procesando pago seguro…</string>
+    <string name="payment_setting_up">Configurando entorno Premium…</string>
     <string name="ai_error_title">Error de la IA</string>
     <string name="action_accept">Aceptar</string>
     <string name="ai_assistant_title">Asistente de Rutinas y Refuerzos por IA ✨</string>
     <string name="ai_assistant_hint">Ingresa una meta o necesidad específica del niño para generar una rutina de tareas paso a paso y mensajes de refuerzo.</string>
-    <string name="ai_assistant_placeholder">Ej: preparar mochila, ordenar juguetes...</string>
+    <string name="ai_assistant_placeholder">Ej: preparar mochila, ordenar juguetes…</string>
     <string name="ai_assistant_design">Diseñar Actividades y Refuerzos</string>
     <string name="ai_proposed_routine">Rutina Propuesta:</string>
     <string name="ai_reinforcement_messages">Mensajes de Refuerzo para el niño:</string>
     <string name="ai_import">Importar Actividades y Refuerzos</string>
     <string name="pictogram_overline">BIBLIOTECA ARASAAC</string>
     <string name="pictogram_title">Busca un Pictograma</string>
-    <string name="pictogram_placeholder">Ej: Lavarse las manos...</string>
+    <string name="pictogram_placeholder">Ej: Lavarse las manos…</string>
     <string name="pictogram_add_photo">AÑADIR FOTO PROPIA</string>
     <string name="cd_view_map">Ver mapa</string>
     <string name="child_setup_overline">CONFIGURACIÓN INICIAL</string>

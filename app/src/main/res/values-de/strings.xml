@@ -3,7 +3,7 @@
     <string name="app_name">U Pad</string>
     <string name="widget_progreso">IN ARBEIT</string>
     <string name="widget_refrescar">Aktualisieren</string>
-    <string name="widget_buscando">Aktivität wird gesucht...</string>
+    <string name="widget_buscando">Aktivität wird gesucht…</string>
     <string name="widget_siguiente_actividad">Nächste Aktivität in: -- Min</string>
     <string name="widget_registro_emocional">Protokoll des emotionalen Zustands:</string>
     <string name="emoji_tranquilo">😊</string>
@@ -97,17 +97,17 @@
     <string name="edit_activities_title">Aktivitäten bearbeiten</string>
     <string name="routine_name_label">Routine-Name</string>
     <string name="add_activity_section">AKTIVITÄT HINZUFÜGEN</string>
-    <string name="add_activity_placeholder">z.B. Englisch lernen, Obst essen...</string>
+    <string name="add_activity_placeholder">z.B. Englisch lernen, Obst essen…</string>
     <string name="scheduled_days_label">Geplante Tage:</string>
     <string name="add_manually_btn">MANUELL HINZUFÜGEN ➕</string>
-    <string name="processing_ai">VERARBEITUNG MIT KI...</string>
+    <string name="processing_ai">VERARBEITUNG MIT KI…</string>
     <string name="suggest_activity_ai">KI-AKTIVITÄT VORSCHLAGEN ✨</string>
     <string name="view_weekly_schedule">WOCHENPLAN ANZEIGEN:</string>
     <string name="activities_of_day_count">AKTIVITÄTEN FÜR %1$s (%2$d)</string>
     <string name="no_activities_for_day">Keine Aktivitäten für %1$s.</string>
     <string name="ai_recommendations">KI-Empfehlungen</string>
     <string name="select_ai_activity_desc">Wählen Sie die Aktivität, die Sie dem Zeitplan Ihres Kindes hinzufügen möchten:</string>
-    <string name="saving_routine_progress">Änderungen für Schicht\n%1$s werden gespeichert...</string>
+    <string name="saving_routine_progress">Änderungen für Schicht\n%1$s werden gespeichert…</string>
     <string name="days_label_prefix">Tage: %1$s</string>
     <string name="days_all">Tage: Jeden Tag</string>
     <string name="back">Zurück</string>
@@ -208,7 +208,7 @@
     <string name="understood_btn">VERSTANDEN! ➔</string>
 
     <!-- TaskExecutionScreen -->
-    <string name="loading_activity">Deine Aktivität wird geladen...</string>
+    <string name="loading_activity">Deine Aktivität wird geladen…</string>
     <string name="mission_accomplished">MISSION ERFÜLLT!</string>
     <string name="focused_great_job">Du hast dich super konzentriert!</string>
     <string name="active_focus">🎯 AKTIVER FOKUS</string>
@@ -298,7 +298,7 @@
     <string name="details_pending">Ausstehend ⏳</string>
     <string name="details_assigned_time">Zugewiesene Zeit</string>
     <string name="details_step_status">Status des Schritts</string>
-    <string name="analytics_analyzing">Verhalten und Gefühlsprotokoll von heute werden analysiert...</string>
+    <string name="analytics_analyzing">Verhalten und Gefühlsprotokoll von heute werden analysiert…</string>
     <string name="analytics_refresh">Analyse aktualisieren</string>
     <string name="analytics_ai_intro">U-Pad AI kann das heute von deinem Kind erfasste Verhalten und Gefühlsleben analysieren und dir passgenaue pädagogische Empfehlungen geben.</string>
     <string name="analytics_generate">Intelligente Analyse erstellen</string>
@@ -332,20 +332,20 @@
     <string name="payment_subtitle">Du bist nur einen Schritt davon entfernt, die Routinen deiner Kinder mit KI-Modellen zu automatisieren.</string>
     <string name="payment_card">Kredit- / Debitkarte</string>
     <string name="payment_confirm_simulated">Simulierte Zahlung bestätigen</string>
-    <string name="payment_processing">Sichere Zahlung wird verarbeitet...</string>
-    <string name="payment_setting_up">Premium-Umgebung wird eingerichtet...</string>
+    <string name="payment_processing">Sichere Zahlung wird verarbeitet…</string>
+    <string name="payment_setting_up">Premium-Umgebung wird eingerichtet…</string>
     <string name="ai_error_title">KI-Fehler</string>
     <string name="action_accept">OK</string>
     <string name="ai_assistant_title">KI-Assistent für Routinen und Bestärkungen ✨</string>
     <string name="ai_assistant_hint">Gib ein konkretes Ziel oder Bedürfnis des Kindes ein, um eine Schritt-für-Schritt-Routine und bestärkende Nachrichten zu erstellen.</string>
-    <string name="ai_assistant_placeholder">Z. B. Rucksack packen, Spielzeug aufräumen...</string>
+    <string name="ai_assistant_placeholder">Z. B. Rucksack packen, Spielzeug aufräumen…</string>
     <string name="ai_assistant_design">Aktivitäten und Bestärkungen entwerfen</string>
     <string name="ai_proposed_routine">Vorgeschlagene Routine:</string>
     <string name="ai_reinforcement_messages">Bestärkende Nachrichten für das Kind:</string>
     <string name="ai_import">Aktivitäten und Bestärkungen übernehmen</string>
     <string name="pictogram_overline">ARASAAC-BIBLIOTHEK</string>
     <string name="pictogram_title">Piktogramm suchen</string>
-    <string name="pictogram_placeholder">Z. B. Hände waschen...</string>
+    <string name="pictogram_placeholder">Z. B. Hände waschen…</string>
     <string name="pictogram_add_photo">EIGENES FOTO HINZUFÜGEN</string>
     <string name="cd_view_map">Karte ansehen</string>
     <string name="child_setup_overline">ERSTEINRICHTUNG</string>

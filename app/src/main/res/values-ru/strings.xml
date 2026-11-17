@@ -3,7 +3,7 @@
     <string name="app_name">U Pad</string>
     <string name="widget_progreso">В ПРОЦЕССЕ</string>
     <string name="widget_refrescar">Обновить</string>
-    <string name="widget_buscando">Поиск активности...</string>
+    <string name="widget_buscando">Поиск активности…</string>
     <string name="widget_siguiente_actividad">Следующая активность через: -- мин</string>
     <string name="widget_registro_emocional">Журнал эмоционального состояния:</string>
     <string name="emoji_tranquilo">😊</string>
@@ -97,17 +97,17 @@
     <string name="edit_activities_title">Редактировать активности</string>
     <string name="routine_name_label">Название рутины</string>
     <string name="add_activity_section">ДОБАВИТЬ АКТИВНОСТЬ</string>
-    <string name="add_activity_placeholder">Напр.: Учить английский, съесть фрукт...</string>
+    <string name="add_activity_placeholder">Напр.: Учить английский, съесть фрукт…</string>
     <string name="scheduled_days_label">Запланированные дни:</string>
     <string name="add_manually_btn">ДОБАВИТЬ ВРУЧНУЮ ➕</string>
-    <string name="processing_ai">ОБРАБОТКА ИИ...</string>
+    <string name="processing_ai">ОБРАБОТКА ИИ…</string>
     <string name="suggest_activity_ai">ПРЕДЛОЖИТЬ АКТИВНОСТЬ ИИ ✨</string>
     <string name="view_weekly_schedule">ПОСМОТРЕТЬ НЕДЕЛЬНЫЙ ПЛАН:</string>
     <string name="activities_of_day_count">АКТИВНОСТИ НА %1$s (%2$d)</string>
     <string name="no_activities_for_day">Нет активностей на %1$s.</string>
     <string name="ai_recommendations">Рекомендации ИИ</string>
     <string name="select_ai_activity_desc">Выберите активность, которую хотите добавить в расписание ребенка:</string>
-    <string name="saving_routine_progress">Сохранение изменений для смены\n%1$s...</string>
+    <string name="saving_routine_progress">Сохранение изменений для смены\n%1$s…</string>
     <string name="days_label_prefix">Дни: %1$s</string>
     <string name="days_all">Дни: Каждый день</string>
     <string name="back">Назад</string>
@@ -208,7 +208,7 @@
     <string name="understood_btn">ПОНЯТНО! ➔</string>
 
     <!-- TaskExecutionScreen -->
-    <string name="loading_activity">Загрузка занятия...</string>
+    <string name="loading_activity">Загрузка занятия…</string>
     <string name="mission_accomplished">МИССИЯ ВЫПОЛНЕНА!</string>
     <string name="focused_great_job">Отличная концентрация!</string>
     <string name="active_focus">🎯 АКТИВНЫЙ ФОКУС</string>
@@ -298,7 +298,7 @@
     <string name="details_pending">Ожидает ⏳</string>
     <string name="details_assigned_time">Отведённое время</string>
     <string name="details_step_status">Статус шага</string>
-    <string name="analytics_analyzing">Анализируем поведение и эмоции за сегодня...</string>
+    <string name="analytics_analyzing">Анализируем поведение и эмоции за сегодня…</string>
     <string name="analytics_refresh">Обновить анализ</string>
     <string name="analytics_ai_intro">U-Pad AI может проанализировать поведение и эмоциональное состояние вашего ребёнка за сегодня и дать индивидуальные рекомендации.</string>
     <string name="analytics_generate">Создать умный анализ</string>
@@ -332,20 +332,20 @@
     <string name="payment_subtitle">Вы в одном шаге от автоматизации распорядка ваших детей с помощью искусственного интеллекта.</string>
     <string name="payment_card">Кредитная / дебетовая карта</string>
     <string name="payment_confirm_simulated">Подтвердить тестовый платёж</string>
-    <string name="payment_processing">Обработка безопасного платежа...</string>
-    <string name="payment_setting_up">Настройка премиум-режима...</string>
+    <string name="payment_processing">Обработка безопасного платежа…</string>
+    <string name="payment_setting_up">Настройка премиум-режима…</string>
     <string name="ai_error_title">Ошибка ИИ</string>
     <string name="action_accept">ОК</string>
     <string name="ai_assistant_title">ИИ-помощник по распорядку и поощрениям ✨</string>
     <string name="ai_assistant_hint">Укажите конкретную цель или потребность ребёнка, чтобы создать пошаговый распорядок и поощрительные сообщения.</string>
-    <string name="ai_assistant_placeholder">Напр.: собрать рюкзак, убрать игрушки...</string>
+    <string name="ai_assistant_placeholder">Напр.: собрать рюкзак, убрать игрушки…</string>
     <string name="ai_assistant_design">Составить задания и поощрения</string>
     <string name="ai_proposed_routine">Предложенный распорядок:</string>
     <string name="ai_reinforcement_messages">Поощрительные сообщения для ребёнка:</string>
     <string name="ai_import">Добавить задания и поощрения</string>
     <string name="pictogram_overline">БИБЛИОТЕКА ARASAAC</string>
     <string name="pictogram_title">Найдите пиктограмму</string>
-    <string name="pictogram_placeholder">Напр.: Вымыть руки...</string>
+    <string name="pictogram_placeholder">Напр.: Вымыть руки…</string>
     <string name="pictogram_add_photo">ДОБАВИТЬ СВОЁ ФОТО</string>
     <string name="cd_view_map">Открыть карту</string>
     <string name="child_setup_overline">НАЧАЛЬНАЯ НАСТРОЙКА</string>
