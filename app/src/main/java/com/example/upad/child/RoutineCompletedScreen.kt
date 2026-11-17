@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import com.example.upad.ui.theme.LightBackground
 import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -154,7 +155,7 @@ fun RoutineCompletedScreen(
 
                 // Contenedor destacado para el texto dinámico
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F4F8)),
+                    colors = CardDefaults.cardColors(containerColor = LightBackground),
                     shape = RoundedCornerShape(18.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
