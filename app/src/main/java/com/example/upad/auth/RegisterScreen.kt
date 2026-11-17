@@ -67,17 +67,17 @@ fun RegisterScreen(
                 .padding(start = 24.dp, top = 40.dp, end = 24.dp, bottom = 32.dp)
         ) {
             IconButton(onClick = onBackClick) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Atrás", tint = colorAzulTEA)
+                Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.cd_back), tint = colorAzulTEA)
             }
             Text(
-                text = "NUEVA CUENTA",
+                text = stringResource(id = R.string.register_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
                 color = Color.LightGray,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
-                text = "Únete a U-Pad",
+                text = stringResource(id = R.string.register_title),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
@@ -94,7 +94,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Nombre completo") },
+                label = { Text(stringResource(id = R.string.field_full_name)) },
                 leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = colorAzulTEA) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
@@ -112,7 +112,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Correo electrónico") },
+                label = { Text(stringResource(id = R.string.field_email)) },
                 leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = colorAzulTEA) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
@@ -130,7 +130,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Contraseña") },
+                label = { Text(stringResource(id = R.string.field_password)) },
                 leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = colorAzulTEA) },
                 modifier = Modifier.fillMaxWidth(),
                 visualTransformation = PasswordVisualTransformation(),
@@ -205,7 +205,7 @@ fun RegisterScreen(
                     )
                 } else {
                     Text(
-                        text = "CREAR CUENTA",
+                        text = stringResource(id = R.string.register_button),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Black
                     )
