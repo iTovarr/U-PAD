@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -165,7 +166,7 @@ fun FeedbackCard(
     Card(
         modifier = modifier
             .height(150.dp)
-            .clickable { onClick() },
+            .clickable(role = Role.Button) { onClick() },
         shape = RoundedCornerShape(32.dp),
         colors = CardDefaults.cardColors(containerColor = colorBase),
         border = BorderStroke(4.dp, colorBorde), // Bordes resaltados para estimulación visual correcta
