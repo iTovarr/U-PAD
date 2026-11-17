@@ -337,7 +337,7 @@ fun AnalyticsScreen(
                                     CircularProgressIndicator(color = colorTextoIAActiva, modifier = Modifier.size(30.dp))
                                     Spacer(modifier = Modifier.height(10.dp))
                                     Text(
-                                        text = "Analizando el comportamiento y registro emocional de hoy...",
+                                        text = stringResource(id = R.string.analytics_analyzing),
                                         fontSize = 13.sp,
                                         color = colorTextoIAActiva,
                                         textAlign = TextAlign.Center
@@ -360,13 +360,13 @@ fun AnalyticsScreen(
                                         shape = RoundedCornerShape(12.dp),
                                         modifier = Modifier.align(Alignment.End)
                                     ) {
-                                        Text("Actualizar Análisis", color = Color.White, fontSize = 12.sp)
+                                        Text(stringResource(id = R.string.analytics_refresh), color = Color.White, fontSize = 12.sp)
                                     }
                                 }
                             } else {
                                 Column {
                                     Text(
-                                        text = "U-Pad AI puede analizar el comportamiento y estado emocional registrado por tu hijo el día de hoy para darte recomendaciones psicopedagógicas a medida.",
+                                        text = stringResource(id = R.string.analytics_ai_intro),
                                         fontSize = 13.sp,
                                         color = colorTextoPrincipal,
                                         lineHeight = 18.sp
@@ -379,7 +379,7 @@ fun AnalyticsScreen(
                                         colors = ButtonDefaults.buttonColors(containerColor = colorTextoIAActiva),
                                         shape = RoundedCornerShape(12.dp)
                                     ) {
-                                        Text("Generar Análisis Inteligente", color = Color.White, fontSize = 12.sp)
+                                        Text(stringResource(id = R.string.analytics_generate), color = Color.White, fontSize = 12.sp)
                                     }
                                 }
                             }
