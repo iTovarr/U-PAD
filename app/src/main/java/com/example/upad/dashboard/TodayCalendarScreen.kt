@@ -1,5 +1,7 @@
 package com.example.upad.dashboard
 
+import com.example.upad.R
+import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -85,7 +87,7 @@ fun TodayCalendarScreen(
             containerColor = Color.Transparent,
             topBar = {
                 UpadTopAppBar(
-                    title = "Calendario de Hoy 📅",
+                    title = stringResource(id = R.string.calendar_title),
                     imageUri = imageUri,
                     colorFondo = colorFondoSolido,
                     colorIconos = colorTextoPrincipal,
@@ -119,7 +121,7 @@ fun TodayCalendarScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "No hay actividades registradas para el día de hoy.",
+                            text = stringResource(id = R.string.no_activities_today),
                             color = colorTextoSecundario,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium
@@ -128,7 +130,7 @@ fun TodayCalendarScreen(
                 } else {
                     if (tasksManana.isNotEmpty()) {
                         TurnCalendarBlock(
-                            title = "🌅 Mañana",
+                            title = stringResource(id = R.string.turn_morning_emoji),
                             tasks = tasksManana,
                             diaDeHoy = diaDeHoy,
                             colorSuperficie = colorSuperficieTarjetas,
@@ -140,7 +142,7 @@ fun TodayCalendarScreen(
 
                     if (tasksTarde.isNotEmpty()) {
                         TurnCalendarBlock(
-                            title = "☀️ Tarde",
+                            title = stringResource(id = R.string.turn_afternoon_emoji),
                             tasks = tasksTarde,
                             diaDeHoy = diaDeHoy,
                             colorSuperficie = colorSuperficieTarjetas,
@@ -152,7 +154,7 @@ fun TodayCalendarScreen(
 
                     if (tasksNoche.isNotEmpty()) {
                         TurnCalendarBlock(
-                            title = "🌙 Noche",
+                            title = stringResource(id = R.string.turn_night_emoji),
                             tasks = tasksNoche,
                             diaDeHoy = diaDeHoy,
                             colorSuperficie = colorSuperficieTarjetas,
@@ -238,14 +240,14 @@ fun TurnCalendarBlock(
                     if (completada) {
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Completado",
+                            contentDescription = stringResource(id = R.string.status_completed),
                             tint = Color(0xFF4CAF50), // Verde
                             modifier = Modifier.size(28.dp)
                         )
                     } else {
                         Icon(
                             imageVector = Icons.Outlined.Circle,
-                            contentDescription = "Pendiente",
+                            contentDescription = stringResource(id = R.string.status_pending),
                             tint = colorSubtexto.copy(alpha = 0.5f), // Círculo vacío
                             modifier = Modifier.size(28.dp)
                         )
