@@ -1,5 +1,6 @@
 package com.example.upad.auth
 
+import com.example.upad.ui.theme.TextoTenueClaro
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -73,7 +74,7 @@ fun RegisterScreen(
                 text = stringResource(id = R.string.register_overline),
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Black,
-                color = Color.LightGray,
+                color = TextoTenueClaro,
                 modifier = Modifier.padding(start = 12.dp)
             )
             Text(
