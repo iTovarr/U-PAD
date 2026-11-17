@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.ColorAzulTEA
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -66,7 +67,7 @@ fun DevicePairingScreen(
     val pantallaPequeña = configuration.screenHeightDp < 650
 
     // --- PALETA DE COLORES ADAPTATIVA MULTI-TEMA ---
-    val colorAzulTEA = Color(0xFF4FC3F7)
+    val colorAzulTEA = ColorAzulTEA
     val colorVerdeExito = Color(0xFF4CAF50)
 
     // Asignación según la personalización previa del usuario
