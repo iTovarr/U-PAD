@@ -1,5 +1,6 @@
 package com.example.upad.setup
 
+import com.example.upad.ui.theme.ColorPremiumGold
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -38,7 +39,7 @@ fun ChangePlanScreen(
     val colorTextoPrincipal = MaterialTheme.colorScheme.onBackground
     val colorTextoSecundario = MaterialTheme.colorScheme.onSurface
 
-    val colorOroBanner = Color(0xFFC5A059)
+    val colorOroBanner = ColorPremiumGold
     val colorVerdeExito = Color(0xFF4CAF50)
 
     Scaffold(
