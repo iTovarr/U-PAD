@@ -1,5 +1,6 @@
 package com.example.upad.child
 
+import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -71,7 +72,7 @@ fun TaskFeedbackScreen(
                     text = stringResource(R.string.feedback_question),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.Gray,
+                    color = TextoSecundarioClaro,
                     textAlign = TextAlign.Center
                 )
                 Text(
