@@ -55,6 +55,10 @@ fun ChildProfileSetupScreen(
     val session = container.sessionRepository
     val parentProfileRepository = container.parentProfileRepository
     val scope = rememberCoroutineScope()
+    // Plantillas de mensajes: se leen aquí porque los Toast se muestran fuera de la composición
+    val msgErrorImagen = stringResource(id = R.string.error_upload_image)
+    val msgErrorPerfil = stringResource(id = R.string.error_save_profile)
+    val msgSesionInvalida = stringResource(id = R.string.error_invalid_session)
 
     // Estado para controlar la pantalla de carga durante la subida a la red
     var cargando by remember { mutableStateOf(false) }
@@ -322,7 +326,7 @@ fun ChildProfileSetupScreen(
                                     throw e
                                 } catch (e: Exception) {
                                     cargando = false
-                                    Toast.makeText(context, "Error al subir imagen: ${e.message}", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(context, msgErrorImagen.format(e.message.orEmpty()), Toast.LENGTH_LONG).show()
                                     return@launch
                                 }
                             } else {
@@ -344,11 +348,11 @@ fun ChildProfileSetupScreen(
                                 throw e
                             } catch (e: Exception) {
                                 cargando = false
-                                Toast.makeText(context, "Error al guardar perfil: ${e.message}", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, msgErrorPerfil.format(e.message.orEmpty()), Toast.LENGTH_LONG).show()
                             }
                         }
                     } else {
-                        Toast.makeText(context, "Sesión no válida. Inicia sesión de nuevo.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, msgSesionInvalida, Toast.LENGTH_LONG).show()
                     }
                 },
                 modifier = Modifier
