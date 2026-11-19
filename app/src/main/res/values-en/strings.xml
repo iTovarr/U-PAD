@@ -405,4 +405,11 @@
     <string name="error_save_profile">Error saving profile: %1$s</string>
     <string name="error_invalid_session">Invalid session. Please sign in again.</string>
     <string name="arasaac_attribution">The pictographic symbols used are the property of the Government of Aragón and have been created by Sergio Palao for ARASAAC (arasaac.org), which distributes them under the Creative Commons BY-NC-SA License.</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_palette">Color palette</string>
+    <string name="palette_calma">Calm</string>
+    <string name="palette_calma_desc">Grey-blue and sage green</string>
+    <string name="palette_tierra">Earth</string>
+    <string name="palette_tierra_desc">Sand, terracotta and olive green</string>
+    <string name="palette_selected">Selected</string>
 </resources>

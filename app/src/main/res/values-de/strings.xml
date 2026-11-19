@@ -405,4 +405,11 @@
     <string name="error_save_profile">Fehler beim Speichern des Profils: %1$s</string>
     <string name="error_invalid_session">Ungültige Sitzung. Bitte melde dich erneut an.</string>
     <string name="arasaac_attribution">Die verwendeten Piktogramme sind Eigentum der Regierung von Aragonien und wurden von Sergio Palao für ARASAAC (arasaac.org) erstellt, das sie unter der Creative-Commons-Lizenz BY-NC-SA verbreitet.</string>
+    <string name="settings_appearance">Darstellung</string>
+    <string name="settings_palette">Farbpalette</string>
+    <string name="palette_calma">Ruhe</string>
+    <string name="palette_calma_desc">Graublau und Salbeigrün</string>
+    <string name="palette_tierra">Erde</string>
+    <string name="palette_tierra_desc">Sand, Terrakotta und Olivgrün</string>
+    <string name="palette_selected">Ausgewählt</string>
 </resources>

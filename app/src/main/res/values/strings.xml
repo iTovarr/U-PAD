@@ -405,4 +405,11 @@
     <string name="error_save_profile">Error al guardar perfil: %1$s</string>
     <string name="error_invalid_session">Sesión no válida. Inicia sesión de nuevo.</string>
     <string name="arasaac_attribution">Los símbolos pictográficos utilizados son propiedad del Gobierno de Aragón y han sido creados por Sergio Palao para ARASAAC (arasaac.org), que los distribuye bajo Licencia Creative Commons BY-NC-SA.</string>
+    <string name="settings_appearance">Apariencia</string>
+    <string name="settings_palette">Paleta de colores</string>
+    <string name="palette_calma">Calma</string>
+    <string name="palette_calma_desc">Azul grisáceo y verde salvia</string>
+    <string name="palette_tierra">Tierra</string>
+    <string name="palette_tierra_desc">Arena, terracota y verde oliva</string>
+    <string name="palette_selected">Seleccionada</string>
 </resources>
