@@ -445,7 +445,7 @@ private fun TareaItem(
         ) {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerLowest,
+                color = MaterialTheme.extendedColors.fondoPictograma,
                 modifier = Modifier.size(64.dp).alpha(if (disponible) 1f else 0.5f)
             ) {
                 Box(contentAlignment = Alignment.Center) {
@@ -460,7 +460,7 @@ private fun TareaItem(
                         Text(
                             text = tarea.actividad.take(1).uppercase(),
                             style = MaterialTheme.typography.headlineSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.extendedColors.onFondoPictograma
                         )
                     }
                 }

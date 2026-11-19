@@ -229,7 +229,7 @@ private fun Cargando() {
 private fun Pictograma(nombre: String, imageUrl: String) {
     Surface(
         shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        color = MaterialTheme.extendedColors.fondoPictograma,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         modifier = Modifier.size(240.dp)
     ) {
@@ -245,7 +245,7 @@ private fun Pictograma(nombre: String, imageUrl: String) {
                 Text(
                     text = nombre.take(1).uppercase(),
                     style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.extendedColors.onFondoPictograma
                 )
             }
         }

@@ -930,7 +930,7 @@ fun PasoItemCard(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(colorDetalle.copy(alpha = 0.12f)),
+                    .background(MaterialTheme.extendedColors.fondoPictograma),
                 contentAlignment = Alignment.Center
             ) {
                 if (tarea.imageUrl.isNotEmpty()) {

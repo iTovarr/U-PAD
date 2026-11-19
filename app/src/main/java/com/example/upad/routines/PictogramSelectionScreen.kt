@@ -1,5 +1,6 @@
 package com.example.upad.routines
 
+import com.example.upad.ui.theme.extendedColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -174,7 +175,7 @@ fun PictogramCard(title: String, imageUrl: String, onClick: () -> Unit) {
                     .weight(1f)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(18.dp))
-                    .background(MaterialTheme.colorScheme.surfaceContainerLowest),
+                    .background(MaterialTheme.extendedColors.fondoPictograma),
                 contentAlignment = Alignment.Center
             ) {
                 // AQUÍ SE CARGA LA IMAGEN DE ARASAAC
