@@ -1,9 +1,5 @@
 package com.example.upad.routines
 
-import com.example.upad.ui.theme.ColorAzulTEA
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
-import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -41,8 +37,8 @@ fun PictogramSelectionScreen(
     // Escuchamos los resultados de la API que llegan al ViewModel
     val apiResults by viewModel.searchResults.collectAsState()
 
-    val colorAzulTEA = ColorAzulTEA
-    val colorFondoBase = LightBackground
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     // Lanzar la búsqueda cada vez que cambia el texto (mínimo 3 letras)
     LaunchedEffect(searchQuery) {
@@ -59,7 +55,7 @@ fun PictogramSelectionScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(top = 40.dp, bottom = 24.dp, start = 16.dp, end = 24.dp)
         ) {
             IconButton(onClick = onBackClick) {
@@ -67,17 +63,15 @@ fun PictogramSelectionScreen(
             }
             Text(
                 text = stringResource(id = R.string.pictogram_overline),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Black,
-                color = TextoTenueClaro,
-                modifier = Modifier.padding(start = 12.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 12.dp),
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
                 text = stringResource(id = R.string.pictogram_title),
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = MaterialTheme.typography.headlineSmall
             )
         }
 
@@ -93,12 +87,12 @@ fun PictogramSelectionScreen(
                 value = searchQuery,
                 onValueChange = { searchQuery = it },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(id = R.string.pictogram_placeholder), color = TextoSecundarioClaro) },
+                placeholder = { Text(stringResource(id = R.string.pictogram_placeholder), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = colorAzulTEA) },
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
                     focusedBorderColor = colorAzulTEA,
                     unfocusedBorderColor = Color.Transparent
                 ),
@@ -130,13 +124,12 @@ fun PictogramSelectionScreen(
             // Atribución exigida por la licencia de los pictogramas (CC BY-NC-SA)
             Text(
                 text = stringResource(id = R.string.arasaac_attribution),
-                fontSize = 10.sp,
-                lineHeight = 13.sp,
-                color = TextoSecundarioClaro,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
+                style = MaterialTheme.typography.labelSmall
             )
 
             // BOTÓN DE CARGA (OPCIONAL)
@@ -147,8 +140,8 @@ fun PictogramSelectionScreen(
                     .padding(vertical = 16.dp)
                     .height(60.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                elevation = ButtonDefaults.buttonElevation(2.dp)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Icon(Icons.Default.CloudUpload, contentDescription = null, tint = colorAzulTEA)
                 Spacer(modifier = Modifier.width(12.dp))
@@ -160,7 +153,7 @@ fun PictogramSelectionScreen(
 
 @Composable
 fun PictogramCard(title: String, imageUrl: String, onClick: () -> Unit) {
-    val colorAzulTEA = ColorAzulTEA
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
 
     Card(
         modifier = Modifier
@@ -168,8 +161,8 @@ fun PictogramCard(title: String, imageUrl: String, onClick: () -> Unit) {
             .aspectRatio(0.9f)
             .clickable(role = Role.Button) { onClick() },
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -181,7 +174,7 @@ fun PictogramCard(title: String, imageUrl: String, onClick: () -> Unit) {
                     .weight(1f)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(18.dp))
-                    .background(Color(0xFFF8F9FA)),
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest),
                 contentAlignment = Alignment.Center
             ) {
                 // AQUÍ SE CARGA LA IMAGEN DE ARASAAC
@@ -194,11 +187,10 @@ fun PictogramCard(title: String, imageUrl: String, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
-                fontWeight = FontWeight.Black,
-                fontSize = 11.sp,
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
-                maxLines = 2
+                maxLines = 2,
+                style = MaterialTheme.typography.labelSmall
             )
         }
     }
