@@ -35,6 +35,7 @@ Todos los datos del menor los introduce o autoriza el tutor. Al tratarse de dato
 | Identificador del dispositivo (ANDROID_ID) y modelo | Dispositivo del niño | Vincular el dispositivo con el tutor. |
 | Token de notificaciones push | Dispositivo del tutor | Enviarle avisos cuando el niño completa una actividad. |
 | Idioma, tema y plan elegidos | Tutor | Recordar sus preferencias. |
+| Perfil sensorial del modo niño: paleta, modo claro u oscuro, intensidad de color, animaciones, sonido, voz, volumen, temporizador y celebraciones | Tutor | Adaptar el modo niño a la sensibilidad del niño en su dispositivo. |
 
 La app **no** recoge contactos, mensajes, historial de navegación ni datos de otras aplicaciones, y no muestra publicidad.
 
