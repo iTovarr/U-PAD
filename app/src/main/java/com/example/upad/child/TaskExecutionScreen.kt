@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -55,7 +56,6 @@ import com.example.upad.utils.RoutineProgressCalculator
 import com.example.upad.utils.Turnos
 import com.example.upad.viewmodel.RoutineViewModel
 import kotlinx.coroutines.delay
-import java.util.Locale
 
 /**
  * Pantalla en la que el niño realiza una tarea: pictograma grande, nombre de la
@@ -105,8 +105,9 @@ fun TaskExecutionScreen(
             }
         }
     }
+    val locale = LocalConfiguration.current.locales[0]
     val textoTemporizador = String.format(
-        Locale.getDefault(), "%02d:%02d", tiempoRestanteSegundos / 60, tiempoRestanteSegundos % 60
+        locale, "%02d:%02d", tiempoRestanteSegundos / 60, tiempoRestanteSegundos % 60
     )
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
