@@ -1,8 +1,5 @@
 package com.example.upad.auth
 
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
-import com.example.upad.ui.theme.TextoSecundarioClaro
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -30,7 +27,7 @@ fun ForgotPasswordScreen(
     var showDialog by remember { mutableStateOf(false) }
 
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = LightBackground
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     Column(
         modifier = Modifier
@@ -42,7 +39,7 @@ fun ForgotPasswordScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(start = 24.dp, top = 40.dp, end = 24.dp, bottom = 32.dp)
         ) {
             IconButton(onClick = onBackToLogin) {
@@ -51,18 +48,15 @@ fun ForgotPasswordScreen(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.forgot_overline),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Black,
-                color = TextoTenueClaro,
-                modifier = Modifier.padding(start = 12.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 12.dp),
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
                 text = stringResource(id = R.string.forgot_password_question),
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
                 modifier = Modifier.padding(horizontal = 12.dp),
-                lineHeight = 32.sp
+                style = MaterialTheme.typography.headlineSmall
             )
         }
 
@@ -76,10 +70,9 @@ fun ForgotPasswordScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.forgot_instructions),
-                fontSize = 15.sp,
-                color = TextoSecundarioClaro,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                lineHeight = 22.sp
+                style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -93,8 +86,8 @@ fun ForgotPasswordScreen(
                 shape = RoundedCornerShape(20.dp),
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorAzulTEA,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                 ),
                 singleLine = true
             )
@@ -109,12 +102,11 @@ fun ForgotPasswordScreen(
                     .height(65.dp),
                 shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.forgot_send_link),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Black
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
         }
@@ -125,7 +117,7 @@ fun ForgotPasswordScreen(
         AlertDialog(
             onDismissRequest = { showDialog = false },
             shape = RoundedCornerShape(28.dp),
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             icon = {
                 Icon(
                     Icons.Default.MarkEmailRead,
@@ -145,7 +137,7 @@ fun ForgotPasswordScreen(
                 Text(
                     text = stringResource(id = R.string.forgot_sent_message),
                     textAlign = TextAlign.Center,
-                    color = Color.DarkGray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             confirmButton = {
