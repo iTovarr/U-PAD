@@ -631,7 +631,7 @@ fun CreateRoutineScreen(
                                                     shape = RoundedCornerShape(10.dp),
                                                     modifier = Modifier.fillMaxWidth()
                                                 ) {
-                                                    Text(stringResource(id = R.string.ai_import), color = Color.White, style = MaterialTheme.typography.labelMedium)
+                                                    Text(stringResource(id = R.string.ai_import), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelMedium)
                                                 }
                                             }
                                         }
