@@ -212,12 +212,12 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Surface(
-color = MaterialTheme.extendedColors.successContainer,
+                        color = MaterialTheme.extendedColors.successContainer,
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
                             text = stringResource(id = R.string.active),
-color = MaterialTheme.extendedColors.onSuccessContainer,
+                            color = MaterialTheme.extendedColors.onSuccessContainer,
                             modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
                             style = MaterialTheme.typography.labelSmall
                         )
@@ -290,7 +290,7 @@ color = MaterialTheme.extendedColors.onSuccessContainer,
                     MenuOptionRow(
                         icon = Icons.Default.ExitToApp,
                         title = stringResource(id = R.string.logout),
-colorSuperficie = MaterialTheme.colorScheme.errorContainer,
+                        colorSuperficie = MaterialTheme.colorScheme.errorContainer,
                         isPremium = false,
                         colorPrincipal = MaterialTheme.colorScheme.error,
                         colorTexto = MaterialTheme.colorScheme.onErrorContainer,
@@ -405,7 +405,7 @@ colorSuperficie = MaterialTheme.colorScheme.errorContainer,
                         ) {
                             Text(
                                 text = stringResource(id = R.string.save_action),
-color = MaterialTheme.colorScheme.onPrimary,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 style = MaterialTheme.typography.labelLarge
                             )
                         }

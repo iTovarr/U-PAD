@@ -208,7 +208,7 @@ fun RoutineDashboardScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-.background(colorFondoBase)
+                .background(colorFondoBase)
         ) {
             Scaffold(
                 containerColor = Color.Transparent,
@@ -230,7 +230,7 @@ fun RoutineDashboardScreen(
                             if (esPremium) onUbicarHijoAccionUnificada()
                             else showTurnSelectionDialog = true
                         },
-containerColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
                         shape = CircleShape
                     ) {
@@ -280,7 +280,7 @@ containerColor = MaterialTheme.colorScheme.primary,
                                     .padding(horizontal = 20.dp),
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(
-containerColor = MaterialTheme.colorScheme.primaryContainer
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer
                                 ),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                             ) {
@@ -371,7 +371,7 @@ containerColor = MaterialTheme.colorScheme.primaryContainer
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(16.dp))
                                             .background(
-if (esElSeleccionado) MaterialTheme.colorScheme.primary
+                                                if (esElSeleccionado) MaterialTheme.colorScheme.primary
                                                 else if (esHoyReal) MaterialTheme.colorScheme.primaryContainer
                                                 else colorSuperficieTarjetas
                                             )
@@ -384,7 +384,7 @@ if (esElSeleccionado) MaterialTheme.colorScheme.primary
                                     ) {
                                         Text(
                                             text = getLocalizedDayName(dia),
-color = if (esElSeleccionado) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
+                                            color = if (esElSeleccionado) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
                                             fontWeight = if (esElSeleccionado || esHoyReal) FontWeight.Black else FontWeight.Bold,
                                             style = MaterialTheme.typography.bodySmall
                                         )
@@ -476,7 +476,7 @@ color = if (esElSeleccionado) MaterialTheme.colorScheme.onPrimary else colorText
                                                                 .clip(CircleShape)
                                                                 .background(
                                                                     when {
-esElSeleccionadoHoy -> MaterialTheme.colorScheme.primary
+                                                                        esElSeleccionadoHoy -> MaterialTheme.colorScheme.primary
                                                                         esDiaActualDelMes -> MaterialTheme.colorScheme.primaryContainer
                                                                         else -> Color.Transparent
                                                                     }
@@ -491,7 +491,7 @@ esElSeleccionadoHoy -> MaterialTheme.colorScheme.primary
                                                             Text(
                                                                 text = numeroDia.toString(),
                                                                 fontWeight = if (esElSeleccionadoHoy || esDiaActualDelMes) FontWeight.Black else FontWeight.Medium,
-color = if (esElSeleccionadoHoy) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
+                                                                color = if (esElSeleccionadoHoy) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
                                                                 style = MaterialTheme.typography.bodySmall
                                                             )
                                                         }
@@ -618,15 +618,15 @@ private fun ProgressStatRow(
             modifier = Modifier
                 .size(28.dp)
                 .clip(CircleShape)
-.background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f)),
+                .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f)),
             contentAlignment = Alignment.Center
         ) {
             Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(14.dp))
         }
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-Text(text = value, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.titleSmall)
-Text(text = label, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.labelSmall)
+            Text(text = value, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.titleSmall)
+            Text(text = label, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.labelSmall)
         }
     }
 }

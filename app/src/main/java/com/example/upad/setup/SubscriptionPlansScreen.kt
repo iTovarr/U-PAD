@@ -169,7 +169,7 @@ fun PlanCard(
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-border = androidx.compose.foundation.BorderStroke(
+        border = androidx.compose.foundation.BorderStroke(
             if (isSelected) 2.dp else 1.dp,
             if (isSelected) colorAzulTEA else MaterialTheme.colorScheme.outlineVariant
         )

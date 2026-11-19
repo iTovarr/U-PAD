@@ -78,7 +78,7 @@ fun ChangePlanScreen(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(id = R.string.most_recommended_plan),
-color = colorTextoOro,
+                        color = colorTextoOro,
                         style = MaterialTheme.typography.labelSmall
                     )
                 }

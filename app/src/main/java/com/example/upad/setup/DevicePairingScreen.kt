@@ -268,7 +268,7 @@ fun DevicePairingScreen(
                     .height(if (pantallaPequeña) 54.dp else 60.dp),
                 shape = RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(
-containerColor = colorAzulTEA,
+                    containerColor = colorAzulTEA,
                     contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)

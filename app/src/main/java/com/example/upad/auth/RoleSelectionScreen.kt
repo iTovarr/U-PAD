@@ -221,7 +221,7 @@ fun RoleOptionCard(
                 indication = null
             ) { onClick() },
         shape = RoundedCornerShape(32.dp), // Tus 32.dp originales
-color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        color = MaterialTheme.colorScheme.surfaceContainerLowest,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(

@@ -56,7 +56,7 @@ fun PaymentViewScreen(
 
             Text(
                 text = stringResource(id = R.string.payment_title),
-color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground,
                 style = MaterialTheme.typography.headlineSmall
             )
 

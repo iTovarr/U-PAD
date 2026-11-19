@@ -170,7 +170,7 @@ fun AnalyticsScreen(
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = if (totalTasksAsignadas > 0) stringResource(id = R.string.achieved_percentage, generalPercentage) else stringResource(id = R.string.no_activity),
-color = MaterialTheme.colorScheme.onPrimary,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 style = MaterialTheme.typography.headlineSmall
                             )
                             Spacer(modifier = Modifier.height(4.dp))

@@ -111,7 +111,7 @@ fun TrialDisclaimerScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.trial_start),
-color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleLarge
                 )
             }

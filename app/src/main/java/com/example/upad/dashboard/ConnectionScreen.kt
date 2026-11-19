@@ -153,7 +153,7 @@ fun ConnectionScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(72.dp)
-.background(
+                                        .background(
                                             color = MaterialTheme.colorScheme.primaryContainer,
                                             shape = RoundedCornerShape(24.dp)
                                         ),
