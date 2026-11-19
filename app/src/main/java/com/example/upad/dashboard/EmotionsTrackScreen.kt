@@ -1,6 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -58,14 +58,13 @@ fun EmotionsTrackScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     val tasksManana by routineViewModel.tasksManana.collectAsState()
     val tasksTarde by routineViewModel.tasksTarde.collectAsState()
@@ -97,8 +96,8 @@ fun EmotionsTrackScreen(
             ) {
                 Text(
                     text = "Monitorea los sentimientos expresados por tu hijo al finalizar cada actividad del día ($diaDeHoy).",
-                    fontSize = 14.sp,
-                    color = colorTextoSecundario
+                    color = colorTextoSecundario,
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 if (tasksManana.isEmpty() && tasksTarde.isEmpty() && tasksNoche.isEmpty()) {
@@ -111,8 +110,7 @@ fun EmotionsTrackScreen(
                         Text(
                             text = stringResource(id = R.string.no_activities_today),
                             color = colorTextoSecundario,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Medium
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 } else {
@@ -168,9 +166,8 @@ fun TurnEmotionsBlock(
     ) {
         Text(
             text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = colorTexto
+            color = colorTexto,
+            style = MaterialTheme.typography.titleSmall
         )
         tasks.forEach { task ->
             val emocion = task.obtenerEmocionHoy(diaDeHoy)
@@ -190,7 +187,7 @@ fun TurnEmotionsBlock(
                     Box(
                         modifier = Modifier
                             .size(50.dp)
-                            .background(Color.White, RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerLowest, RoundedCornerShape(12.dp))
                             .padding(4.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -201,7 +198,7 @@ fun TurnEmotionsBlock(
                                 modifier = Modifier.fillMaxSize()
                             )
                         } else {
-                            Text(text = "⭐", fontSize = 24.sp)
+                            Text(text = "⭐", style = MaterialTheme.typography.headlineSmall)
                         }
                     }
 
@@ -210,14 +207,13 @@ fun TurnEmotionsBlock(
                     ) {
                         Text(
                             text = task.actividad,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = colorTexto
+                            color = colorTexto,
+                            style = MaterialTheme.typography.titleSmall
                         )
                         Text(
                             text = "${task.duration} minutos",
-                            fontSize = 12.sp,
-                            color = colorSubtexto
+                            color = colorSubtexto,
+                            style = MaterialTheme.typography.bodySmall
                         )
                     }
 
@@ -231,10 +227,11 @@ fun TurnEmotionsBlock(
 @Composable
 fun EmotionBadge(emocion: String) {
     val config = when (emocion.lowercase().trim()) {
-        "feliz" -> BadgeConfig("😊 Feliz", Color(0xFFE8F5E9), Color(0xFF2E7D32))
-        "neutral" -> BadgeConfig("😐 Neutral", Color(0xFFFFFDE7), Color(0xFFF57F17))
-        "triste" -> BadgeConfig("🙁 Triste", Color(0xFFFFEBEE), Color(0xFFC62828))
-        else -> BadgeConfig("⏳ Sin registrar", Color(0xFFECEFF1), Color(0xFF455A64))
+// Colores suaves de la paleta, los mismos que ve el niño al elegir la emoción.
+        "feliz" -> BadgeConfig("😊 " + stringResource(R.string.feedback_happy), MaterialTheme.extendedColors.emocionFeliz, MaterialTheme.extendedColors.onEmocion)
+        "neutral" -> BadgeConfig("😐 " + stringResource(R.string.feedback_neutral), MaterialTheme.extendedColors.emocionNeutral, MaterialTheme.extendedColors.onEmocion)
+        "triste" -> BadgeConfig("🙁 " + stringResource(R.string.feedback_sad), MaterialTheme.extendedColors.emocionTriste, MaterialTheme.extendedColors.onEmocion)
+        else -> BadgeConfig("⏳ " + stringResource(R.string.emotion_not_recorded), MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.colorScheme.onSurfaceVariant)
     }
 
     Surface(
@@ -245,9 +242,8 @@ fun EmotionBadge(emocion: String) {
         Text(
             text = config.text,
             color = config.textColor,
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            style = MaterialTheme.typography.labelMedium
         )
     }
 }
