@@ -10,6 +10,9 @@ import com.example.upad.data.ArasaacRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.catch
+import com.example.upad.data.SensoryProfile
 import com.example.upad.data.ArasaacPictogram
 import com.example.upad.data.DataStoreManager
 import com.example.upad.data.DeviceRepository
@@ -129,6 +132,12 @@ class RoutineViewModel(
     private val _esPremiumPorPadre = MutableStateFlow(false)
     val esPremiumPorPadre: StateFlow<Boolean> = _esPremiumPorPadre.asStateFlow()
 
+    // Perfil sensorial que el tutor eligió para este niño. Hasta que llega, se usan
+    // los valores por defecto, que son los más tranquilos.
+    private val _perfilSensorial = MutableStateFlow(SensoryProfile())
+    val perfilSensorial: StateFlow<SensoryProfile> = _perfilSensorial.asStateFlow()
+    private var perfilSensorialJob: Job? = null
+
     private val _errorDesvinculacion = MutableStateFlow("")
     val errorDesvinculacion: StateFlow<String> = _errorDesvinculacion.asStateFlow()
 
@@ -199,6 +208,13 @@ class RoutineViewModel(
                     _esPremiumPorPadre.value = isPremium
                     _cargandoChild.value = false
                 }
+
+                perfilSensorialJob?.cancel()
+                perfilSensorialJob = viewModelScope.launch {
+                    parentProfileRepository.observeSensoryProfile(padreId)
+                        .catch { error -> Log.e(TAG, "No se pudo leer el perfil sensorial", error) }
+                        .collect { _perfilSensorial.value = it }
+                }
             }
 
             pairingCodeListener?.remove()
@@ -209,6 +225,7 @@ class RoutineViewModel(
     fun detenerEscuchaDispositivoNiño() {
         devicesListener?.remove()
         premiumListener?.remove()
+        perfilSensorialJob?.cancel()
         pairingCodeListener?.remove()
         detenerEscuchaIdioma()
     }
