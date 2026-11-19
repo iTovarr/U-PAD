@@ -1,7 +1,5 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.DarkSurface
-import com.example.upad.ui.theme.UPadColors
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -67,19 +65,14 @@ fun DeviceManagementScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
     // 🎨 PALETA DE COLORES RE-ACOPLADA AL DISEÑO DEL CONTENEDOR
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorSuperficieTarjetas = if (isPremiumUser) {
-        if (isDarkMode) Color.White.copy(alpha = 0.1f) else Color.White.copy(alpha = 0.7f)
-    } else {
-        if (isDarkMode) DarkSurface else Color(0xFFF7F7F7)
-    }
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     val activity = context as FragmentActivity
 
@@ -152,8 +145,8 @@ fun DeviceManagementScreen(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(18.dp),
                             colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas),
-                            border = if (isPremiumUser) androidx.compose.foundation.BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.2f)) else null,
-                            elevation = CardDefaults.cardElevation(defaultElevation = if (isPremiumUser) 0.dp else 2.dp)
+                            border = null,
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth().padding(16.dp),
