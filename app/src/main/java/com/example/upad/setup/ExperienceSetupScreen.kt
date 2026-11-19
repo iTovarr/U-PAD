@@ -1,7 +1,5 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.DarkSurface
-import com.example.upad.ui.theme.UPadColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -58,20 +56,14 @@ fun ExperienceSetupScreen(
     var audioVolume by remember { mutableFloatStateOf(prefs.getFloat("AUDIO_VOLUME", 0.7f)) }
     var voiceEnabled by remember { mutableStateOf(prefs.getBoolean("VOICE_ENABLED", true)) }
 
-    // --- ADAPTACIÓN DE TEXTOS Y CONTRASTES SEGÚN TU CONFIGURACIÓN DE SETTINGS ---
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+// --- Colores de la paleta activa ---
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    // 🌸 EXTRACTO FIEL DE SETTINGSSCREEN: Configuración translúcida sobre el Gradiente o Sólida en Básico
-    val colorSuperficieTarjetas = if (isPremiumUser) {
-        if (isDarkMode) Color.White.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.65f)
-    } else {
-        if (isDarkMode) DarkSurface else Color(0xFFF7F7F7)
-    }
+val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
-    // Acabado Oro (0xFFC5A059) para Premium (combina con el Rosita/Azul profundo) o Primario para Básico
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorSuperficieSeleccionada = if (isDarkMode) Color.White.copy(alpha = 0.12f) else colorAcabadoPrincipal.copy(alpha = 0.15f)
+val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorSuperficieSeleccionada = MaterialTheme.colorScheme.secondaryContainer
 
     UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
         Column(
@@ -101,18 +93,15 @@ fun ExperienceSetupScreen(
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = stringResource(id = R.string.experience_overline),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Black,
                         color = colorTextoSecundario,
                         modifier = Modifier.padding(start = 12.dp),
-                        letterSpacing = 1.5.sp
+                        style = MaterialTheme.typography.labelSmall
                     )
                     Text(
                         text = stringResource(id = R.string.experience_title),
-                        fontSize = if (pantallaPequeña) 24.sp else 28.sp,
-                        fontWeight = FontWeight.Black,
                         color = colorTextoPrincipal,
-                        modifier = Modifier.padding(horizontal = 12.dp)
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        style = MaterialTheme.typography.headlineMedium
                     )
                 }
             }
@@ -130,9 +119,8 @@ fun ExperienceSetupScreen(
 
                 Text(
                     text = stringResource(id = R.string.experience_appearance),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colorTextoSecundario
+                    color = colorTextoSecundario,
+                    style = MaterialTheme.typography.titleSmall
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -178,9 +166,9 @@ fun ExperienceSetupScreen(
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(
                                     text = theme,
-                                    fontSize = 15.sp,
                                     color = colorTextoPrincipal,
-                                    fontWeight = if (estaSeleccionado) FontWeight.Bold else FontWeight.Medium
+                                    fontWeight = if (estaSeleccionado) FontWeight.Bold else FontWeight.Medium,
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                             }
                         }
@@ -191,9 +179,8 @@ fun ExperienceSetupScreen(
 
                 Text(
                     text = stringResource(id = R.string.experience_audio),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colorTextoSecundario
+                    color = colorTextoSecundario,
+                    style = MaterialTheme.typography.titleSmall
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -213,14 +200,14 @@ fun ExperienceSetupScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(stringResource(id = R.string.experience_voice), fontWeight = FontWeight.Bold, color = colorTextoPrincipal)
-                                Text(stringResource(id = R.string.experience_voice_hint), fontSize = 12.sp, color = colorTextoSecundario)
+                                Text(stringResource(id = R.string.experience_voice), style = MaterialTheme.typography.titleSmall, color = colorTextoPrincipal)
+                                Text(stringResource(id = R.string.experience_voice_hint), color = colorTextoSecundario, style = MaterialTheme.typography.bodySmall)
                             }
                             Switch(
                                 checked = voiceEnabled,
                                 onCheckedChange = { voiceEnabled = it },
                                 colors = SwitchDefaults.colors(
-                                    checkedThumbColor = Color.White,
+                                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
                                     checkedTrackColor = colorAcabadoPrincipal,
                                     uncheckedTrackColor = colorTextoSecundario.copy(alpha = 0.3f)
                                 )
@@ -299,13 +286,12 @@ fun ExperienceSetupScreen(
                             .height(if (pantallaPequeña) 54.dp else 60.dp),
                         shape = RoundedCornerShape(18.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = colorAcabadoPrincipal),
-                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
                     ) {
                         Text(
                             text = stringResource(id = R.string.experience_save),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Black,
-                            color = if (isDarkMode) Color.White else Color.Black
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleSmall
                         )
                     }
                 }
