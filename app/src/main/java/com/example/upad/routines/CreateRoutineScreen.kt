@@ -1,8 +1,6 @@
 package com.example.upad.routines
 
-import com.example.upad.ui.theme.ColorPremiumGold
-import com.example.upad.ui.theme.DarkSurface
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -77,13 +75,13 @@ fun CreateRoutineScreen(
 
     var customNeedText by remember { mutableStateOf("") }
 
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
     val colorFondoBase = Color.Transparent // 🔑 Deja ver el degradado del Wrapper trasero
 
     // Superficie limpia translúcida sin grises forzados automáticos de Material 3
-    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     val session = LocalAppContainer.current.sessionRepository
     val currentUserId = remember {
@@ -165,7 +163,7 @@ fun CreateRoutineScreen(
             routineTurn = routineTurn,
             childName = childName,
             isPremiumUser = isPremiumUser,
-            colorFondo = if (isDarkMode) DarkSurface else Color.White,
+            colorFondo = MaterialTheme.colorScheme.surfaceContainerHigh,
             colorTexto = colorTextoPrincipal,
             colorProgreso = colorAcabadoPrincipal,
             onDismiss = { showSendingDialog = false }
@@ -183,10 +181,10 @@ fun CreateRoutineScreen(
     if (mostrarPopUpSugerencias) {
         AIOptionsDialog(
             opciones = sugerenciasIAByMenu,
-            colorFondo = if (isDarkMode) DarkSurface else Color.White,
+            colorFondo = MaterialTheme.colorScheme.surfaceContainerHigh,
             colorTexto = colorTextoPrincipal,
             colorTextoSec = colorTextoSecundario,
-            colorAccion = ColorPremiumGold,
+            colorAccion = MaterialTheme.extendedColors.premium,
             onDismiss = { mostrarPopUpSugerencias = false },
             onOpcionSelected = { actividadElegida ->
                 mostrarPopUpSugerencias = false
@@ -239,7 +237,7 @@ fun CreateRoutineScreen(
                             ),
                             border = BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.3f))
                         ) {
-                            Text(stringResource(id = R.string.cancel), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                            Text(stringResource(id = R.string.cancel), style = MaterialTheme.typography.labelMedium)
                         }
 
                         Button(
@@ -248,10 +246,10 @@ fun CreateRoutineScreen(
                             shape = RoundedCornerShape(16.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = colorAcabadoPrincipal,
-                                contentColor = Color.White
+                                contentColor = MaterialTheme.colorScheme.onPrimary
                             )
                         ) {
-                            Text(stringResource(id = R.string.save_action), fontWeight = FontWeight.Black, fontSize = 13.sp)
+                            Text(stringResource(id = R.string.save_action), style = MaterialTheme.typography.labelMedium)
                         }
                     }
                 }
@@ -309,8 +307,7 @@ fun CreateRoutineScreen(
                                         Text(
                                             stringResource(id = R.string.premium_badge),
                                             color = colorAcabadoPrincipal,
-                                            fontSize = 10.sp,
-                                            fontWeight = FontWeight.Black
+                                            style = MaterialTheme.typography.labelSmall
                                         )
                                     }
                                 }
@@ -333,8 +330,7 @@ fun CreateRoutineScreen(
                                     Text(
                                         stringResource(id = R.string.basic_badge),
                                         color = colorAcabadoPrincipal,
-                                        fontSize = 12.sp,
-                                        fontWeight = FontWeight.Bold
+                                        style = MaterialTheme.typography.labelMedium
                                     )
                                 }
                             }
@@ -351,18 +347,15 @@ fun CreateRoutineScreen(
 
                         Text(
                             text = stringResource(id = R.string.turn_label, localizedTurn.uppercase()),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Black,
                             color = colorTextoSecundario.copy(alpha = 0.8f),
                             modifier = Modifier.padding(start = 12.dp),
-                            letterSpacing = 1.sp
+                            style = MaterialTheme.typography.labelSmall
                         )
                         Text(
                             text = stringResource(id = R.string.edit_activities_title),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Black,
                             color = colorTextoPrincipal,
-                            modifier = Modifier.padding(horizontal = 12.dp)
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            style = MaterialTheme.typography.headlineSmall
                         )
                     }
                 }
@@ -400,10 +393,8 @@ fun CreateRoutineScreen(
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
                                     text = stringResource(id = R.string.add_activity_section),
-                                    fontSize = 11.sp,
-                                    fontWeight = FontWeight.Bold,
                                     color = colorAcabadoPrincipal,
-                                    letterSpacing = 0.5.sp
+                                    style = MaterialTheme.typography.labelSmall
                                 )
 
                                 Spacer(modifier = Modifier.height(10.dp))
@@ -432,8 +423,8 @@ fun CreateRoutineScreen(
 
                                 Text(
                                     text = stringResource(id = R.string.scheduled_days_label),
-                                    fontSize = 13.sp,
-                                    color = colorTextoSecundario
+                                    color = colorTextoSecundario,
+                                    style = MaterialTheme.typography.bodySmall
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -459,7 +450,7 @@ fun CreateRoutineScreen(
                                                 .clip(RoundedCornerShape(10.dp))
                                                 .background(
                                                     if (estaSeleccionado) colorAcabadoPrincipal
-                                                    else if (isDarkMode) Color.White.copy(alpha = 0.05f) else Color(0xFFEEEEEE)
+                                                    else MaterialTheme.colorScheme.surfaceVariant
                                                 )
                                                 .clickable(role = Role.Button) {
                                                     if (estaSeleccionado) diasSeleccionados.remove(dia)
@@ -470,10 +461,9 @@ fun CreateRoutineScreen(
                                         ) {
                                             Text(
                                                 text = stringResource(id = dayResId),
-                                                fontSize = 11.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = if (estaSeleccionado) Color.White
-                                                else colorTextoSecundario
+                                                color = if (estaSeleccionado) MaterialTheme.colorScheme.onPrimary
+                                                else colorTextoSecundario,
+                                                style = MaterialTheme.typography.labelSmall
                                             )
                                         }
                                     }
@@ -502,7 +492,7 @@ fun CreateRoutineScreen(
                                     shape = RoundedCornerShape(14.dp),
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = colorAcabadoPrincipal,
-                                        contentColor = Color.White
+                                        contentColor = MaterialTheme.colorScheme.onPrimary
                                     )
                                 ) {
                                     Icon(
@@ -511,7 +501,7 @@ fun CreateRoutineScreen(
                                         modifier = Modifier.size(18.dp)
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Text(stringResource(id = R.string.add_manually_btn), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                    Text(stringResource(id = R.string.add_manually_btn), style = MaterialTheme.typography.labelMedium)
                                 }
                                 if (isPremiumUser) {
                                     Spacer(modifier = Modifier.height(10.dp))
@@ -525,20 +515,19 @@ fun CreateRoutineScreen(
                                         shape = RoundedCornerShape(14.dp),
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = colorAcabadoPrincipal,
-                                            contentColor = Color.White
+                                            contentColor = MaterialTheme.colorScheme.onPrimary
                                         )
                                     ) {
                                         if (isAiLoading) {
                                             CircularProgressIndicator(
                                                 modifier = Modifier.size(18.dp),
-                                                color = Color.White,
+                                                color = MaterialTheme.colorScheme.onPrimary,
                                                 strokeWidth = 2.dp
                                             )
                                             Spacer(modifier = Modifier.width(8.dp))
                                             Text(
                                                 stringResource(id = R.string.processing_ai),
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 13.sp
+                                                style = MaterialTheme.typography.labelMedium
                                             )
                                         } else {
                                             Icon(
@@ -549,8 +538,7 @@ fun CreateRoutineScreen(
                                             Spacer(modifier = Modifier.width(8.dp))
                                             Text(
                                                 stringResource(id = R.string.suggest_activity_ai),
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 13.sp
+                                                style = MaterialTheme.typography.labelMedium
                                             )
                                         }
                                     }
@@ -561,21 +549,20 @@ fun CreateRoutineScreen(
 
                                     Text(
                                         text = stringResource(id = R.string.ai_assistant_title),
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 14.sp,
-                                        color = colorTextoPrincipal
+                                        color = colorTextoPrincipal,
+                                        style = MaterialTheme.typography.titleSmall
                                     )
                                     Text(
                                         text = stringResource(id = R.string.ai_assistant_hint),
-                                        fontSize = 12.sp,
-                                        color = colorTextoSecundario
+                                        color = colorTextoSecundario,
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                     Spacer(modifier = Modifier.height(8.dp))
 
                                     OutlinedTextField(
                                         value = customNeedText,
                                         onValueChange = { customNeedText = it },
-                                        placeholder = { Text(stringResource(id = R.string.ai_assistant_placeholder), fontSize = 13.sp) },
+                                        placeholder = { Text(stringResource(id = R.string.ai_assistant_placeholder), style = MaterialTheme.typography.bodySmall) },
                                         modifier = Modifier.fillMaxWidth(),
                                         shape = RoundedCornerShape(12.dp),
                                         colors = OutlinedTextFieldDefaults.colors(
@@ -597,9 +584,9 @@ fun CreateRoutineScreen(
                                         colors = ButtonDefaults.buttonColors(containerColor = colorAcabadoPrincipal)
                                     ) {
                                         if (isCustomRoutineLoading) {
-                                            CircularProgressIndicator(modifier = Modifier.size(16.dp), color = Color.White)
+                                            CircularProgressIndicator(modifier = Modifier.size(16.dp), color = MaterialTheme.colorScheme.onPrimary)
                                         } else {
-                                            Text(stringResource(id = R.string.ai_assistant_design), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                            Text(stringResource(id = R.string.ai_assistant_design), style = MaterialTheme.typography.labelMedium)
                                         }
                                     }
 
@@ -612,14 +599,14 @@ fun CreateRoutineScreen(
                                             modifier = Modifier.fillMaxWidth()
                                         ) {
                                             Column(modifier = Modifier.padding(12.dp)) {
-                                                Text(stringResource(id = R.string.ai_proposed_routine), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = colorTextoPrincipal)
+                                                Text(stringResource(id = R.string.ai_proposed_routine), color = colorTextoPrincipal, style = MaterialTheme.typography.labelMedium)
                                                 aiCustomRoutine.forEachIndexed { i, act ->
-                                                    Text("${i + 1}. $act", fontSize = 12.sp, color = colorTextoPrincipal)
+                                                    Text("${i + 1}. $act", color = colorTextoPrincipal, style = MaterialTheme.typography.bodySmall)
                                                 }
                                                 Spacer(modifier = Modifier.height(8.dp))
-                                                Text(stringResource(id = R.string.ai_reinforcement_messages), fontWeight = FontWeight.Bold, fontSize = 13.sp, color = colorTextoPrincipal)
+                                                Text(stringResource(id = R.string.ai_reinforcement_messages), color = colorTextoPrincipal, style = MaterialTheme.typography.labelMedium)
                                                 aiRefuerzos.forEach { ref ->
-                                                    Text("• \"$ref\"", fontSize = 12.sp, color = colorTextoSecundario)
+                                                    Text("• \"$ref\"", color = colorTextoSecundario, style = MaterialTheme.typography.bodySmall)
                                                 }
                                                 Spacer(modifier = Modifier.height(12.dp))
                                                 Button(
@@ -640,11 +627,11 @@ fun CreateRoutineScreen(
                                                         aiViewModel.clearCustomRoutine()
                                                         customNeedText = ""
                                                     },
-                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                                                     shape = RoundedCornerShape(10.dp),
                                                     modifier = Modifier.fillMaxWidth()
                                                 ) {
-                                                    Text(stringResource(id = R.string.ai_import), color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                                                    Text(stringResource(id = R.string.ai_import), color = Color.White, style = MaterialTheme.typography.labelMedium)
                                                 }
                                             }
                                         }
@@ -659,10 +646,9 @@ fun CreateRoutineScreen(
                     Column(modifier = Modifier.padding(vertical = 8.dp)) {
                         Text(
                             text = stringResource(id = R.string.view_weekly_schedule),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
                             color = colorTextoSecundario,
-                            modifier = Modifier.padding(start = 24.dp, bottom = 8.dp)
+                            modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
+                            style = MaterialTheme.typography.labelSmall
                         )
                         LazyRow(
                             modifier = Modifier.fillMaxWidth(),
@@ -703,12 +689,12 @@ fun CreateRoutineScreen(
                                 ) {
                                     Text(
                                         text = if (esHoyDelSistema) "$dayName ${stringResource(id = R.string.today_label_parenthesis)}" else dayName,
-                                        fontSize = 13.sp,
                                         fontWeight = if (esElDiaActivo || esHoyDelSistema)
                                             FontWeight.Bold else FontWeight.Medium,
-                                        color = if (esElDiaActivo) Color.White
+                                            color = if (esElDiaActivo) MaterialTheme.colorScheme.onPrimary
                                         else if (esHoyDelSistema) colorAcabadoPrincipal
-                                        else colorTextoPrincipal
+                                        else colorTextoPrincipal,
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                 }
                             }
@@ -734,12 +720,11 @@ fun CreateRoutineScreen(
                             activeDayName.uppercase(),
                             pasosFiltradosPorDia.size
                         ),
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
                         color = colorTextoPrincipal,
                         modifier = Modifier.padding(
                             start = 24.dp, top = 16.dp, end = 24.dp, bottom = 8.dp
-                        )
+                        ),
+                        style = MaterialTheme.typography.labelMedium
                     )
                 }
 
@@ -757,12 +742,12 @@ fun CreateRoutineScreen(
                         val activeDayName = stringResource(id = activeDayResId)
                         Text(
                             text = stringResource(id = R.string.no_activities_for_day, activeDayName),
-                            fontSize = 14.sp,
                             color = colorTextoSecundario,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 32.dp, horizontal = 24.dp)
+                                .padding(vertical = 32.dp, horizontal = 24.dp),
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 } else {
@@ -818,10 +803,9 @@ fun AIOptionsDialog(
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(id = R.string.ai_recommendations),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
                     color = colorTexto,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
         },
@@ -832,10 +816,10 @@ fun AIOptionsDialog(
             ) {
                 Text(
                     text = stringResource(id = R.string.select_ai_activity_desc),
-                    fontSize = 13.sp,
                     color = colorTextoSec,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    style = MaterialTheme.typography.bodySmall
                 )
 
                 opciones.forEach { opcion ->
@@ -853,15 +837,14 @@ fun AIOptionsDialog(
                         ) {
                             Text(
                                 text = "✨",
-                                fontSize = 14.sp,
-                                modifier = Modifier.padding(end = 10.dp)
+                                modifier = Modifier.padding(end = 10.dp),
+                                style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
                                 text = opcion,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
                                 color = colorTexto,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                style = MaterialTheme.typography.titleSmall
                             )
                         }
                     }
@@ -873,8 +856,7 @@ fun AIOptionsDialog(
                 Text(
                     stringResource(id = R.string.cancel),
                     color = colorTextoSec,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
         },
@@ -918,10 +900,9 @@ fun SendingRoutineDialog(
                 }
                 Text(
                     text = stringResource(id = R.string.saving_routine_progress, localizedTurn),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
                     color = colorTexto,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
         }
@@ -942,7 +923,7 @@ fun PasoItemCard(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = colorSuperficie),
         border = BorderStroke(1.dp, colorDetalle.copy(alpha = 0.25f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -979,9 +960,8 @@ fun PasoItemCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = tarea.actividad,
-                    fontWeight = FontWeight.Bold,
                     color = colorTexto,
-                    fontSize = 15.sp
+                    style = MaterialTheme.typography.titleSmall
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 val localizedDays = tarea.dias.map { dia ->
@@ -1009,8 +989,8 @@ fun PasoItemCard(
                         stringResource(id = R.string.days_label_prefix, localizedDays.joinToString(", "))
                     else
                         stringResource(id = R.string.days_all),
-                    fontSize = 12.sp,
-                    color = colorTextoSec
+                    color = colorTextoSec,
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
@@ -1018,7 +998,7 @@ fun PasoItemCard(
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = stringResource(id = R.string.delete),
-                    tint = Color(0xFFEF5350)
+                    tint = MaterialTheme.colorScheme.error
                 )
             }
         }
