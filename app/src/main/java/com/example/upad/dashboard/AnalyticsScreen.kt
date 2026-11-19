@@ -1,6 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import android.content.Context
 import android.net.Uri
 import androidx.compose.animation.core.animateFloatAsState
@@ -74,22 +74,22 @@ fun AnalyticsScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
     // Superficie de tarjetas purificada: Translúcidas en Premium, sólidas en Básico
-    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
-    val colorTurnoManana = Color(0xFFFFB74D)
-    val colorTurnoTarde = Color(0xFF81C784)
-    val colorTurnoNoche = Color(0xFF9575CD)
+// Un color de la paleta por turno para las barras del gráfico.
+    val colorTurnoManana = MaterialTheme.extendedColors.premium
+    val colorTurnoTarde = MaterialTheme.colorScheme.secondary
+    val colorTurnoNoche = MaterialTheme.colorScheme.tertiary
 
-    val colorFondoIAActiva = if (isDarkMode) Color(0xFF2E7D32).copy(alpha = 0.2f) else Color(0xFFE8F5E9).copy(alpha = 0.75f)
-    val colorTextoIAActiva = if (isDarkMode) Color(0xFF81C784) else Color(0xFF2E7D32)
+val colorFondoIAActiva = MaterialTheme.colorScheme.secondaryContainer
+    val colorTextoIAActiva = MaterialTheme.colorScheme.onSecondaryContainer
 
     val tasksManana by routineViewModel.tasksManana.collectAsState()
     val tasksTarde by routineViewModel.tasksTarde.collectAsState()
@@ -150,7 +150,7 @@ fun AnalyticsScreen(
                     shape = RoundedCornerShape(24.dp),
                     color = colorAcabadoPrincipal,
                     tonalElevation = 0.dp,
-                    shadowElevation = if (isPremiumUser) 0.dp else 2.dp
+                    shadowElevation = 0.dp
                 ) {
                     Row(
                         modifier = Modifier.padding(20.dp),
@@ -166,28 +166,27 @@ fun AnalyticsScreen(
                                 "SÁB", "SAB" -> stringResource(id = R.string.day_sat)
                                 else -> stringResource(id = R.string.day_sun)
                             }
-                            Text(text = stringResource(id = R.string.effectiveness_today, localizedDiaActual), color = Color.White.copy(alpha = 0.8f), fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                            Text(text = stringResource(id = R.string.effectiveness_today, localizedDiaActual), color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), style = MaterialTheme.typography.bodySmall)
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = if (totalTasksAsignadas > 0) stringResource(id = R.string.achieved_percentage, generalPercentage) else stringResource(id = R.string.no_activity),
-                                color = Color.White,
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Black
+color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.headlineSmall
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = stringResource(id = R.string.progress_desc),
-                                color = Color.White.copy(alpha = 0.9f),
-                                fontSize = 12.sp
+                                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.9f),
+                                style = MaterialTheme.typography.bodySmall
                             )
                         }
                         Box(
                             modifier = Modifier
                                 .size(50.dp)
-                                .background(Color.White.copy(alpha = 0.2f), CircleShape),
+                                .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.2f), CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(26.dp))
+                            Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(26.dp))
                         }
                     }
                 }
@@ -197,7 +196,7 @@ fun AnalyticsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
                     color = colorSuperficieTarjetas,
-                    border = if (isPremiumUser) BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.25f)) else BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.1f)),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     tonalElevation = 0.dp,
                     shadowElevation = 0.dp
                 ) {
@@ -216,11 +215,9 @@ fun AnalyticsScreen(
 
                 Text(
                     text = stringResource(id = R.string.weekly_turn_compliance),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Black,
                     color = colorTextoSecundario.copy(alpha = 0.7f),
-                    letterSpacing = 1.sp,
-                    modifier = Modifier.padding(start = 4.dp)
+                    modifier = Modifier.padding(start = 4.dp),
+                    style = MaterialTheme.typography.labelSmall
                 )
 
                 // --- PANEL PRINCIPAL DEL GRÁFICO ---
@@ -228,7 +225,7 @@ fun AnalyticsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(24.dp),
                     color = colorSuperficieTarjetas,
-                    border = if (isPremiumUser) BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.25f)) else BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.1f)),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     tonalElevation = 0.dp,
                     shadowElevation = 0.dp
                 ) {
@@ -270,9 +267,8 @@ fun AnalyticsScreen(
                                     modifier = Modifier
                                         .width(75.dp)
                                         .padding(top = 4.dp),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
-                                    color = colorTextoPrincipal
+                                    color = colorTextoPrincipal,
+                                    style = MaterialTheme.typography.titleSmall
                                 )
 
                                 Column(
@@ -295,11 +291,9 @@ fun AnalyticsScreen(
                 // --- 🤖 SECCIÓN MÓDULO DE IA ---
                 Text(
                     text = stringResource(id = R.string.behavioral_recommendations),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Black,
                     color = colorTextoSecundario.copy(alpha = 0.7f),
-                    letterSpacing = 1.sp,
-                    modifier = Modifier.padding(start = 4.dp, top = 8.dp)
+                    modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+                    style = MaterialTheme.typography.labelSmall
                 )
 
                 if (isPremiumUser) {
@@ -315,7 +309,7 @@ fun AnalyticsScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(Icons.Default.AutoAwesome, contentDescription = null, tint = colorTextoIAActiva, modifier = Modifier.size(20.dp))
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(stringResource(id = R.string.upad_ai_mind_active), fontWeight = FontWeight.Black, fontSize = 14.sp, color = colorTextoIAActiva)
+                                Text(stringResource(id = R.string.upad_ai_mind_active), color = colorTextoIAActiva, style = MaterialTheme.typography.titleSmall)
                             }
                             Spacer(modifier = Modifier.height(10.dp))
 
@@ -328,48 +322,46 @@ fun AnalyticsScreen(
                                     Spacer(modifier = Modifier.height(10.dp))
                                     Text(
                                         text = stringResource(id = R.string.analytics_analyzing),
-                                        fontSize = 13.sp,
                                         color = colorTextoIAActiva,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                 }
                             } else if (aiAnalysis != null) {
                                 Column {
                                     Text(
                                         text = aiAnalysis ?: "",
-                                        fontSize = 13.sp,
                                         color = colorTextoPrincipal,
-                                        lineHeight = 18.sp
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Button(
                                         onClick = {
                                             aiViewModel.obtenerAnalisisPersonalizado(tasksManana, tasksTarde, tasksNoche)
                                         },
-                                        colors = ButtonDefaults.buttonColors(containerColor = colorTextoIAActiva),
+                                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                                         shape = RoundedCornerShape(12.dp),
                                         modifier = Modifier.align(Alignment.End)
                                     ) {
-                                        Text(stringResource(id = R.string.analytics_refresh), color = Color.White, fontSize = 12.sp)
+                                        Text(stringResource(id = R.string.analytics_refresh), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelLarge)
                                     }
                                 }
                             } else {
                                 Column {
                                     Text(
                                         text = stringResource(id = R.string.analytics_ai_intro),
-                                        fontSize = 13.sp,
                                         color = colorTextoPrincipal,
-                                        lineHeight = 18.sp
+                                        style = MaterialTheme.typography.bodySmall
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
                                     Button(
                                         onClick = {
                                             aiViewModel.obtenerAnalisisPersonalizado(tasksManana, tasksTarde, tasksNoche)
                                         },
-                                        colors = ButtonDefaults.buttonColors(containerColor = colorTextoIAActiva),
+                                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                                         shape = RoundedCornerShape(12.dp)
                                     ) {
-                                        Text(stringResource(id = R.string.analytics_generate), color = Color.White, fontSize = 12.sp)
+                                        Text(stringResource(id = R.string.analytics_generate), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.labelLarge)
                                     }
                                 }
                             }
@@ -394,9 +386,8 @@ fun AnalyticsScreen(
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Text(
                                     text = stringResource(id = R.string.unlock_ai_desc),
-                                    fontSize = 13.sp,
                                     color = colorTextoSecundario,
-                                    lineHeight = 18.sp
+                                    style = MaterialTheme.typography.bodySmall
                                 )
                             }
                             TextButton(onClick = onNavigateToPremium) {
@@ -453,11 +444,10 @@ fun BarChartRow(progress: Float, color: Color, icon: ImageVector, textColor: Col
 
         Text(
             text = if (tieneTareas) "${(progress * 100).toInt()}%" else "--",
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Black,
             color = if (tieneTareas) textColor else textColor.copy(alpha = 0.3f),
             modifier = Modifier.width(32.dp),
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.labelSmall
         )
     }
 }
@@ -467,6 +457,6 @@ fun LegendItem(text: String, color: Color, icon: ImageVector, textColor: Color) 
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(16.dp))
         Spacer(modifier = Modifier.width(6.dp))
-        Text(text = text, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = textColor.copy(alpha = 0.8f))
+        Text(text = text, color = textColor.copy(alpha = 0.8f), style = MaterialTheme.typography.labelMedium)
     }
 }
