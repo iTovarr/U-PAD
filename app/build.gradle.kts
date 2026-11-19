@@ -87,6 +87,14 @@ android {
         compose = true
         buildConfig = true
     }
+    testOptions {
+        // Robolectric necesita los recursos (textos, fuentes e imágenes) en los tests de la JVM.
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            // Carpeta donde los tests de capturas guardan las imágenes de las pantallas.
+            test.systemProperty("upad.capturas", rootProject.file("docs/capturas").absolutePath)
+        }
+    }
 }
 
 dependencies {
@@ -136,6 +144,9 @@ dependencies {
     // Tests
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
