@@ -11,6 +11,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 
@@ -114,6 +115,32 @@ class ParentProfileRepository(
             .set(mapOf(CAMPO_TOKENS_PUSH to FieldValue.arrayRemove(token)), SetOptions.merge())
             .await()
     }
+
+    /**
+     * Guarda el perfil sensorial del modo niño en el documento del tutor, que es el
+     * que lee el dispositivo del niño. No espera al servidor: Firestore encola la
+     * escritura y la envía aunque en ese momento no haya conexión.
+     */
+    fun saveSensoryProfile(uid: String, perfil: SensoryProfile) {
+        firestore.collection("users").document(uid)
+            .set(mapOf(SensoryProfile.CAMPO_PERFIL to perfil.toMap()), SetOptions.merge())
+    }
+
+    /**
+     * Emite el perfil sensorial guardado por el tutor y cada cambio posterior. Si el
+     * tutor todavía no ha guardado ninguno, emite el perfil por defecto.
+     */
+    fun observeSensoryProfile(padreId: String): Flow<SensoryProfile> = callbackFlow {
+        val listener = firestore.collection("users").document(padreId)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                trySend(SensoryProfile.fromMap(snapshot?.get(SensoryProfile.CAMPO_PERFIL) as? Map<*, *>))
+            }
+        awaitClose { listener.remove() }
+    }.distinctUntilChanged()
 
     /** Emite el estado premium del tutor cada vez que cambia su documento en `users`. */
     fun observePremium(padreId: String): Flow<Boolean> = callbackFlow {
