@@ -1,6 +1,6 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.ColorPremiumGold
+import com.example.upad.ui.theme.extendedColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -35,17 +35,18 @@ fun ChangePlanScreen(
 
     val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
     val colorFondoBase = MaterialTheme.colorScheme.background
-    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surface
+val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
     val colorTextoPrincipal = MaterialTheme.colorScheme.onBackground
-    val colorTextoSecundario = MaterialTheme.colorScheme.onSurface
+val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorOroBanner = ColorPremiumGold
-    val colorVerdeExito = Color(0xFF4CAF50)
+val colorOroBanner = MaterialTheme.extendedColors.premiumContainer
+    val colorTextoOro = MaterialTheme.extendedColors.onPremiumContainer
+val colorVerdeExito = MaterialTheme.extendedColors.success
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(id = R.string.plan_subscription_title), fontWeight = FontWeight.Black, fontSize = 20.sp, color = colorTextoPrincipal) },
+                title = { Text(stringResource(id = R.string.plan_subscription_title), color = colorTextoPrincipal, style = MaterialTheme.typography.titleLarge) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = stringResource(id = R.string.back), tint = colorAcabadoPrincipal)
@@ -73,14 +74,12 @@ fun ChangePlanScreen(
                     .padding(horizontal = 24.dp, vertical = 6.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Default.Star, contentDescription = null, tint = colorTextoOro, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(id = R.string.most_recommended_plan),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Black,
-                        color = Color.White,
-                        letterSpacing = 1.sp
+color = colorTextoOro,
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
             }
@@ -89,7 +88,7 @@ fun ChangePlanScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp, topStart = 0.dp, topEnd = 0.dp),
                 colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 border = androidx.compose.foundation.BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.12f))
             ) {
                 Column(
@@ -98,10 +97,8 @@ fun ChangePlanScreen(
                 ) {
                     Text(
                         text = stringResource(id = R.string.plan_premium_title),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Black,
                         color = colorAcabadoPrincipal,
-                        letterSpacing = 1.5.sp
+                        style = MaterialTheme.typography.titleSmall
                     )
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -111,25 +108,23 @@ fun ChangePlanScreen(
                     ) {
                         Text(
                             text = "$9.99",
-                            fontSize = 42.sp,
-                            fontWeight = FontWeight.Black,
-                            color = colorTextoPrincipal
+                            color = colorTextoPrincipal,
+                            style = MaterialTheme.typography.displayMedium
                         )
                         Text(
                             text = stringResource(id = R.string.per_month),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
                             color = colorTextoSecundario,
-                            modifier = Modifier.padding(bottom = 8.dp)
+                            modifier = Modifier.padding(bottom = 8.dp),
+                            style = MaterialTheme.typography.titleSmall
                         )
                     }
 
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = stringResource(id = R.string.premium_desc),
-                        fontSize = 13.sp,
                         color = colorTextoSecundario,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -161,8 +156,8 @@ fun ChangePlanScreen(
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
                                 text = stringResource(id = beneficio),
-                                fontSize = 14.sp,
-                                color = colorTextoPrincipal
+                                color = colorTextoPrincipal,
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
@@ -174,16 +169,15 @@ fun ChangePlanScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas.copy(alpha = 0.8f)),
+                colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas),
                 border = androidx.compose.foundation.BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.1f))
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Text(
                         text = stringResource(id = R.string.renewal_desc),
-                        fontSize = 12.sp,
                         color = colorTextoSecundario,
-                        lineHeight = 16.sp,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
@@ -192,12 +186,10 @@ fun ChangePlanScreen(
 
              Text(
                 text = stringResource(id = R.string.secure_payment_methods),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Black,
                 color = colorTextoSecundario,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start,
-                letterSpacing = 0.5.sp
+                style = MaterialTheme.typography.labelSmall
             )
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -205,9 +197,9 @@ fun ChangePlanScreen(
                 onClick = { scope.launch { onNavigateToPayment() } },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = colorAcabadoPrincipal)
+                colors = ButtonDefaults.buttonColors(containerColor = colorOroBanner, contentColor = colorTextoOro)
             ) {
-                Text(stringResource(id = R.string.pay_with_credit_card), fontSize = 15.sp, fontWeight = FontWeight.Black, color = Color.White)
+                Text(stringResource(id = R.string.pay_with_credit_card), style = MaterialTheme.typography.titleSmall)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -219,7 +211,7 @@ fun ChangePlanScreen(
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = colorTextoPrincipal),
                 border = androidx.compose.foundation.BorderStroke(1.5.dp, colorTextoSecundario.copy(alpha = 0.4f))
             ) {
-                Text(stringResource(id = R.string.pay_with_google), fontSize = 15.sp, fontWeight = FontWeight.Black)
+                Text(stringResource(id = R.string.pay_with_google), style = MaterialTheme.typography.titleSmall)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
