@@ -1,6 +1,6 @@
 package com.example.upad.dashboard.components
 
-import com.example.upad.ui.theme.DarkSurface
+import com.example.upad.ui.theme.extendedColors
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -38,7 +37,6 @@ import com.example.upad.R
  * @param colorTextoPrincipal   Color principal de texto e iconos.
  * @param colorTextoSecundario  Color secundario de texto e iconos.
  * @param colorDinamicoSuscripcion Color dorado (premium) o primario (básico).
- * @param gradienteFondoPremium Gradiente de fondo premium.
  * @param fuentePremium         Familia tipográfica del proyecto.
  * @param onChangePlan          Acción al pulsar "Cambiar Plan".
  * @param onCancelPremium       Acción al pulsar "Volver a Plan Básico".
@@ -59,7 +57,6 @@ fun DashboardDrawerContent(
     colorTextoPrincipal: Color,
     colorTextoSecundario: Color,
     colorDinamicoSuscripcion: Color,
-    gradienteFondoPremium: Brush,
     fuentePremium: FontFamily,
     onChangePlan: () -> Unit,
     onCancelPremium: () -> Unit,
@@ -71,21 +68,16 @@ fun DashboardDrawerContent(
     onNavigateToSettings: () -> Unit
 ) {
     ModalDrawerSheet(
-        drawerContainerColor = if (esPremium) Color.Transparent
-        else if (isDarkMode) DarkSurface
-        else MaterialTheme.colorScheme.surface,
+        drawerContainerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         modifier = Modifier
             .width(300.dp)
             .fillMaxHeight()
-            .then(
-                if (esPremium) Modifier.background(gradienteFondoPremium) else Modifier
-            )
     ) {
         // ── CABECERA: foto, nombre, correo ───────────────────────────────────
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(if (esPremium) Color.Transparent else colorDinamicoSuscripcion)
+                .background(MaterialTheme.colorScheme.primaryContainer)
                 .padding(24.dp)
         ) {
             Column {
@@ -95,8 +87,7 @@ fun DashboardDrawerContent(
                         .size(64.dp)
                         .clip(CircleShape)
                         .background(
-                            if (esPremium && !isDarkMode) Color(0xFF111111).copy(alpha = 0.1f)
-                            else Color.White.copy(alpha = 0.15f)
+                            MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.1f)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -113,7 +104,7 @@ fun DashboardDrawerContent(
                         Icon(
                             Icons.Default.AccountCircle,
                             contentDescription = null,
-                            tint = if (esPremium && !isDarkMode) Color(0xFF111111) else Color.White,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.fillMaxSize()
                         )
                     }
@@ -123,17 +114,13 @@ fun DashboardDrawerContent(
 
                 Text(
                     text = parentName,
-                    color = if (esPremium && !isDarkMode) Color(0xFF111111) else Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = fuentePremium
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Text(
                     text = userEmail,
-                    color = if (esPremium && !isDarkMode) Color(0xFF444444)
-                    else Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp,
-                    fontFamily = fuentePremium
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -147,7 +134,7 @@ fun DashboardDrawerContent(
             selectedIconColor = colorDinamicoSuscripcion,
             selectedTextColor = colorTextoPrincipal,
             unselectedContainerColor = Color.Transparent,
-            selectedContainerColor = colorTextoPrincipal.copy(alpha = 0.1f)
+            selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer
         )
 
         // ── ÍTEMS DEL MENÚ ───────────────────────────────────────────────────
@@ -155,15 +142,14 @@ fun DashboardDrawerContent(
         // Cambiar plan
         NavigationDrawerItem(
             icon = {
-                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFFFD700))
+                Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.extendedColors.premium)
             },
             label = {
                 Text(
                     text = if (esPremium) stringResource(R.string.change_basic_plan) else stringResource(R.string.change_premium_plan),
                     fontWeight = FontWeight.Bold,
                     color = colorTextoPrincipal,
-                    fontFamily = fuentePremium
-                )
+                    )
             },
             selected = false,
             onClick = { if (esPremium) onCancelPremium() else onChangePlan() },
@@ -182,8 +168,7 @@ fun DashboardDrawerContent(
                         text = stringResource(R.string.locate_child),
                         fontWeight = FontWeight.Bold,
                         color = colorTextoPrincipal,
-                        fontFamily = fuentePremium
-                    )
+                        )
                 },
                 selected = false,
                 onClick = onUbicarHijo,
@@ -200,8 +185,7 @@ fun DashboardDrawerContent(
                     text = stringResource(R.string.performance_analysis),
                     fontWeight = FontWeight.Medium,
                     color = colorTextoPrincipal,
-                    fontFamily = fuentePremium
-                )
+                    )
             },
             selected = false,
             onClick = onNavigateToAnalytics,
@@ -217,8 +201,7 @@ fun DashboardDrawerContent(
                     text = stringResource(R.string.lock_device),
                     fontWeight = FontWeight.Medium,
                     color = colorTextoPrincipal,
-                    fontFamily = fuentePremium
-                )
+                    )
             },
             selected = false,
             onClick = onNavigateToDeviceManagement,
@@ -234,8 +217,7 @@ fun DashboardDrawerContent(
                     text = stringResource(R.string.connect_child),
                     fontWeight = FontWeight.Medium,
                     color = colorTextoPrincipal,
-                    fontFamily = fuentePremium
-                )
+                    )
             },
             selected = false,
             onClick = onNavigateToConnection,
@@ -251,8 +233,7 @@ fun DashboardDrawerContent(
                     text = stringResource(R.string.my_profile),
                     fontWeight = FontWeight.Medium,
                     color = colorTextoPrincipal,
-                    fontFamily = fuentePremium
-                )
+                    )
             },
             selected = false,
             onClick = onNavigateToProfile,
@@ -268,8 +249,7 @@ fun DashboardDrawerContent(
                     text = stringResource(R.string.settings_title),
                     fontWeight = FontWeight.Medium,
                     color = colorTextoPrincipal,
-                    fontFamily = fuentePremium
-                )
+                    )
             },
             selected = false,
             onClick = onNavigateToSettings,
