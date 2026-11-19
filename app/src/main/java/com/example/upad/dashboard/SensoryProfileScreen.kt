@@ -43,6 +43,7 @@ import com.example.upad.dashboard.components.UpadTopAppBar
 import com.example.upad.data.CelebrationStyle
 import com.example.upad.data.ChildThemeMode
 import com.example.upad.data.ColorIntensity
+import com.example.upad.data.SensoryProfile
 import com.example.upad.data.TimerStyle
 import com.example.upad.ui.theme.AppPalette
 import com.example.upad.viewmodel.SensoryProfileViewModel
@@ -60,6 +61,27 @@ fun SensoryProfileScreen(
 ) {
     val perfil by viewModel.perfil.collectAsState()
 
+    SensoryProfileContent(
+        perfil = perfil,
+        onCambio = viewModel::actualizar,
+        onNavigateBack = onNavigateBack,
+        onNavigateToHelp = onNavigateToHelp,
+        onNavigateToProfile = onNavigateToProfile
+    )
+}
+
+/**
+ * Contenido del perfil sensorial sin estado: muestra el perfil y avisa de cada
+ * cambio. Se puede previsualizar y capturar en tests sin ViewModel ni Firebase.
+ */
+@Composable
+internal fun SensoryProfileContent(
+    perfil: SensoryProfile,
+    onCambio: ((SensoryProfile) -> SensoryProfile) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToHelp: () -> Unit,
+    onNavigateToProfile: () -> Unit
+) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -105,7 +127,7 @@ fun SensoryProfileScreen(
                             AppPalette.TIERRA -> stringResource(R.string.palette_tierra)
                         }
                     },
-                    onSelect = { opcion -> viewModel.actualizar { it.copy(paleta = opcion) } }
+                    onSelect = { opcion -> onCambio { it.copy(paleta = opcion) } }
                 )
                 Divider()
                 OptionGroup(
@@ -119,7 +141,7 @@ fun SensoryProfileScreen(
                             ChildThemeMode.OSCURO -> stringResource(R.string.sensory_theme_dark)
                         }
                     },
-                    onSelect = { opcion -> viewModel.actualizar { it.copy(tema = opcion) } }
+                    onSelect = { opcion -> onCambio { it.copy(tema = opcion) } }
                 )
                 Divider()
                 OptionGroup(
@@ -132,7 +154,7 @@ fun SensoryProfileScreen(
                             ColorIntensity.NORMAL -> stringResource(R.string.sensory_intensity_normal)
                         }
                     },
-                    onSelect = { opcion -> viewModel.actualizar { it.copy(intensidadColor = opcion) } }
+                    onSelect = { opcion -> onCambio { it.copy(intensidadColor = opcion) } }
                 )
                 Divider()
                 SettingSwitchRow(
@@ -140,7 +162,7 @@ fun SensoryProfileScreen(
                     title = stringResource(R.string.sensory_animations),
                     subtitle = stringResource(R.string.sensory_animations_desc),
                     checked = perfil.animaciones,
-                    onCheckedChange = { valor -> viewModel.actualizar { it.copy(animaciones = valor) } }
+                    onCheckedChange = { valor -> onCambio { it.copy(animaciones = valor) } }
                 )
             }
 
@@ -153,7 +175,7 @@ fun SensoryProfileScreen(
                     title = stringResource(R.string.sensory_sound),
                     subtitle = stringResource(R.string.sensory_sound_desc),
                     checked = perfil.sonido,
-                    onCheckedChange = { valor -> viewModel.actualizar { it.copy(sonido = valor) } }
+                    onCheckedChange = { valor -> onCambio { it.copy(sonido = valor) } }
                 )
                 Divider()
                 SettingSwitchRow(
@@ -161,7 +183,7 @@ fun SensoryProfileScreen(
                     title = stringResource(R.string.sensory_voice),
                     subtitle = stringResource(R.string.sensory_voice_desc),
                     checked = perfil.voz,
-                    onCheckedChange = { valor -> viewModel.actualizar { it.copy(voz = valor) } }
+                    onCheckedChange = { valor -> onCambio { it.copy(voz = valor) } }
                 )
                 Divider()
                 val tituloVolumen = stringResource(R.string.sensory_volume)
@@ -180,7 +202,7 @@ fun SensoryProfileScreen(
                 }
                 Slider(
                     value = perfil.volumen,
-                    onValueChange = { valor -> viewModel.actualizar { it.copy(volumen = valor) } },
+                    onValueChange = { valor -> onCambio { it.copy(volumen = valor) } },
                     enabled = perfil.sonido || perfil.voz,
                     modifier = Modifier.semantics { contentDescription = tituloVolumen }
                 )
@@ -201,7 +223,7 @@ fun SensoryProfileScreen(
                             TimerStyle.NINGUNO -> stringResource(R.string.sensory_timer_none)
                         }
                     },
-                    onSelect = { opcion -> viewModel.actualizar { it.copy(temporizador = opcion) } }
+                    onSelect = { opcion -> onCambio { it.copy(temporizador = opcion) } }
                 )
                 Divider()
                 OptionGroup(
@@ -214,7 +236,7 @@ fun SensoryProfileScreen(
                             CelebrationStyle.NORMAL -> stringResource(R.string.sensory_celebration_normal)
                         }
                     },
-                    onSelect = { opcion -> viewModel.actualizar { it.copy(celebracion = opcion) } }
+                    onSelect = { opcion -> onCambio { it.copy(celebracion = opcion) } }
                 )
             }
         }
