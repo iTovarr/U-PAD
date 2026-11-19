@@ -47,6 +47,7 @@ import com.example.upad.auth.RegisterScreen
 import com.example.upad.auth.RoleSelectionScreen
 import com.example.upad.auth.WelcomeScreen
 import com.example.upad.child.ChildStartScreen
+import com.example.upad.child.ChildTheme
 import com.example.upad.child.RoutineCompletedScreen
 import com.example.upad.child.TaskExecutionScreen
 import com.example.upad.child.TaskFeedbackScreen
@@ -277,6 +278,8 @@ fun UPadNavigation(
     onRouteChanged: (String) -> Unit
 ) {
     val navController = rememberNavController()
+    // Perfil sensorial que el tutor eligió para el modo niño (paleta, tema, sonido…).
+    val perfilNino by routineViewModel.perfilSensorial.collectAsState()
     val session = LocalAppContainer.current.sessionRepository
     val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
@@ -721,14 +724,16 @@ fun UPadNavigation(
 
                 // ── SECCIÓN NIÑO ─────────────────────────────────────────────
                 composable(Routes.CHILD_START) {
-                    ChildStartScreen(
-                        routineViewModel = routineViewModel,
-                        onNavigateToTask = { actividadNombre, turno ->
-                            navController.navigate(Routes.childTaskExecution(actividadNombre, turno))
-                        },
-                        onNavigateToCompleted = { navController.navigate(Routes.CHILD_ROUTINE_COMPLETED) },
-                        onPadreIdObtenido = { pId -> padreIdDelHijo = pId }
-                    )
+                    ChildTheme(perfil = perfilNino) {
+                        ChildStartScreen(
+                            routineViewModel = routineViewModel,
+                            onNavigateToTask = { actividadNombre, turno ->
+                                navController.navigate(Routes.childTaskExecution(actividadNombre, turno))
+                            },
+                            onNavigateToCompleted = { navController.navigate(Routes.CHILD_ROUTINE_COMPLETED) },
+                            onPadreIdObtenido = { pId -> padreIdDelHijo = pId }
+                        )
+                    }
                 }
 
                 composable(
@@ -740,15 +745,17 @@ fun UPadNavigation(
                 ) { backStackEntry ->
                     val activityName = backStackEntry.arguments?.getString(Routes.ARG_ACTIVITY_NAME) ?: "Actividad"
                     val turn = backStackEntry.arguments?.getString(Routes.ARG_ROUTINE_TURN) ?: "MAÑANA"
-                    TaskExecutionScreen(
-                        viewModel = routineViewModel,
-                        activityName = activityName,
-                        turn = turn,
-                        padreId = padreIdDelHijo,
-                        onFinishRoutine = { nombreDeLaTareaCompletada ->
-                            navController.navigate(Routes.childTaskFeedback(nombreDeLaTareaCompletada))
-                        }
-                    )
+                    ChildTheme(perfil = perfilNino, turno = turn) {
+                        TaskExecutionScreen(
+                            viewModel = routineViewModel,
+                            activityName = activityName,
+                            turn = turn,
+                            padreId = padreIdDelHijo,
+                            onFinishRoutine = { nombreDeLaTareaCompletada ->
+                                navController.navigate(Routes.childTaskFeedback(nombreDeLaTareaCompletada))
+                            }
+                        )
+                    }
                 }
 
                 composable(
@@ -757,40 +764,44 @@ fun UPadNavigation(
                 ) { backStackEntry ->
                     val activityName = backStackEntry.arguments?.getString(Routes.ARG_ACTIVITY_NAME) ?: "Actividad"
                     val context = androidx.compose.ui.platform.LocalContext.current
-                    TaskFeedbackScreen(
-                        activityName = activityName,
-                        onFeedbackSelected = { emocion ->
-                            val idPadre = padreIdDelHijo.ifEmpty {
-                                session.currentUserId
+                    ChildTheme(perfil = perfilNino) {
+                        TaskFeedbackScreen(
+                            activityName = activityName,
+                            onFeedbackSelected = { emocion ->
+                                val idPadre = padreIdDelHijo.ifEmpty {
+                                    session.currentUserId
+                                }
+                                val horaActual = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+                                val turnoActual = com.example.upad.utils.Turnos.paraHora(horaActual)
+                                routineViewModel.registrarFeedbackEmocional(
+                                    userId = idPadre,
+                                    turn = turnoActual,
+                                    actividadNombre = activityName,
+                                    emocionSeleccionada = emocion,
+                                    context = context
+                                )
+                                routineViewModel.cargarMensajesRefuerzo(idPadre, turnoActual)
+                                navController.navigate(Routes.CHILD_ROUTINE_COMPLETED) {
+                                    popUpTo(Routes.CHILD_START) { inclusive = false }
+                                }
                             }
-                            val horaActual = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-                            val turnoActual = com.example.upad.utils.Turnos.paraHora(horaActual)
-                            routineViewModel.registrarFeedbackEmocional(
-                                userId = idPadre,
-                                turn = turnoActual,
-                                actividadNombre = activityName,
-                                emocionSeleccionada = emocion,
-                                context = context
-                            )
-                            routineViewModel.cargarMensajesRefuerzo(idPadre, turnoActual)
-                            navController.navigate(Routes.CHILD_ROUTINE_COMPLETED) {
-                                popUpTo(Routes.CHILD_START) { inclusive = false }
-                            }
-                        }
-                    )
+                        )
+                    }
                 }
 
                 composable(Routes.CHILD_ROUTINE_COMPLETED) {
                     val reinforcementMessages by routineViewModel.reinforcementMessages.collectAsState()
-                    RoutineCompletedScreen(
-                        nextActivityPreview = "",
-                        reinforcementMessages = reinforcementMessages,
-                        onFinishClick = {
-                            navController.navigate(Routes.CHILD_START) {
-                                popUpTo(Routes.CHILD_START) { inclusive = true }
+                    ChildTheme(perfil = perfilNino) {
+                        RoutineCompletedScreen(
+                            nextActivityPreview = "",
+                            reinforcementMessages = reinforcementMessages,
+                            onFinishClick = {
+                                navController.navigate(Routes.CHILD_START) {
+                                    popUpTo(Routes.CHILD_START) { inclusive = true }
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
 
                 composable(Routes.ACHIEVEMENT_REPORT) {
