@@ -47,4 +47,13 @@ object RoutineProgressCalculator {
         val completadas = tareasFiltradas.count { it.estaCompletadaHoy(prefijoLimpio) }
         return Pair(total, completadas)
     }
+
+    /**
+     * Primera tarea de la lista que toca hoy y todavía no está completada, en el
+     * orden en que el tutor las creó; null si no queda ninguna.
+     */
+    fun siguientePendiente(tareas: List<TaskItem>, dia: String): TaskItem? {
+        val prefijo = obtenerPrefijoDia(dia)
+        return filtrarTareasPorDia(tareas, prefijo).firstOrNull { !it.estaCompletadaHoy(prefijo) }
+    }
 }

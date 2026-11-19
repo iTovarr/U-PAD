@@ -82,4 +82,25 @@ class RoutineProgressCalculatorTest {
         assertEquals("feliz", tarea.obtenerEmocionHoy("lunes"))
         assertEquals("", tarea.obtenerEmocionHoy("MARTES"))
     }
+
+    @Test
+    fun `la siguiente pendiente es la primera de hoy sin completar`() {
+        val tareas = listOf(
+            tarea("Desayunar", completadaEn = listOf("LUN")),
+            tarea("Nadar", dias = listOf("SABADO")),
+            tarea("Vestirse"),
+            tarea("Peinarse")
+        )
+
+        assertEquals("Vestirse", RoutineProgressCalculator.siguientePendiente(tareas, "LUNES")?.actividad)
+        assertEquals("Desayunar", RoutineProgressCalculator.siguientePendiente(tareas, "MARTES")?.actividad)
+    }
+
+    @Test
+    fun `sin tareas pendientes no hay siguiente`() {
+        val tareas = listOf(tarea("Desayunar", completadaEn = listOf("LUN")))
+
+        assertEquals(null, RoutineProgressCalculator.siguientePendiente(tareas, "LUNES"))
+        assertEquals(null, RoutineProgressCalculator.siguientePendiente(emptyList(), "LUNES"))
+    }
 }
