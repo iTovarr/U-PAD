@@ -7,6 +7,7 @@ import com.example.upad.data.DataStoreManager
 import com.example.upad.data.FirebaseRepository
 import com.example.upad.data.LanguageDataStore
 import com.example.upad.data.ThemePreferences
+import com.example.upad.ui.theme.AppPalette
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "SettingsViewModel"
 
-/** Preferencias de la app: tema oscuro, idioma y plan de suscripción. */
+/** Preferencias de la app: tema oscuro, paleta de colores, idioma y plan de suscripción. */
 class SettingsViewModel(
     private val dataStoreManager: DataStoreManager,
     private val languageDataStore: LanguageDataStore,
@@ -32,6 +33,9 @@ class SettingsViewModel(
     private val _isDarkMode = MutableStateFlow(themePreferences.isDarkMode())
     val isDarkMode: StateFlow<Boolean> = _isDarkMode.asStateFlow()
 
+    private val _palette = MutableStateFlow(themePreferences.palette())
+    val palette: StateFlow<AppPalette> = _palette.asStateFlow()
+
     init {
         viewModelScope.launch {
             dataStoreManager.isPremiumFlow.collectLatest { _isUserPremium.value = it }
@@ -45,6 +49,12 @@ class SettingsViewModel(
     fun setDarkMode(enabled: Boolean) {
         _isDarkMode.value = enabled
         themePreferences.setDarkMode(enabled)
+    }
+
+    /** Cambia la paleta de colores y la guarda en el dispositivo. */
+    fun setPalette(palette: AppPalette) {
+        _palette.value = palette
+        themePreferences.setPalette(palette)
     }
 
     /** Refleja en el dispositivo el plan que ya consta en el servidor. */
