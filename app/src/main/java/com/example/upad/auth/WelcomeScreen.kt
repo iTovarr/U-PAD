@@ -1,7 +1,5 @@
 package com.example.upad.auth
 
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.res.stringResource
 import android.content.Context
 import android.util.Log
@@ -96,7 +94,7 @@ fun WelcomeScreen(
     onLoginExitoso: () -> Unit // Callback para cuando Google dice "OK"
 ) {
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = LightBackground
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     // Herramientas necesarias para lanzar la hoja flotante de Android
     val context = LocalContext.current
@@ -113,7 +111,7 @@ fun WelcomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(top = 60.dp, bottom = 40.dp, start = 24.dp, end = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -136,17 +134,15 @@ fun WelcomeScreen(
 
             Text(
                 text = stringResource(id = R.string.welcome_title),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineMedium
             )
 
             Text(
                 text = stringResource(id = R.string.welcome_tagline),
-                fontSize = 16.sp,
-                color = TextoSecundarioClaro,
-                fontWeight = FontWeight.Medium
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -166,12 +162,11 @@ fun WelcomeScreen(
                     .height(65.dp),
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Text(
                     text = stringResource(id = R.string.welcome_start),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Black
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
 
@@ -206,9 +201,8 @@ fun WelcomeScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = stringResource(id = R.string.welcome_google),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorAzulTEA
+                        color = colorAzulTEA,
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
@@ -219,18 +213,17 @@ fun WelcomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(vertical = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = stringResource(id = R.string.welcome_have_account), color = TextoSecundarioClaro, fontSize = 15.sp)
+                Text(text = stringResource(id = R.string.welcome_have_account), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodyMedium)
                 TextButton(onClick = onNavigateToLogin) {
                     Text(
                         text = stringResource(id = R.string.welcome_sign_in),
                         color = colorAzulTEA,
-                        fontWeight = FontWeight.Black,
-                        fontSize = 15.sp
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
