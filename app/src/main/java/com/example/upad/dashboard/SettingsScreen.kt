@@ -100,9 +100,6 @@ fun SettingsScreen(
                     title = tituloAjustado,
                     // ✅ FIX 1: ahora sí pasa la foto cargada desde SharedPreferences/Firebase
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     // ✅ FIX 2: onNavigateToHelp conectado (vendrá de MainActivity)

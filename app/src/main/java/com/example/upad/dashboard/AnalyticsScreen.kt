@@ -129,9 +129,6 @@ fun AnalyticsScreen(
                 UpadTopAppBar(
                     title = stringResource(id = R.string.weekly_report),
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     onNavigateToProfile = onNavigateToProfile,

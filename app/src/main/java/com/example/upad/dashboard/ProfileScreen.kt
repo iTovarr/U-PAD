@@ -126,9 +126,6 @@ fun ProfileScreen(
                     title = if (isEditingMode) stringResource(id = R.string.edit_profile_title) else stringResource(id = R.string.my_profile),
                     // FIX: pasamos imageUri reactivo — se actualiza cuando el usuario cambia foto
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = {
                         if (isEditingMode) isEditingMode = false else onNavigateBack()

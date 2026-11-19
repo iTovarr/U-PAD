@@ -43,7 +43,6 @@ fun AchievementReportScreen(
             UpadTopAppBar(
                 title = stringResource(id = R.string.report_title),
                 imageUri = null,
-                colorFondo = colorFondoSolido,
                 showBackButton = true,
                 onBackPressed = onBackClick,
                 onNavigateToHelp = onNavigateToHelp,

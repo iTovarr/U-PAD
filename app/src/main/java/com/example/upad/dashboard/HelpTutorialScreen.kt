@@ -85,9 +85,6 @@ fun HelpTutorialScreen(
                 UpadTopAppBar(
                     title = stringResource(id = R.string.help_title),
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     onNavigateToProfile = onNavigateToProfile,

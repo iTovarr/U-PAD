@@ -216,9 +216,6 @@ fun HijoTrackingScreen(
                 UpadTopAppBar(
                     title = stringResource(id = R.string.tracking_title),
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorAcabadoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     onNavigateToProfile = onNavigateToProfile,

@@ -18,13 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 
@@ -38,11 +34,10 @@ import coil.compose.AsyncImage
  * Dashboard  → [ ☰ ]  Título  [ ? ]  [ 👤 ]
  * Secundaria → [ ← ]  Título  [ ? ]  [ 👤 ]
  *
+ * Los colores y la tipografía salen del tema activo.
+ *
  * @param title               Texto del centro de la barra.
  * @param imageUri            Foto de perfil circular (nullable).
- * @param colorFondo          Color SÓLIDO de fondo (no transparent, o se verá el contenido).
- * @param colorIconos         Color de iconos y texto.
- * @param fuentePremium       Tipografía del proyecto.
  * @param showBackButton      false = muestra ☰ (Dashboard). true = muestra ← (resto).
  * @param onOpenMenu          Callback del botón ☰.
  * @param onBackPressed       Callback del botón ←.
@@ -53,20 +48,19 @@ import coil.compose.AsyncImage
 fun UpadTopAppBar(
     title: String,
     imageUri: Uri? = null,
-    colorFondo: Color,                        // ← OBLIGATORIO, sin default transparente
-    colorIconos: Color = Color.Black,
-    fuentePremium: FontFamily = FontFamily.SansSerif,
     showBackButton: Boolean = true,
     onOpenMenu: () -> Unit = {},
     onBackPressed: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {},
     onNavigateToHelp: () -> Unit = {}
 ) {
+    val colorFondo = MaterialTheme.colorScheme.surfaceContainer
+    val colorIconos = MaterialTheme.colorScheme.onSurface
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .zIndex(10f)                       // ← siempre encima de TODO el contenido
-            .shadow(elevation = 4.dp)          // ← sombra sutil para separarse visualmente
             .background(colorFondo)            // ← fondo SÓLIDO que tapa lo que hay debajo
             .statusBarsPadding()               // ← respeta la barra de estado del teléfono
     ) {
@@ -81,11 +75,11 @@ fun UpadTopAppBar(
             // ── 1. IZQUIERDA: ☰ o ← ────────────────────────────────────────
             IconButton(
                 onClick = if (showBackButton) onBackPressed else onOpenMenu,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(48.dp)
             ) {
                 Icon(
                     imageVector = if (showBackButton) Icons.Default.ArrowBackIosNew else Icons.Default.Menu,
-                    contentDescription = if (showBackButton) "Volver" else "Abrir menú",
+                    contentDescription = stringResource(id = if (showBackButton) R.string.cd_back else R.string.open_menu),
                     tint = colorIconos,
                     modifier = Modifier.size(if (showBackButton) 22.dp else 26.dp)
                 )
@@ -94,10 +88,10 @@ fun UpadTopAppBar(
             // ── 2. TÍTULO ────────────────────────────────────────────────────
             Text(
                 text = title,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Black,
+                style = MaterialTheme.typography.titleMedium,
                 color = colorIconos,
-                fontFamily = fuentePremium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 8.dp)
@@ -106,7 +100,7 @@ fun UpadTopAppBar(
             // ── 3. AYUDA ─────────────────────────────────────────────────────
             IconButton(
                 onClick = onNavigateToHelp,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(48.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.HelpOutline,
@@ -121,7 +115,7 @@ fun UpadTopAppBar(
             // ── 4. AVATAR ────────────────────────────────────────────────────
             Box(
                 modifier = Modifier
-                    .size(36.dp)
+                    .size(40.dp)
                     .clip(CircleShape)
                     .background(colorIconos.copy(alpha = 0.1f))
                     .clickable(role = Role.Button) { onNavigateToProfile() },

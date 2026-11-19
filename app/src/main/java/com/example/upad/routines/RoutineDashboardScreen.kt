@@ -233,15 +233,6 @@ fun RoutineDashboardScreen(
                     UpadTopAppBar(
                         title = stringResource(R.string.child_routines),
                         imageUri = imageUri,
-                        // Fondo sólido: si es premium usa el primer color del gradiente,
-                        // si no usa el fondo base del tema. Nunca transparente.
-                        colorFondo = if (esPremium) {
-                            if (isDarkMode) Color(0xFF0F0C29) else Color(0xFFFBE9E7)
-                        } else {
-                            colorFondoBase
-                        },
-                        colorIconos = colorTextoPrincipal,
-                        fuentePremium = fuentePremium,
                         showBackButton = false,
                         onOpenMenu = { scope.launch { drawerState.open() } },
                         onNavigateToProfile = onNavigateToProfile,

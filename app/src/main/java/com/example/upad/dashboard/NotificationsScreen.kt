@@ -153,9 +153,6 @@ fun NotificationsScreen(
                 UpadTopAppBar(
                     title = stringResource(id = R.string.alerts_title),
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     onNavigateToProfile = onNavigateToProfile,

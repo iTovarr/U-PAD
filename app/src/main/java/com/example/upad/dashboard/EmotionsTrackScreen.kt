@@ -80,9 +80,6 @@ fun EmotionsTrackScreen(
                 UpadTopAppBar(
                     title = stringResource(id = R.string.emotions_title),
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     onNavigateToProfile = onNavigateToProfile,

@@ -125,9 +125,6 @@ fun ConnectionScreen(
                 UpadTopAppBar(
                     title = stringResource(id = R.string.devices_title),
                     imageUri = imageUri,
-                    colorFondo = colorFondoSolido,
-                    colorIconos = colorTextoPrincipal,
-                    fuentePremium = fuentePremium,
                     showBackButton = true,
                     onBackPressed = onNavigateBack,
                     onNavigateToProfile = onNavigateToProfile,
