@@ -40,10 +40,10 @@ La regla que sostiene esta estructura: **solo el paquete `data/` (y los widgets)
 | Paquete | Contenido |
 |---|---|
 | `auth/` | Selección de rol, bienvenida, inicio de sesión, registro y recuperación de contraseña. |
-| `setup/` | Configuración inicial del tutor: plan, perfil del hijo, experiencia, vinculación y tutoriales. |
+| `setup/` | Configuración inicial del tutor: plan, perfil del hijo, perfil sensorial, vinculación y tutoriales. |
 | `dashboard/` | Panel del tutor: analítica, calendario, emociones, avisos, perfil, ajustes, dispositivos y mapa. |
 | `routines/` | Panel de rutinas, creación de rutinas y buscador de pictogramas. |
-| `child/` | Modo niño: inicio, ejecución de la tarea, registro de emoción y pantalla de logro. |
+| `child/` | Modo niño: inicio, ejecución de la tarea, registro de emoción y pantalla de logro, con su propio tema (`ChildTheme`), voz y sonido (`ChildAudio`) según el perfil sensorial. |
 | `premium/` | Pantalla de pago (simulado). |
 | `components/` | Piezas de interfaz compartidas: barras, cajón lateral, fondo y aviso de conexión. |
 | `viewmodel/` | ViewModels y la fábrica que los crea (`AppViewModelFactory`). |
@@ -55,7 +55,7 @@ La regla que sostiene esta estructura: **solo el paquete `data/` (y los widgets)
 | `kiosk/` | Modo kiosco (fijación de la app en pantalla). |
 | `widget/` | Tres widgets de escritorio: progreso del día, progreso premium y sesión del niño. |
 | `utils/` | Lógica pura y utilidades: cálculo de progreso, validadores, código de vinculación, huella, idioma y red. |
-| `ui/theme/` | Tema de Material 3, colores con nombre y `UPadColors`. |
+| `ui/theme/` | Tema de Material 3: paletas Calma y Tierra en claro y oscuro (`Palettes.kt`), colores extra del tema (`MaterialTheme.extendedColors`) y tipografía Atkinson Hyperlegible (`Type.kt`). Ninguna pantalla define colores propios. |
 
 ## Inyección de dependencias
 
@@ -78,13 +78,14 @@ Las rutas del modo niño empiezan todas por `child_`. `MainActivity` usa ese pre
 ```
 users/{uid}                         Perfil del tutor
   name, isPremium, language, fcmTokens[]
+  perfilSensorial                   paleta, tema, intensidadColor, animaciones, sonido,
+                                    voz, volumen, temporizador, celebracion
   notifications/{id}                Avisos que deja el dispositivo del niño
     title, description, type, timestamp
 
 usuarios/{uid}                      Plan y datos de configuración del tutor
   planSuscripcion, estadoSuscripcion, fechaSeleccionPlan
   hijos/perfil                      nombre, edad, intereses, fotoUrl, fechaRegistro
-  configuracion/experiencia         temaSeleccionado, volumenAudio, vozHabilitada
 
 routines/{uid}/turns/{turno}        turno: MAÑANA | TARDE | NOCHE
   tasks[], mensajesRefuerzo[]
