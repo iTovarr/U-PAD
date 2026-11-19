@@ -1,170 +1,154 @@
-# U-Pad 📱✨
+# U-Pad
 
 [![Android CI](https://github.com/iTovarr/U-PAD/actions/workflows/android.yml/badge.svg)](https://github.com/iTovarr/U-PAD/actions/workflows/android.yml)
-### Apoyo Visual, Rutinas Inteligentes y Seguimiento en Tiempo Real para Niños con TEA
+![Plataforma](https://img.shields.io/badge/plataforma-Android%207.0%2B-3DDC84)
+![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7F52FF)
+[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-blue)](LICENSE)
 
-U-Pad es una aplicación Android nativa diseñada para mejorar la autonomía diaria de niños con Trastorno del Espectro Autista (TEA) mediante agendas visuales basadas en pictogramas. Facilita la tranquilidad de los padres y tutores al permitirles supervisar en tiempo real el progreso de las rutinas y realizar un rastreo GPS satelital de la ubicación del menor. Asimismo, integra un asistente inteligente de IA que sugiere actividades personalizadas adaptadas a las necesidades específicas de cada niño.
+**Agendas visuales, rutinas guiadas y seguimiento en tiempo real para niños con Trastorno del Espectro Autista (TEA).**
 
----
+U-Pad es una aplicación Android nativa que ayuda a niños con TEA a ganar autonomía en su día a día mediante rutinas basadas en pictogramas. El tutor diseña las rutinas desde su dispositivo, el niño las sigue paso a paso en el suyo y el tutor ve su progreso al instante. Un asistente de inteligencia artificial propone actividades y mensajes de refuerzo adaptados a cada niño.
 
-## 🛠️ Stack Tecnológico
+## Funcionalidades
 
-El proyecto está desarrollado nativamente para la plataforma Android utilizando las siguientes tecnologías:
+**Para el tutor**
 
-* **Lenguaje principal**: Kotlin
-* **Diseño y UI**: Jetpack Compose (Material Design 3) con soporte para temas dinámicos y persistencia de modo oscuro
-* **Consumo de Servicios REST (Pictogramas)**: Retrofit (para búsqueda y consulta de imágenes desde la API oficial de ARASAAC)
-* **Cliente HTTP (IA)**: OkHttp (para llamadas asíncronas estructuradas)
-* **Persistencia y Backend**: Firebase Firestore y Firebase Storage
-* **Autenticación**: Firebase Authentication con soporte de Google Sign-In integrado
-* **Servicio de Ubicación y Mapas**: Google Maps SDK, Fused Location Provider Client
-* **Persistencia Local**: Preferences DataStore (gestión de idioma y suscripción)
-* **Notificaciones**: Firebase Cloud Messaging, con una Cloud Function que avisa al tutor aunque tenga la app cerrada
-* **Arquitectura**: ViewModels por funcionalidad, repositorios como único acceso a Firebase e inyección de dependencias manual (`AppContainer`)
-* **Idiomas**: español, inglés, francés, alemán, portugués y ruso
-* **Calidad**: tests unitarios con JUnit, Android Lint e integración continua con GitHub Actions
+- Rutinas por turno (mañana, tarde y noche) y por día de la semana, con pictogramas de ARASAAC o fotos propias.
+- Vinculación del dispositivo del niño mediante un código de 6 dígitos con caducidad.
+- Progreso y registro emocional del día, calendario y avisos en tiempo real, también con la app cerrada.
+- Asistente de IA: sugerencias de actividades, rutinas a medida con mensajes de refuerzo y análisis del día.
+- Localización del dispositivo del niño en el mapa y bloqueo remoto confirmado con huella digital (plan Premium).
+- Widgets de escritorio con el progreso del día.
 
----
+**Para el niño**
 
-## 🤖 Componente de IA y Funcionamiento
+- Agenda visual del día, sin necesidad de cuenta ni de escribir.
+- Ejecución guiada de cada tarea y registro de cómo se sintió al terminarla.
+- Mensajes de refuerzo positivo al completar la rutina.
 
-U-Pad integra de forma segura la API de **Groq AI** mediante el uso del modelo de procesamiento de lenguaje natural `llama-3.3-70b-versatile`. 
+La aplicación está disponible en español, inglés, francés, alemán, portugués y ruso.
 
-### ¿Cómo funciona en la aplicación?
-1. **Instrucciones de Contexto (System Prompt)**: Se entrena conceptualmente al modelo como un psicopedagogo experto en autismo, indicándole que retorne exactamente 3 sugerencias cortas (máximo 4 palabras cada una) por línea para garantizar la comprensión del menor.
-2. **Petición del Tutor**: Desde la vista de creación de rutinas, al hacer clic en "Sugerir con IA", `AiViewModel` invoca de forma asíncrona a `AiRepository.kt` para consultar el modelo con el turno de la rutina correspondiente. La respuesta se pide en el idioma elegido en la app.
-3. **Manejo de Errores Reactivo**: El sistema monitoriza los estados de red a través de flujos observables (`isAiLoading` y `aiError`). Si la API de Groq falla o hay problemas de conexión, la aplicación reintenta la petición hasta tres veces y, si sigue fallando, interrumpe la carga y despliega un `AlertDialog` informativo al tutor, previniendo pantallas congeladas.
-4. **Clave protegida**: Con la Cloud Function `aiChat` desplegada, la app no contiene la clave de Groq: la petición pasa por el servidor, que solo atiende a tutores con sesión iniciada.
+## Capturas
 
----
+| Bienvenida | Selección de rol | Inicio de sesión | Edición de rutinas | Seguimiento |
+|:---:|:---:|:---:|:---:|:---:|
+| <img width="180" alt="Pantalla de bienvenida" src="https://github.com/user-attachments/assets/65c0da67-eafd-4e48-b7d1-ace815470a0e" /> | <img width="180" alt="Selección de rol" src="https://github.com/user-attachments/assets/3fa0f043-6db0-46b9-b2bf-2c9b6cc5b1f3" /> | <img width="180" alt="Inicio de sesión" src="https://github.com/user-attachments/assets/01a805b9-005a-4c58-aab0-24ef8d4136c4" /> | <img width="180" alt="Panel de edición de rutinas" src="https://github.com/user-attachments/assets/b71ea66b-c720-4832-9861-230a049573dc" /> | <img width="180" alt="Mapa de seguimiento del dispositivo del niño" src="https://github.com/user-attachments/assets/a317f8bc-bc8a-42cc-be33-b7cdf2ba1f85" /> |
 
-## 🧱 Arquitectura
+[Ver la demostración en vídeo](https://youtu.be/fVQU3RGt8KI)
+
+## Tecnologías
+
+| Área | Tecnología |
+|---|---|
+| Lenguaje e interfaz | Kotlin, Jetpack Compose y Material 3 |
+| Arquitectura | ViewModels, repositorios e inyección de dependencias manual |
+| Backend | Firebase Authentication, Cloud Firestore, Cloud Storage y Cloud Messaging |
+| Funciones en la nube | Cloud Functions para Firebase (Node.js 22) |
+| Pictogramas | API de ARASAAC con Retrofit y Coil |
+| Inteligencia artificial | Groq (`llama-3.3-70b-versatile`) con OkHttp |
+| Ubicación y mapas | Fused Location Provider y Maps Compose |
+| Persistencia local | Preferences DataStore |
+| Calidad | JUnit, Android Lint y GitHub Actions |
+
+## Arquitectura
 
 ```
-Interfaz (Compose)  →  ViewModels  →  Repositorios (data/)  →  Firebase · ARASAAC · Groq
+Interfaz (Compose)  →  ViewModels  →  Repositorios  →  Firebase · ARASAAC · Groq
 ```
 
-Las pantallas no usan el SDK de Firebase: hablan con ViewModels y repositorios. El detalle de los paquetes, el modelo de datos en Firestore y los flujos principales (vinculación, tareas, rastreo e IA) está en [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md).
+Las pantallas no acceden directamente a Firebase: trabajan con ViewModels, que a su vez usan repositorios. Las dependencias se crean en un único contenedor (`AppContainer`) y se inyectan por constructor.
 
----
+El detalle de los paquetes, el modelo de datos en Firestore y los flujos principales (vinculación, tareas completadas, rastreo e IA) está en [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md).
 
-## 📸 Evidencias Visuales (Capturas de Pantalla)
+## Puesta en marcha
 
-*[Las siguientes capturas de pantalla serán insertadas en los correspondientes marcadores de posición]*
+### Requisitos
 
-* `Pantalla de Bienvenida de U-Pad (WelcomeScreen) y Selector de Roles`
-<img width="723" height="1600" alt="WhatsApp Image 2026-06-28 at 9 01 38 AM (3)" src="https://github.com/user-attachments/assets/65c0da67-eafd-4e48-b7d1-ace815470a0e" />
-<img width="723" height="1600" alt="WhatsApp Image 2026-06-28 at 9 01 38 AM (2)" src="https://github.com/user-attachments/assets/3fa0f043-6db0-46b9-b2bf-2c9b6cc5b1f3" />
-<img width="720" height="1600" alt="WhatsApp Image 2026-06-28 at 9 01 53 AM" src="https://github.com/user-attachments/assets/01a805b9-005a-4c58-aab0-24ef8d4136c4" />
+- Android Studio con el SDK de Android 37.
+- JDK 17 o superior para ejecutar Gradle (el propio Gradle descarga el JDK 21 que usa para compilar).
+- Un proyecto de Firebase con Authentication (correo y Google), Firestore y Storage habilitados.
+- Un dispositivo o emulador con Android 7.0 (API 24) o superior.
 
-* `Panel de Edición de Rutinas`
-<img width="723" height="1600" alt="WhatsApp Image 2026-06-28 at 9 01 38 AM (1)" src="https://github.com/user-attachments/assets/b71ea66b-c720-4832-9861-230a049573dc" />
+### Configuración
 
-* `Mapa de Seguimiento GPS Activo del Niño`
-<img width="723" height="1600" alt="WhatsApp Image 2026-06-28 at 9 01 38 AM" src="https://github.com/user-attachments/assets/a317f8bc-bc8a-42cc-be33-b7cdf2ba1f85" />
+1. Copia `local.properties.example` como `local.properties` y completa las claves:
 
----
-
-## Video Demostrativo
-* **Demostración Práctica**: [Video Demostrativo del funcionamiento y flujo de U-Pad](https://youtu.be/fVQU3RGt8KI)
-
----
-
-## 👥 Integrantes del Proyecto
-
-* Mamani Puma, Anyelina Yolit
-* Mansilla Tovar, Maria Fernanda
-* Ricasca Montes, Angelo Joseph
-* Vargas Jucharo, Angelo Rodrigo
-
----
-
-## 🔒 Configuración e Instrucciones de Credenciales
-
-Para compilar y desplegar el proyecto con éxito, se requieren las siguientes API Keys y configuraciones de servicios:
-
-1. **Archivo `local.properties`**: créalo en la raíz del proyecto a partir de `local.properties.example` (está ignorado por git) con las llaves que `app/build.gradle.kts` inyecta en el build:
    ```properties
-   GOOGLE_CLIENT_ID=tu_client_id_de_google_sign_in_aqui
-   MAPS_API_KEY=tu_clave_del_sdk_de_google_maps_aqui
+   GOOGLE_CLIENT_ID=tu_client_id_de_google_sign_in
+   MAPS_API_KEY=tu_clave_del_sdk_de_google_maps
 
-   # Opción recomendada: proxy de IA (la clave de Groq se queda en el servidor)
+   # Recomendado: proxy de IA (la clave de Groq se queda en el servidor)
    AI_PROXY_URL=https://us-central1-TU_PROYECTO.cloudfunctions.net/aiChat
 
-   # Solo para desarrollo, si aún no desplegaste el proxy. Esta clave queda
-   # dentro del APK y puede extraerse: no la uses en builds que vayas a compartir.
-   GROQ_API_KEY=tu_clave_de_api_de_groq_aqui
+   # Solo para desarrollo, si aún no has desplegado el proxy.
+   # Esta clave queda dentro del APK y puede extraerse.
+   GROQ_API_KEY=
    ```
-   Si `AI_PROXY_URL` está definida, la app usa el proxy y `GROQ_API_KEY` debe dejarse vacía.
-2. **Archivo `google-services.json`**: descárgalo desde Firebase Console y ubícalo en la carpeta `/app` para conectar Firestore, Storage y Auth.
 
-### Reglas de seguridad y proxy de IA (Firebase)
+2. Descarga `google-services.json` desde la consola de Firebase y colócalo en `app/`.
 
-El repositorio incluye las reglas de Firestore (`firestore.rules`) y Storage (`storage.rules`) y dos Cloud Functions (`functions/`): `aiChat`, que reenvía las peticiones de IA a Groq sin exponer la clave, y `notifyParent`, que envía una notificación push al tutor cuando el niño completa una actividad, aunque tenga la app cerrada. Se despliegan con [Firebase CLI](https://firebase.google.com/docs/cli):
+Ninguno de los dos archivos se versiona.
+
+### Ejecución
+
+Abre el proyecto en Android Studio, sincroniza Gradle y ejecuta la configuración `app`. Desde la terminal:
+
+```bash
+./gradlew installDebug
+```
+
+### Servicios de Firebase
+
+El repositorio incluye las reglas de seguridad de Firestore y Storage y dos Cloud Functions:
+
+- `aiChat`: proxy de IA que evita incluir la clave de Groq en la aplicación. Solo atiende a tutores con sesión iniciada.
+- `notifyParent`: envía una notificación push al tutor cuando el niño completa una actividad.
+
+Se despliegan con [Firebase CLI](https://firebase.google.com/docs/cli). Las funciones requieren el plan Blaze.
 
 ```bash
 firebase use TU_PROYECTO
 firebase deploy --only firestore:rules,storage
 
-# Proxy de IA y notificaciones push (requieren el plan Blaze)
 cd functions && npm install && cd ..
 firebase functions:secrets:set GROQ_API_KEY
 firebase deploy --only functions
 ```
 
-> Las reglas actuales documentan una limitación: el dispositivo del niño todavía no inicia sesión en Firebase, por lo que sus documentos se protegen prohibiendo listados y validando lo que se escribe. Ver los comentarios de `firestore.rules`.
-
----
-
-### Limitaciones conocidas
-
-* **Modo kiosco**: el bloqueo del dispositivo del niño usa la fijación de pantalla estándar de Android (`startLockTask`). Sin registrar la app como *Device Owner* —lo que exige aprovisionar el dispositivo, por ejemplo con `adb shell dpm set-device-owner`—, el sistema muestra un aviso al fijar la app y el niño puede salir con el gesto de desanclar. Es una ayuda para mantener el foco, no un bloqueo inviolable.
-* **Rastreo GPS**: el servicio de ubicación se inicia al abrir el modo niño y sigue activo en segundo plano, pero si el sistema lo detiene (ahorro de batería agresivo, reinicio del dispositivo) no se reanuda hasta que se vuelve a abrir la app.
-* **Notificaciones push y proxy de IA**: requieren desplegar las Cloud Functions (plan Blaze). Sin ellas, los avisos solo llegan con la app abierta y la IA usa la clave incluida en el build.
-
-### Calidad: tests, lint y CI
+## Calidad
 
 ```bash
 ./gradlew testDebugUnitTest lintDebug
 ```
 
-Cada push a `main` y cada pull request ejecuta en GitHub Actions los tests unitarios, Android Lint y la compilación del APK de debug (`.github/workflows/android.yml`).
+Cada push a `main` y cada pull request ejecutan en GitHub Actions los tests unitarios, Android Lint y la compilación del APK de debug.
 
-### Build de release
+## Build de release
 
 ```bash
 ./gradlew assembleRelease
 ```
 
-El build de release usa R8 (código reducido y ofuscado). Para que salga firmado, copia `keystore.properties.example` como `keystore.properties` y completa los datos de tu keystore; sin ese archivo se genera `app-release-unsigned.apk`.
+El build de release se reduce y ofusca con R8. Para firmarlo, copia `keystore.properties.example` como `keystore.properties` y completa los datos de tu keystore; sin ese archivo se genera un APK sin firmar.
 
----
+## Limitaciones conocidas
 
-## 💻 Instrucciones de Ejecución
+- **Modo kiosco.** El bloqueo del dispositivo del niño usa la fijación de pantalla estándar de Android. Sin registrar la aplicación como *Device Owner*, el niño puede salir con el gesto de desanclar: es una ayuda para mantener el foco, no un bloqueo inviolable.
+- **Rastreo en segundo plano.** Si el sistema detiene el servicio de ubicación (ahorro de batería o reinicio del dispositivo), no se reanuda hasta que se vuelve a abrir el modo niño.
+- **Dispositivo del niño sin sesión.** El dispositivo del niño no inicia sesión en Firebase, por lo que sus datos se protegen impidiendo listados y validando las escrituras. Los detalles están en `firestore.rules`.
+- **Funciones en la nube.** Sin desplegar las Cloud Functions, los avisos al tutor solo llegan con la aplicación abierta y la IA usa la clave incluida en el build.
 
-1. Clona el repositorio e introduce las credenciales detalladas en el paso anterior.
-2. Abre el proyecto en **Android Studio**.
-3. Sincroniza los archivos de Gradle.
-4. Despliega la aplicación en un dispositivo emulador o físico con **API level 24 (Android 7.0) o superior**.
-
----
-
-## 📚 Documentación
+## Documentación
 
 | Documento | Contenido |
 |---|---|
-| [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md) | Capas, paquetes, modelo de datos y flujos principales. |
-| [docs/PRIVACIDAD.md](docs/PRIVACIDAD.md) | Borrador de la política de privacidad: qué datos trata la app y a quién los envía. |
-| [docs/LICENCIAS_DE_TERCEROS.md](docs/LICENCIAS_DE_TERCEROS.md) | Licencia de los pictogramas, servicios externos y librerías. |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Cómo preparar el entorno, convenciones de commits y de código. |
+| [Arquitectura](docs/ARQUITECTURA.md) | Capas, paquetes, modelo de datos y flujos principales. |
+| [Privacidad](docs/PRIVACIDAD.md) | Borrador de la política de privacidad: qué datos se tratan y con quién se comparten. |
+| [Licencias de terceros](docs/LICENCIAS_DE_TERCEROS.md) | Pictogramas, servicios externos y librerías. |
+| [Guía de contribución](CONTRIBUTING.md) | Entorno, convenciones de código y de commits. |
 
----
+## Licencia
 
-## 🙏 Créditos y licencias
+El código se distribuye bajo la [licencia MIT](LICENSE). La licencia cubre el código del proyecto, no los pictogramas ni los servicios de terceros, que conservan las suyas.
 
-El código de U-Pad se distribuye bajo la [licencia MIT](LICENSE). Esa licencia cubre el código del proyecto, no los pictogramas ni los servicios de terceros, que conservan las suyas.
-
-Los símbolos pictográficos utilizados son propiedad del Gobierno de Aragón y han sido creados por Sergio Palao para [ARASAAC](https://arasaac.org), que los distribuye bajo Licencia Creative Commons BY-NC-SA.
-
-Esa licencia no permite el uso comercial de los pictogramas. Mientras el plan Premium sea un pago simulado no hay conflicto, pero antes de cobrar por la app hay que resolverlo; las opciones están en [docs/LICENCIAS_DE_TERCEROS.md](docs/LICENCIAS_DE_TERCEROS.md).
-
+Los símbolos pictográficos utilizados son propiedad del Gobierno de Aragón y han sido creados por Sergio Palao para [ARASAAC](https://arasaac.org), que los distribuye bajo Licencia Creative Commons BY-NC-SA. Esa licencia no permite el uso comercial; las implicaciones para el plan Premium se explican en [Licencias de terceros](docs/LICENCIAS_DE_TERCEROS.md).
