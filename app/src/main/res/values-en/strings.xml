@@ -442,4 +442,10 @@
     <string name="sensory_celebration">Celebration</string>
     <string name="sensory_celebration_discreet">Discreet</string>
     <string name="sensory_celebration_normal">Normal</string>
+    <string name="child_mode_continue">CONTINUE</string>
+    <string name="child_listen_again">Listen again</string>
+    <string name="child_finished">I\'M DONE</string>
+    <string name="child_task_time">Task time</string>
+    <string name="child_time_left">%1$s left</string>
+    <string name="child_well_done">Well done!</string>
 </resources>

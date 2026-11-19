@@ -442,4 +442,10 @@
     <string name="sensory_celebration">Feier</string>
     <string name="sensory_celebration_discreet">Dezent</string>
     <string name="sensory_celebration_normal">Normal</string>
+    <string name="child_mode_continue">WEITER</string>
+    <string name="child_listen_again">Noch einmal hören</string>
+    <string name="child_finished">FERTIG</string>
+    <string name="child_task_time">Zeit für die Aufgabe</string>
+    <string name="child_time_left">Noch %1$s</string>
+    <string name="child_well_done">Sehr gut!</string>
 </resources>

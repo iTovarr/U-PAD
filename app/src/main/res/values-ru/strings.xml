@@ -442,4 +442,10 @@
     <string name="sensory_celebration">Поощрение</string>
     <string name="sensory_celebration_discreet">Сдержанное</string>
     <string name="sensory_celebration_normal">Обычное</string>
+    <string name="child_mode_continue">ДАЛЕЕ</string>
+    <string name="child_listen_again">Послушать ещё раз</string>
+    <string name="child_finished">ГОТОВО</string>
+    <string name="child_task_time">Время задания</string>
+    <string name="child_time_left">Осталось %1$s</string>
+    <string name="child_well_done">Молодец!</string>
 </resources>

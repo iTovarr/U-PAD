@@ -442,4 +442,10 @@
     <string name="sensory_celebration">Comemoração</string>
     <string name="sensory_celebration_discreet">Discreta</string>
     <string name="sensory_celebration_normal">Normal</string>
+    <string name="child_mode_continue">CONTINUAR</string>
+    <string name="child_listen_again">Ouvir de novo</string>
+    <string name="child_finished">TERMINEI</string>
+    <string name="child_task_time">Tempo da tarefa</string>
+    <string name="child_time_left">Faltam %1$s</string>
+    <string name="child_well_done">Muito bem!</string>
 </resources>
