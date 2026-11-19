@@ -44,6 +44,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.upad.R
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.TaskItem
+import com.example.upad.utils.RoutineProgressCalculator
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import java.util.Calendar
 
@@ -135,43 +137,11 @@ fun ChildStartScreen(
         else -> "LUN"
     }
 
-    val listaVariacionesDia = when (numeroDia) {
-        Calendar.MONDAY -> listOf("LUN", "LUNES")
-        Calendar.TUESDAY -> listOf("MAR", "MARTES")
-        Calendar.WEDNESDAY -> listOf("MIE", "MIÉ", "MIERCOLES", "MIÉRCOLES")
-        Calendar.THURSDAY -> listOf("JUE", "JUEVES")
-        Calendar.FRIDAY -> listOf("VIE", "VIERNES")
-        Calendar.SATURDAY -> listOf("SAB", "SÁB", "SABADO", "SÁBADO")
-        Calendar.SUNDAY -> listOf("DOM", "DOMINGO")
-        else -> emptyList()
-    }
-
-    val filtradasManana = remember(tasksManana, listaVariacionesDia) {
-        tasksManana.filter { item ->
-            try {
-                val listaDias = item.javaClass.getMethod("getDias").invoke(item) as? List<*> ?: emptyList<String>()
-                listaDias.isEmpty() || listaDias.any { d -> listaVariacionesDia.contains(d.toString().uppercase().trim()) }
-            } catch (e: Exception) { true }
-        }
-    }
-
-    val filtradasTarde = remember(tasksTarde, listaVariacionesDia) {
-        tasksTarde.filter { item ->
-            try {
-                val listaDias = item.javaClass.getMethod("getDias").invoke(item) as? List<*> ?: emptyList<String>()
-                listaDias.isEmpty() || listaDias.any { d -> listaVariacionesDia.contains(d.toString().uppercase().trim()) }
-            } catch (e: Exception) { true }
-        }
-    }
-
-    val filtradasNoche = remember(tasksNoche, listaVariacionesDia) {
-        tasksNoche.filter { item ->
-            try {
-                val listaDias = item.javaClass.getMethod("getDias").invoke(item) as? List<*> ?: emptyList<String>()
-                listaDias.isEmpty() || listaDias.any { d -> listaVariacionesDia.contains(d.toString().uppercase().trim()) }
-            } catch (e: Exception) { true }
-        }
-    }
+    // Tareas que tocan hoy en cada turno (las que no tienen días asignados tocan siempre).
+    val diaDeHoy = remember { RoutineProgressCalculator.obtenerDiaDeHoy() }
+    val filtradasManana = remember(tasksManana, diaDeHoy) { RoutineProgressCalculator.filtrarTareasPorDia(tasksManana, diaDeHoy) }
+    val filtradasTarde = remember(tasksTarde, diaDeHoy) { RoutineProgressCalculator.filtrarTareasPorDia(tasksTarde, diaDeHoy) }
+    val filtradasNoche = remember(tasksNoche, diaDeHoy) { RoutineProgressCalculator.filtrarTareasPorDia(tasksNoche, diaDeHoy) }
 
     Box(
         modifier = Modifier
@@ -494,7 +464,7 @@ fun CardBloqueadoPorHorario(mensaje: String) {
 
 @Composable
 fun BloqueListaTareas(
-    tareas: List<Any>,
+    tareas: List<TaskItem>,
     turnoNombre: String,
     diaActualTexto: String,
     yaSeEncontroActiva: Boolean,
@@ -512,28 +482,10 @@ fun BloqueListaTareas(
         var localActivaEncontrada = yaSeEncontroActiva
         Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
             tareas.forEachIndexed { index, task ->
-                val clase = task.javaClass
-                val nombreActividad = try {
-                    clase.getMethod("getActividad").invoke(task)?.toString() ?: ""
-                } catch (e: Exception) { "" }
-
-                var duracionText = try {
-                    clase.getMethod("getDuration").invoke(task)?.toString() ?: "5"
-                } catch (e: Exception) {
-                    try { clase.getMethod("getDuracion").invoke(task)?.toString() ?: "5" } catch (ex: Exception) { "5" }
-                }
-
-                if (duracionText.trim() == "55" || duracionText.trim() == "0") {
-                    duracionText = "5"
-                }
-
-                val imageUrlText = try {
-                    clase.getMethod("getImageUrl").invoke(task)?.toString() ?: ""
-                } catch (e: Exception) { "" }
-
-                val completada = try {
-                    clase.getMethod("estaCompletadaHoy", String::class.java).invoke(task, diaActualTexto) as Boolean
-                } catch (e: Exception) { false }
+                val nombreActividad = task.actividad
+                val duracionText = task.duration.toString()
+                val imageUrlText = task.imageUrl
+                val completada = task.estaCompletadaHoy(diaActualTexto)
 
                 val estaHabilitada = if (completada) {
                     false
