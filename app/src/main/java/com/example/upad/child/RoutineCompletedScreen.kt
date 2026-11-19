@@ -1,208 +1,164 @@
 package com.example.upad.child
 
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoSecundarioClaro
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.upad.R
+import com.example.upad.data.CelebrationStyle
+import com.example.upad.ui.theme.extendedColors
 
-import androidx.compose.ui.res.stringResource
-
+/**
+ * Pantalla que cierra cada tarea: felicita al niño, le dice qué viene después
+ * (la siguiente actividad o que ya no le quedan) y muestra un mensaje de refuerzo
+ * del tutor. No avanza sola.
+ *
+ * @param nextActivityPreview Nombre de la siguiente actividad pendiente, o vacío si no queda ninguna.
+ */
 @Composable
 fun RoutineCompletedScreen(
     nextActivityPreview: String = "",
     reinforcementMessages: List<String> = emptyList(),
     onFinishClick: () -> Unit
 ) {
-    val colorAzulTEA = Color(0xFF0288D1)     // Azul más vivo y con mejor contraste
-    val colorVerdeExito = Color(0xFF2E7D32)  // Verde sólido de logro cumplido
+    val perfil = LocalSensoryProfile.current
+    val audio = rememberChildAudio()
 
-    // ✨ Un degradado mágico, alegre y luminoso digno de una celebración
-    val fondoDegradadoMagico = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFFE1F5FE), // Celeste cielo pastel
-            Color(0xFFFFF9C4)  // Oro/Amarillo radiante muy sutil abajo
-        )
-    )
+    val esFinDeRutina = nextActivityPreview.isBlank()
+    val mensajeRefuerzo = remember(reinforcementMessages) { reinforcementMessages.randomOrNull() }
+    val titulo = stringResource(R.string.routine_completed_title)
 
-    val esFinDeRutina = nextActivityPreview.isEmpty() || nextActivityPreview == "¡Felicidades! Completaste todo"
-    val chosenMessage = remember(reinforcementMessages) {
-        if (reinforcementMessages.isNotEmpty()) {
-            reinforcementMessages.random()
-        } else {
-            null
-        }
-    }
-    val textToShow = if (esFinDeRutina) {
-        chosenMessage ?: stringResource(R.string.routine_completed_default_preview)
-    } else {
-        nextActivityPreview
+    LaunchedEffect(Unit) {
+        audio.leer(listOfNotNull(titulo, mensajeRefuerzo).joinToString(". "), perfil)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(fondoDegradadoMagico)
-            .verticalScroll(rememberScrollState()) // Protege pantallas pequeñas de recortes
-    ) {
-        // --- 🏆 CABECERA DE ÉXITO ---
-        Card(
+    val visible = remember { MutableTransitionState(!perfil.animaciones).apply { targetState = true } }
+
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            shape = RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(24.dp)
         ) {
             Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
                 modifier = Modifier
+                    .weight(1f)
                     .fillMaxWidth()
-                    .padding(top = 55.dp, bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .verticalScroll(rememberScrollState())
             ) {
+                AnimatedVisibility(visibleState = visible, enter = fadeIn()) {
+                    if (perfil.celebracion == CelebrationStyle.NORMAL) {
+                        Image(
+                            painter = painterResource(id = R.drawable.celebracion),
+                            contentDescription = stringResource(R.string.cd_celebration),
+                            modifier = Modifier.size(180.dp)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.extendedColors.success,
+                            modifier = Modifier.size(96.dp)
+                        )
+                    }
+                }
+
                 Text(
-                    text = stringResource(R.string.routine_completed_title),
-                    fontSize = 38.sp,
-                    fontWeight = FontWeight.Black,
-                    color = colorVerdeExito,
+                    text = titulo,
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
-                    letterSpacing = 1.sp
+                    modifier = Modifier.semantics { heading() }
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+
+                // Qué viene después: la siguiente actividad o que ya no queda ninguna.
+                Surface(
+                    shape = RoundedCornerShape(24.dp),
+                    color = MaterialTheme.colorScheme.surfaceContainer,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+                        Text(
+                            text = stringResource(if (esFinDeRutina) R.string.today_status_label else R.string.next_activity_label),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = if (esFinDeRutina) stringResource(R.string.no_pending_tasks) else nextActivityPreview.uppercase(),
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                // Mensaje de refuerzo que escribió el tutor (o generó con la IA).
+                if (mensajeRefuerzo != null) {
+                    Surface(
+                        shape = RoundedCornerShape(24.dp),
+                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = mensajeRefuerzo,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(20.dp)
+                        )
+                    }
+                }
+
                 Text(
-                    text = if (esFinDeRutina) stringResource(R.string.no_pending_tasks) else stringResource(R.string.activity_completed_success),
-                    fontSize = 17.sp,
-                    color = TextoSecundarioClaro,
-                    fontWeight = FontWeight.Bold,
+                    text = stringResource(if (esFinDeRutina) R.string.time_to_rest_or_play else R.string.keep_it_up),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             }
-        }
 
-        // --- 🖼️ CONTENEDOR DE LA ILUSTRACIÓN DE CELEBRACIÓN ---
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            // Contenedor blanco estilizado semi-flotante para que la imagen destaque
-            Card(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
-                shape = RoundedCornerShape(36.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.celebracion),
-                        contentDescription = stringResource(id = R.string.cd_celebration),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(260.dp)
-                            .padding(8.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                }
-            }
-        }
-
-        // --- 📥 PANEL DE PRÓXIMA ACTIVIDAD DE ALTA VISIBILIDAD ---
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            elevation = CardDefaults.cardElevation(defaultElevation = 12.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 28.dp, bottom = 32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = if (esFinDeRutina) stringResource(R.string.today_status_label) else stringResource(R.string.next_activity_label),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color.DarkGray,
-                    letterSpacing = 1.5.sp
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Contenedor destacado para el texto dinámico
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = LightBackground),
-                    shape = RoundedCornerShape(18.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = textToShow.uppercase(),
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Black,
-                        color = colorAzulTEA,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 12.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    text = if (esFinDeRutina) stringResource(R.string.time_to_rest_or_play) else stringResource(R.string.keep_it_up),
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = TextoSecundarioClaro,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // 🚀 BOTÓN ENTENDIDO PREMIUM CON EFECTO DE IMPACTO
-                Button(
-                    onClick = onFinishClick,
-                    modifier = Modifier
-                        .fillMaxWidth(0.95f)
-                        .height(72.dp),
-                    shape = RoundedCornerShape(24.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)), // Cambiado a verde para asociar la acción con avanzar con éxito
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.understood_btn),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Black,
-                        color = Color.White,
-                        letterSpacing = 1.sp
-                    )
-                }
-            }
+            Spacer(modifier = Modifier.height(16.dp))
+            ChildPrimaryButton(
+                text = stringResource(R.string.understood_btn),
+                onClick = onFinishClick
+            )
         }
     }
 }
