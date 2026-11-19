@@ -1,6 +1,5 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.ColorAzulTEA
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -67,7 +66,6 @@ fun ChildProfileSetupScreen(
 
     // --- PERSISTENCIA LOCAL (SharedPreferences) ---
     val prefs = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
-    val esTemaOscuro by remember { mutableStateOf(prefs.getBoolean("TEMA_OSCURO", false)) }
 
     var name by remember { mutableStateOf(prefs.getString("CHILD_NAME", "") ?: "") }
     var age by remember { mutableStateOf(prefs.getString("CHILD_AGE", "") ?: "") }
@@ -87,16 +85,16 @@ fun ChildProfileSetupScreen(
     }
 
     // --- CONFIGURACIÓN DE COLORES MULTI-TEMA ---
-    val colorAzulTEA = ColorAzulTEA
-    val colorAmarilloTEA = Color(0xFFFFD54F)
+val colorAzulTEA = MaterialTheme.colorScheme.primary
+val colorAmarilloTEA = MaterialTheme.colorScheme.tertiaryContainer
 
-    val colorFondoBase = if (esTemaOscuro) Color(0xFF0F172A) else Color(0xFFF8FAFC)
-    val colorSuperficie = if (esTemaOscuro) Color(0xFF1E293B) else Color.White
-    val colorTextoPrincipal = if (esTemaOscuro) Color(0xFFF1F5F9) else Color(0xFF1E293B)
-    val colorTextoSecundario = if (esTemaOscuro) Color(0xFF94A3B8) else Color(0xFF64748B)
-    val colorBordeInput = if (esTemaOscuro) Color(0xFF334155) else Color(0xFFCBD5E1)
-    val colorFondoIconoDefecto = if (esTemaOscuro) Color(0xFF334155) else Color(0xFFE2E8F0)
-    val colorDivisor = if (esTemaOscuro) Color(0xFF334155) else Color(0xFFF1F5F9)
+val colorFondoBase = MaterialTheme.colorScheme.background
+val colorSuperficie = MaterialTheme.colorScheme.surfaceContainerLowest
+val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
+val colorBordeInput = MaterialTheme.colorScheme.outline
+val colorFondoIconoDefecto = MaterialTheme.colorScheme.surfaceVariant
+val colorDivisor = MaterialTheme.colorScheme.outlineVariant
 
     Column(
         modifier = Modifier
@@ -122,19 +120,16 @@ fun ChildProfileSetupScreen(
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = stringResource(id = R.string.child_setup_overline),
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Black,
-                color = Color.LightGray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 12.dp),
-                letterSpacing = 1.5.sp
+                style = MaterialTheme.typography.labelSmall
             )
             Text(
                 text = stringResource(id = R.string.child_setup_title),
-                fontSize = if (pantallaPequeña) 22.sp else 26.sp,
-                fontWeight = FontWeight.Black,
                 color = colorTextoPrincipal,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 2.dp),
-                lineHeight = if (pantallaPequeña) 28.sp else 32.sp
+                lineHeight = if (pantallaPequeña) 28.sp else 32.sp,
+                style = MaterialTheme.typography.headlineSmall
             )
         }
 
@@ -186,12 +181,12 @@ fun ChildProfileSetupScreen(
                         .clip(CircleShape)
                         .border(2.dp, colorSuperficie, CircleShape),
                     color = colorAzulTEA,
-                    shadowElevation = 4.dp
+                    shadowElevation = 0.dp
                 ) {
                     Icon(
                         imageVector = Icons.Default.CameraAlt,
                         contentDescription = stringResource(id = R.string.child_change_photo),
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.padding(if (pantallaPequeña) 8.dp else 10.dp)
                     )
                 }
@@ -202,18 +197,16 @@ fun ChildProfileSetupScreen(
             Card(
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = colorSuperficie),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(if (pantallaPequeña) 16.dp else 20.dp)) {
 
                     Text(
                         text = stringResource(id = R.string.child_personal_info),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
                         color = colorAzulTEA,
-                        letterSpacing = 1.sp,
-                        modifier = Modifier.padding(bottom = 12.dp)
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        style = MaterialTheme.typography.labelSmall
                     )
 
                     OutlinedTextField(
@@ -262,11 +255,9 @@ fun ChildProfileSetupScreen(
 
                     Text(
                         text = stringResource(id = R.string.child_preferences),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
                         color = colorAzulTEA,
-                        letterSpacing = 1.sp,
-                        modifier = Modifier.padding(bottom = 12.dp)
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        style = MaterialTheme.typography.labelSmall
                     )
 
                     OutlinedTextField(
@@ -363,16 +354,15 @@ fun ChildProfileSetupScreen(
                 enabled = !cargando,
                 shape = RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 if (cargando) {
-                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(24.dp))
                 } else {
                     Text(
                         text = stringResource(id = R.string.child_continue),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Black,
-                        color = if (esTemaOscuro) Color.Black else Color.White
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
