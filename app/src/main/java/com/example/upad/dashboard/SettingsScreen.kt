@@ -27,6 +27,8 @@ import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Tune
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -77,6 +79,7 @@ private val IdiomasDisponibles = listOf(
 fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
     onNavigateBack: () -> Unit,
+    onNavigateToSensoryProfile: () -> Unit,
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
 ) {
@@ -162,6 +165,24 @@ fun SettingsScreen(
                     checked = isDarkMode,
                     onCheckedChange = { settingsViewModel.setDarkMode(it) }
                 )
+            }
+
+            // ── Modo niño ───────────────────────────────────────────────────
+            Spacer(modifier = Modifier.size(8.dp))
+            SectionTitle(stringResource(R.string.settings_child_mode))
+            UPadCard {
+                SettingRow(
+                    icon = Icons.Default.Tune,
+                    title = stringResource(R.string.sensory_title),
+                    subtitle = stringResource(R.string.settings_sensory_desc),
+                    modifier = Modifier.clickable(role = Role.Button, onClick = onNavigateToSensoryProfile)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
             // ── General ─────────────────────────────────────────────────────

@@ -580,6 +580,19 @@ fun UPadNavigation(
                     SettingsScreen(
                         settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
+                        onNavigateToSensoryProfile = { navController.navigate(Routes.SENSORY_PROFILE) },
+                        onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
+                        onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
+                    )
+                }
+
+                composable(Routes.SENSORY_PROFILE) {
+                    val sensoryProfileViewModel: com.example.upad.viewmodel.SensoryProfileViewModel = viewModel(
+                        factory = AppViewModelFactory(LocalAppContainer.current)
+                    )
+                    com.example.upad.dashboard.SensoryProfileScreen(
+                        viewModel = sensoryProfileViewModel,
+                        onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
                         onNavigateToProfile = { navController.navigate(Routes.PROFILE) }
                     )

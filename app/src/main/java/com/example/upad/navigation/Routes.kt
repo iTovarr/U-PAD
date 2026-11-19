@@ -33,6 +33,7 @@ object Routes {
     const val NOTIFICATIONS = "notifications"
     const val PROFILE = "profile"
     const val SETTINGS = "settings"
+    const val SENSORY_PROFILE = "sensory_profile"
     const val CONNECTION_CODE = "connection_code"
     const val ANALYTICS = "analytics"
     const val DEVICE_MANAGEMENT = "device_management"
