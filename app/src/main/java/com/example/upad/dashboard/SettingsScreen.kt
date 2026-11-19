@@ -104,6 +104,41 @@ fun SettingsScreen(
     val palette by settingsViewModel.palette.collectAsState()
     val appLanguage by settingsViewModel.appLanguage.collectAsState()
 
+    SettingsContent(
+        isPremiumUser = isPremiumUser,
+        isDarkMode = isDarkMode,
+        palette = palette,
+        appLanguage = appLanguage,
+        imageUri = imageUri,
+        onPaletteChange = settingsViewModel::setPalette,
+        onDarkModeChange = settingsViewModel::setDarkMode,
+        onLanguageChange = { codigo -> settingsViewModel.changeLanguage(session.currentUser?.uid, codigo) },
+        onNavigateBack = onNavigateBack,
+        onNavigateToSensoryProfile = onNavigateToSensoryProfile,
+        onNavigateToHelp = onNavigateToHelp,
+        onNavigateToProfile = onNavigateToProfile
+    )
+}
+
+/**
+ * Contenido de Ajustes sin estado: recibe las preferencias y avisa de los cambios.
+ * Se puede previsualizar y capturar en tests sin ViewModel ni Firebase.
+ */
+@Composable
+internal fun SettingsContent(
+    isPremiumUser: Boolean,
+    isDarkMode: Boolean,
+    palette: AppPalette,
+    appLanguage: String,
+    imageUri: Uri?,
+    onPaletteChange: (AppPalette) -> Unit,
+    onDarkModeChange: (Boolean) -> Unit,
+    onLanguageChange: (String) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToSensoryProfile: () -> Unit,
+    onNavigateToHelp: () -> Unit,
+    onNavigateToProfile: () -> Unit
+) {
     // Aún no hay una preferencia real de notificaciones: el interruptor solo vive en esta pantalla.
     var notificationsEnabled by remember { mutableStateOf(true) }
     var expandedLanguage by remember { mutableStateOf(false) }
@@ -149,7 +184,7 @@ fun SettingsScreen(
                             palette = opcion,
                             darkTheme = isDarkMode,
                             selected = opcion == palette,
-                            onSelect = { settingsViewModel.setPalette(opcion) },
+                            onSelect = { onPaletteChange(opcion) },
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -163,7 +198,7 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_dark_mode),
                     subtitle = stringResource(R.string.settings_dark_mode_desc),
                     checked = isDarkMode,
-                    onCheckedChange = { settingsViewModel.setDarkMode(it) }
+                    onCheckedChange = onDarkModeChange
                 )
             }
 
@@ -216,7 +251,7 @@ fun SettingsScreen(
                                 text = { Text(text = nombre, style = MaterialTheme.typography.bodyLarge) },
                                 onClick = {
                                     expandedLanguage = false
-                                    settingsViewModel.changeLanguage(session.currentUser?.uid, codigo)
+                                    onLanguageChange(codigo)
                                 }
                             )
                         }
