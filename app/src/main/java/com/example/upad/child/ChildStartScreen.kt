@@ -150,37 +150,14 @@ fun ChildStartScreen(
 
                 !estaVinculado -> CodigoVinculacion(codigo = codigoNiño)
 
-                esPremiumPorPadre || verTareasModoBasico -> Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = 20.dp, vertical = 24.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.my_activities_today),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier
-                            .padding(end = 48.dp)
-                            .semantics { heading() }
-                    )
-                    listOf(
-                        Triple(Turnos.MANANA, tasksManana, R.string.morning_activities),
-                        Triple(Turnos.TARDE, tasksTarde, R.string.afternoon_activities),
-                        Triple(Turnos.NOCHE, tasksNoche, R.string.evening_activities)
-                    ).forEach { (turno, tareas, titulo) ->
-                        Spacer(modifier = Modifier.height(4.dp))
-                        SeccionTurno(
-                            turno = turno,
-                            titulo = stringResource(titulo),
-                            activo = turno == turnoActual,
-                            tareas = RoutineProgressCalculator.filtrarTareasPorDia(tareas, diaDeHoy),
-                            diaDeHoy = diaDeHoy,
-                            onNavigateToTask = onNavigateToTask
-                        )
-                    }
-                }
+                esPremiumPorPadre || verTareasModoBasico -> TareasDelDia(
+                    tasksManana = tasksManana,
+                    tasksTarde = tasksTarde,
+                    tasksNoche = tasksNoche,
+                    turnoActual = turnoActual,
+                    diaDeHoy = diaDeHoy,
+                    onNavigateToTask = onNavigateToTask
+                )
 
                 else -> ListoParaEmpezar(onVerTareas = { verTareasModoBasico = true })
             }
@@ -201,6 +178,52 @@ fun ChildStartScreen(
             deviceId = deviceId,
             onCerrar = { mostrarDialogoDesvincular = false }
         )
+    }
+}
+
+/**
+ * Lista de las tareas de hoy por turno, sin estado. Se puede previsualizar y
+ * capturar en tests sin ViewModel ni Firebase.
+ */
+@Composable
+internal fun TareasDelDia(
+    tasksManana: List<TaskItem>,
+    tasksTarde: List<TaskItem>,
+    tasksNoche: List<TaskItem>,
+    turnoActual: String,
+    diaDeHoy: String,
+    onNavigateToTask: (String, String) -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp, vertical = 24.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.my_activities_today),
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier
+                .padding(end = 48.dp)
+                .semantics { heading() }
+        )
+        listOf(
+            Triple(Turnos.MANANA, tasksManana, R.string.morning_activities),
+            Triple(Turnos.TARDE, tasksTarde, R.string.afternoon_activities),
+            Triple(Turnos.NOCHE, tasksNoche, R.string.evening_activities)
+        ).forEach { (turno, tareas, titulo) ->
+            Spacer(modifier = Modifier.height(4.dp))
+            SeccionTurno(
+                turno = turno,
+                titulo = stringResource(titulo),
+                activo = turno == turnoActual,
+                tareas = RoutineProgressCalculator.filtrarTareasPorDia(tareas, diaDeHoy),
+                diaDeHoy = diaDeHoy,
+                onNavigateToTask = onNavigateToTask
+            )
+        }
     }
 }
 
