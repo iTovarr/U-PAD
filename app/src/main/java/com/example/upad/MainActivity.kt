@@ -764,11 +764,7 @@ fun UPadNavigation(
                                 session.currentUserId
                             }
                             val horaActual = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-                            val turnoActual = when {
-                                horaActual < 13 -> "MAÑANA"
-                                horaActual in 13..17 -> "TARDE"
-                                else -> "NOCHE"
-                            }
+                            val turnoActual = com.example.upad.utils.Turnos.paraHora(horaActual)
                             routineViewModel.registrarFeedbackEmocional(
                                 userId = idPadre,
                                 turn = turnoActual,
