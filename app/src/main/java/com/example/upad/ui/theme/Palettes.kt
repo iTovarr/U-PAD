@@ -44,7 +44,15 @@ data class ExtendedColors(
     val emocionFeliz: Color,
     val emocionNeutral: Color,
     val emocionTriste: Color,
-    val onEmocion: Color
+    val onEmocion: Color,
+    /**
+     * Fondo sobre el que se dibujan los pictogramas. Siempre claro, también en modo
+     * oscuro: los pictogramas de ARASAAC tienen contorno negro y se perderían sobre
+     * un fondo oscuro. En oscuro es algo menos blanco para no deslumbrar.
+     */
+    val fondoPictograma: Color,
+    /** Texto o inicial sobre [fondoPictograma]; oscuro en ambos modos. */
+    val onFondoPictograma: Color
 )
 
 private val CalmaClaro = lightColorScheme(
@@ -211,7 +219,9 @@ private val CalmaClaroExtendido = ExtendedColors(
     emocionFeliz = Color(0xFFDCEFE1),
     emocionNeutral = Color(0xFFF3EDD8),
     emocionTriste = Color(0xFFDCE6F2),
-    onEmocion = Color(0xFF1C2329)
+    onEmocion = Color(0xFF1C2329),
+    fondoPictograma = Color(0xFFFFFFFF),
+    onFondoPictograma = Color(0xFF4A5862)
 )
 
 private val CalmaOscuroExtendido = ExtendedColors(
@@ -230,7 +240,9 @@ private val CalmaOscuroExtendido = ExtendedColors(
     emocionFeliz = Color(0xFF2B4434),
     emocionNeutral = Color(0xFF453F2C),
     emocionTriste = Color(0xFF2C3B4D),
-    onEmocion = Color(0xFFDDE4E9)
+    onEmocion = Color(0xFFDDE4E9),
+    fondoPictograma = Color(0xFFDCE2E6),
+    onFondoPictograma = Color(0xFF3A454D)
 )
 
 private val TierraClaroExtendido = ExtendedColors(
@@ -249,7 +261,9 @@ private val TierraClaroExtendido = ExtendedColors(
     emocionFeliz = Color(0xFFE2EDD6),
     emocionNeutral = Color(0xFFF4EBD4),
     emocionTriste = Color(0xFFDCE5EC),
-    onEmocion = Color(0xFF2A231E)
+    onEmocion = Color(0xFF2A231E),
+    fondoPictograma = Color(0xFFFFFFFF),
+    onFondoPictograma = Color(0xFF5A4F46)
 )
 
 private val TierraOscuroExtendido = ExtendedColors(
@@ -268,7 +282,9 @@ private val TierraOscuroExtendido = ExtendedColors(
     emocionFeliz = Color(0xFF34432A),
     emocionNeutral = Color(0xFF4A402B),
     emocionTriste = Color(0xFF2E3B47),
-    onEmocion = Color(0xFFEDE3DA)
+    onEmocion = Color(0xFFEDE3DA),
+    fondoPictograma = Color(0xFFE6DED6),
+    onFondoPictograma = Color(0xFF4A413A)
 )
 
 /** Esquema de Material 3 de la paleta para el modo indicado. */
