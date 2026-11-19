@@ -203,7 +203,7 @@ fun HijoTrackingScreen(
     }
 
     // 🚀 2. IMPLEMENTACIÓN DEL CONTENEDOR BASE
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent, // Fondo transparente para que funcione la estética Premium/Fondo unificado
             topBar = {

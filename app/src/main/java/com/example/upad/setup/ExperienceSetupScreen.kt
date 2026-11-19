@@ -67,7 +67,7 @@ fun ExperienceSetupScreen(
     val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
     val colorSuperficieSeleccionada = MaterialTheme.colorScheme.secondaryContainer
 
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Column(
             modifier = Modifier
                 .fillMaxSize()

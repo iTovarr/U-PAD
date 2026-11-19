@@ -103,7 +103,7 @@ fun DeviceManagementScreen(
     }
 
     // 🚀 2. IMPLEMENTAR EL CONTENEDOR BASE
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {

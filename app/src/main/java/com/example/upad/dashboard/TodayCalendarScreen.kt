@@ -74,7 +74,7 @@ fun TodayCalendarScreen(
 
     val diaDeHoy = remember { RoutineProgressCalculator.obtenerDiaDeHoy() }
 
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {

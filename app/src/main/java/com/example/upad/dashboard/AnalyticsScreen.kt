@@ -122,7 +122,7 @@ fun AnalyticsScreen(
     val generalPercentage = (generalProgress * 100).toInt()
 
     // 🚀 2. CONTENEDOR BASE UNIFICADO
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {

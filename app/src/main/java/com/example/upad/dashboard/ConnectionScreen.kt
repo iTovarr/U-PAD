@@ -111,7 +111,7 @@ fun ConnectionScreen(
     }
 
     // 🚀 2. IMPLEMENTACIÓN DEL CONTENEDOR BASE
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {

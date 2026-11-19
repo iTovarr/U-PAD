@@ -140,7 +140,7 @@ fun NotificationsScreen(
         }
     }
 
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {

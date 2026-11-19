@@ -76,7 +76,7 @@ fun HelpTutorialScreen(
     val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     // 🌸 GRADIENTE O FONDO PREMIUM INTEGRADO
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {

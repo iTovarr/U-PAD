@@ -210,7 +210,7 @@ fun CreateRoutineScreen(
     }
 
     // 🚀 WRAPPER PRINCIPAL QUE PINTA EL DEGRADADO DE FONDO ADAPTATIVO
-    UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
+    UPADBackgroundWrapper() {
         Scaffold(
             containerColor = colorFondoBase,
             bottomBar = {
