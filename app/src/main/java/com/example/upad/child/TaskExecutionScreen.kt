@@ -55,6 +55,7 @@ import com.example.upad.ui.theme.extendedColors
 import com.example.upad.utils.RoutineProgressCalculator
 import com.example.upad.utils.Turnos
 import com.example.upad.viewmodel.RoutineViewModel
+import com.example.upad.viewmodel.TaskItem
 import kotlinx.coroutines.delay
 
 /**
@@ -119,65 +120,90 @@ fun TaskExecutionScreen(
                 onContinuar = { onFinishRoutine(activityName) }
             )
 
-            else -> Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .safeDrawingPadding()
-                    .padding(24.dp)
-            ) {
-                // Contenido desplazable por si la pantalla es pequeña; el botón queda fijo abajo.
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Pictograma(nombre = currentTask.actividad, imageUrl = currentTask.imageUrl)
-
-                    Text(
-                        text = currentTask.actividad.uppercase(),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.semantics { heading() }
+            else -> TareaEnCurso(
+                tarea = currentTask,
+                perfil = perfil,
+                restante = tiempoRestanteSegundos.toFloat() / tiempoInicialSegundos,
+                textoTiempo = textoTemporizador,
+                tiempoCumplido = tiempoRestanteSegundos == 0,
+                onEscuchar = { audio.leer(currentTask.actividad, perfil) },
+                onTerminar = {
+                    audio.sonarTareaCompletada(perfil)
+                    viewModel.completeTaskPorNombre(
+                        userId = currentUserId,
+                        turn = turn,
+                        actividadTexto = currentTask.actividad,
+                        diaActual = RoutineProgressCalculator.obtenerDiaDeHoy()
                     )
-
-                    if (perfil.voz) {
-                        ChildSecondaryButton(
-                            text = stringResource(R.string.child_listen_again),
-                            onClick = { audio.leer(currentTask.actividad, perfil) },
-                            icon = Icons.AutoMirrored.Filled.VolumeUp
-                        )
-                    }
-
-                    ChildTimer(
-                        estilo = perfil.temporizador,
-                        restante = tiempoRestanteSegundos.toFloat() / tiempoInicialSegundos,
-                        textoTiempo = textoTemporizador,
-                        terminado = tiempoRestanteSegundos == 0
-                    )
+                    tareaTerminada = true
                 }
+            )
+        }
+    }
+}
 
-                Spacer(modifier = Modifier.height(16.dp))
-                ChildPrimaryButton(
-                    text = stringResource(R.string.child_finished),
-                    icon = Icons.Default.Check,
-                    onClick = {
-                        audio.sonarTareaCompletada(perfil)
-                        viewModel.completeTaskPorNombre(
-                            userId = currentUserId,
-                            turn = turn,
-                            actividadTexto = currentTask.actividad,
-                            diaActual = RoutineProgressCalculator.obtenerDiaDeHoy()
-                        )
-                        tareaTerminada = true
-                    }
+/**
+ * Contenido de la tarea en curso, sin estado: recibe los datos ya calculados y
+ * avisa de las acciones. Se puede previsualizar y probar sin ViewModel ni Firebase.
+ */
+@Composable
+internal fun TareaEnCurso(
+    tarea: TaskItem,
+    perfil: SensoryProfile,
+    restante: Float,
+    textoTiempo: String,
+    tiempoCumplido: Boolean,
+    onEscuchar: () -> Unit,
+    onTerminar: () -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .padding(24.dp)
+    ) {
+        // Contenido desplazable por si la pantalla es pequeña; el botón queda fijo abajo.
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Pictograma(nombre = tarea.actividad, imageUrl = tarea.imageUrl)
+
+            Text(
+                text = tarea.actividad.uppercase(),
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.semantics { heading() }
+            )
+
+            if (perfil.voz) {
+                ChildSecondaryButton(
+                    text = stringResource(R.string.child_listen_again),
+                    onClick = onEscuchar,
+                    icon = Icons.AutoMirrored.Filled.VolumeUp
                 )
             }
+
+            ChildTimer(
+                estilo = perfil.temporizador,
+                restante = restante,
+                textoTiempo = textoTiempo,
+                terminado = tiempoCumplido
+            )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+        ChildPrimaryButton(
+            text = stringResource(R.string.child_finished),
+            icon = Icons.Default.Check,
+            onClick = onTerminar
+        )
     }
 }
 
