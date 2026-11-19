@@ -1,6 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -60,14 +60,13 @@ fun TodayCalendarScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     val tasksManana by routineViewModel.tasksManana.collectAsState()
     val tasksTarde by routineViewModel.tasksTarde.collectAsState()
@@ -99,8 +98,8 @@ fun TodayCalendarScreen(
             ) {
                 Text(
                     text = "Revisa el estado de las rutinas de tu hijo correspondientes al día de hoy ($diaDeHoy).",
-                    fontSize = 14.sp,
-                    color = colorTextoSecundario
+                    color = colorTextoSecundario,
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 if (tasksManana.isEmpty() && tasksTarde.isEmpty() && tasksNoche.isEmpty()) {
@@ -113,8 +112,7 @@ fun TodayCalendarScreen(
                         Text(
                             text = stringResource(id = R.string.no_activities_today),
                             color = colorTextoSecundario,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Medium
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 } else {
@@ -174,9 +172,8 @@ fun TurnCalendarBlock(
     ) {
         Text(
             text = title,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = colorTexto
+            color = colorTexto,
+            style = MaterialTheme.typography.titleSmall
         )
         tasks.forEach { task ->
             val completada = task.estaCompletadaHoy(diaDeHoy)
@@ -196,7 +193,7 @@ fun TurnCalendarBlock(
                     Box(
                         modifier = Modifier
                             .size(50.dp)
-                            .background(Color.White, RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surfaceContainerLowest, RoundedCornerShape(12.dp))
                             .padding(4.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -207,7 +204,7 @@ fun TurnCalendarBlock(
                                 modifier = Modifier.fillMaxSize()
                             )
                         } else {
-                            Text(text = "⭐", fontSize = 24.sp)
+                            Text(text = "⭐", style = MaterialTheme.typography.headlineSmall)
                         }
                     }
 
@@ -216,14 +213,13 @@ fun TurnCalendarBlock(
                     ) {
                         Text(
                             text = task.actividad,
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = colorTexto
+                            color = colorTexto,
+                            style = MaterialTheme.typography.titleSmall
                         )
                         Text(
                             text = "${task.duration} minutos",
-                            fontSize = 12.sp,
-                            color = colorSubtexto
+                            color = colorSubtexto,
+                            style = MaterialTheme.typography.bodySmall
                         )
                     }
 
@@ -231,7 +227,7 @@ fun TurnCalendarBlock(
                         Icon(
                             imageVector = Icons.Default.CheckCircle,
                             contentDescription = stringResource(id = R.string.status_completed),
-                            tint = Color(0xFF4CAF50), // Verde
+                            tint = MaterialTheme.extendedColors.success,
                             modifier = Modifier.size(28.dp)
                         )
                     } else {
