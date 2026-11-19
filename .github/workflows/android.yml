@@ -29,7 +29,7 @@ jobs:
           java-version: '21'
 
       - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       # El google-services.json real no se versiona. Para compilar basta con uno
       # de relleno: la CI no ejecuta la app ni se conecta a Firebase.
