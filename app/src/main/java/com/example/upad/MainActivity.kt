@@ -153,11 +153,12 @@ class MainActivity : AppCompatActivity() {
 
             // SettingsViewModel es la única fuente del tema: lo lee y lo guarda con ThemePreferences.
             val isDarkTheme by settingsViewModel.isDarkMode.collectAsState()
+            val palette by settingsViewModel.palette.collectAsState()
 
             val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = null)
 
             CompositionLocalProvider(LocalAppContainer provides container) {
-                UPadTheme(darkTheme = isDarkTheme, isPremium = isPremiumUser ?: false) {
+                UPadTheme(darkTheme = isDarkTheme, palette = palette) {
                     UPadNavigation(
                         bloqueoActivo = ordenBloqueoPadreActiva,
                         routineViewModel = routineViewModel,
