@@ -55,18 +55,6 @@ class ParentProfileRepository(
         )
     }
 
-    /** Guarda los ajustes de tema y audio. Igual que el plan, no espera al servidor. */
-    fun saveExperienceSettings(uid: String, tema: String, volumenAudio: Double, vozHabilitada: Boolean) {
-        usuario(uid).collection("configuracion").document("experiencia").set(
-            mapOf(
-                "temaSeleccionado" to tema,
-                "volumenAudio" to volumenAudio,
-                "vozHabilitada" to vozHabilitada
-            ),
-            SetOptions.merge()
-        )
-    }
-
     /** Sube la foto de perfil del hijo y devuelve su URL de descarga. */
     suspend fun uploadChildPhoto(uid: String, imageUri: Uri): String {
         val ref = storage.reference.child("usuarios/$uid/perfil_hijo.jpg")
