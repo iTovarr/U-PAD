@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import com.example.upad.data.TaskItemMapper
 import com.example.upad.viewmodel.RoutineViewModel
 import kotlinx.coroutines.delay
@@ -59,6 +61,13 @@ fun TaskExecutionScreen(
     }
 
     var mostrandoCelebracionIdivual by remember { mutableStateOf(false) }
+
+    // Voz y sonido según el perfil sensorial que eligió el tutor.
+    val perfil = LocalSensoryProfile.current
+    val audio = rememberChildAudio()
+    LaunchedEffect(currentTask?.actividad) {
+        currentTask?.let { audio.leer(it.actividad, perfil) }
+    }
 
     // --- ⏱️ TEMPORIZADOR: dura lo que el tutor asignó a la tarea (en minutos) ---
     val tiempoInicialSegundos = remember(currentTask) {
@@ -184,6 +193,13 @@ fun TaskExecutionScreen(
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
+                if (perfil.voz) {
+                    TextButton(onClick = { audio.leer(currentTask.actividad, perfil) }) {
+                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(stringResource(R.string.child_listen_again))
+                    }
+                }
 
                 // ⏱️ RELOJ VISUAL TIME TIMER (CIRCULO ROJO PASTEL DECRECIENTE) PARA NIÑOS CON TEA
                 val progreso = if (tiempoInicialSegundos > 0) tiempoRestanteSegundos.toFloat() / tiempoInicialSegundos else 0f
@@ -239,6 +255,7 @@ fun TaskExecutionScreen(
                 // El temporizador es una guía visual: el niño puede terminar cuando acabe la tarea.
                 Button(
                     onClick = {
+                        audio.sonarTareaCompletada(perfil)
                         viewModel.completeTaskPorNombre(
                             userId = currentUserId,
                             turn = turn,
