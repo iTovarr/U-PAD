@@ -30,9 +30,23 @@ La aplicación está disponible en español, inglés, francés, alemán, portugu
 
 ## Capturas
 
-| Bienvenida | Selección de rol | Inicio de sesión | Edición de rutinas | Seguimiento |
-|:---:|:---:|:---:|:---:|:---:|
-| <img width="180" alt="Pantalla de bienvenida" src="https://github.com/user-attachments/assets/65c0da67-eafd-4e48-b7d1-ace815470a0e" /> | <img width="180" alt="Selección de rol" src="https://github.com/user-attachments/assets/3fa0f043-6db0-46b9-b2bf-2c9b6cc5b1f3" /> | <img width="180" alt="Inicio de sesión" src="https://github.com/user-attachments/assets/01a805b9-005a-4c58-aab0-24ef8d4136c4" /> | <img width="180" alt="Panel de edición de rutinas" src="https://github.com/user-attachments/assets/b71ea66b-c720-4832-9861-230a049573dc" /> | <img width="180" alt="Mapa de seguimiento del dispositivo del niño" src="https://github.com/user-attachments/assets/a317f8bc-bc8a-42cc-be33-b7cdf2ba1f85" /> |
+**Modo niño**: pictogramas grandes, un solo botón fijo abajo y colores suaves. El tutor ajusta la paleta, el modo claro u oscuro, el temporizador, la voz y las celebraciones desde el perfil sensorial.
+
+| Inicio del día | Tarea en curso | ¿Cómo te sientes? |
+|:---:|:---:|:---:|
+| <img width="220" alt="Inicio del día con las tareas por turno" src="docs/capturas/nino-inicio.png" /> | <img width="220" alt="Tarea en curso con pictograma y temporizador" src="docs/capturas/nino-tarea.png" /> | <img width="220" alt="Tarjetas de emociones" src="docs/capturas/nino-emociones.png" /> |
+
+| Rutina completada | Noche, modo oscuro | Paleta Tierra |
+|:---:|:---:|:---:|
+| <img width="220" alt="Rutina completada" src="docs/capturas/nino-logro.png" /> | <img width="220" alt="Tarea de noche en modo oscuro" src="docs/capturas/nino-tarea-noche.png" /> | <img width="220" alt="Tarea con la paleta Tierra" src="docs/capturas/nino-tarea-tierra.png" /> |
+
+**Panel del tutor**
+
+| Ajustes (Calma, claro) | Ajustes (Tierra, oscuro) | Perfil sensorial |
+|:---:|:---:|:---:|
+| <img width="220" alt="Ajustes con la paleta Calma en modo claro" src="docs/capturas/tutor-ajustes.png" /> | <img width="220" alt="Ajustes con la paleta Tierra en modo oscuro" src="docs/capturas/tutor-ajustes-tierra-oscuro.png" /> | <img width="220" alt="Perfil sensorial del modo niño" src="docs/capturas/tutor-perfil-sensorial.png" /> |
+
+Las capturas se generan con Robolectric a partir del código (`./gradlew :app:testDebugUnitTest --tests 'com.example.upad.capturas.CapturasTest'`), así que se pueden actualizar tras cada cambio de diseño.
 
 [Ver la demostración en vídeo](https://youtu.be/fVQU3RGt8KI)
 
