@@ -1,6 +1,5 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.UPadColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -67,15 +66,14 @@ fun HelpTutorialScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
     // 🎨 PALETA ADAPTATIVA COMPATIBLE
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     // 🌸 GRADIENTE O FONDO PREMIUM INTEGRADO
     UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
@@ -102,14 +100,13 @@ fun HelpTutorialScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.help_how_to_use),
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Black,
-                    color = colorTextoPrincipal
+                    color = colorTextoPrincipal,
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Text(
                     text = stringResource(id = R.string.help_intro),
-                    fontSize = 14.sp,
-                    color = colorTextoSecundario
+                    color = colorTextoSecundario,
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 // 🔄 FILA DE SUBTÍTULOS ADAPTATIVOS
@@ -129,9 +126,9 @@ fun HelpTutorialScreen(
                     ) {
                         Text(
                             text = stringResource(id = R.string.help_tab_instructions),
-                            fontSize = 16.sp,
                             fontWeight = if (pestañaSeleccionada == 0) FontWeight.Bold else FontWeight.Normal,
-                            color = if (pestañaSeleccionada == 0) colorAcabadoPrincipal else colorTextoSecundario.copy(alpha = 0.6f)
+                            color = if (pestañaSeleccionada == 0) colorAcabadoPrincipal else colorTextoSecundario.copy(alpha = 0.6f),
+                            style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Box(
@@ -154,9 +151,9 @@ fun HelpTutorialScreen(
                     ) {
                         Text(
                             text = stringResource(id = R.string.help_tab_video),
-                            fontSize = 16.sp,
                             fontWeight = if (pestañaSeleccionada == 1) FontWeight.Bold else FontWeight.Normal,
-                            color = if (pestañaSeleccionada == 1) colorAcabadoPrincipal else colorTextoSecundario.copy(alpha = 0.6f)
+                            color = if (pestañaSeleccionada == 1) colorAcabadoPrincipal else colorTextoSecundario.copy(alpha = 0.6f),
+                            style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Box(
@@ -239,8 +236,7 @@ fun HelpTutorialScreen(
                                 Text(
                                     text = stringResource(id = R.string.help_play_video),
                                     color = colorTextoPrincipal,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 15.sp
+                                    style = MaterialTheme.typography.titleSmall
                                 )
                             }
                         }
@@ -288,15 +284,14 @@ fun TutorialStepItem(
             Column {
                 Text(
                     text = title,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = colorTexto
+                    color = colorTexto,
+                    style = MaterialTheme.typography.titleSmall
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = description,
-                    fontSize = 13.sp,
-                    color = colorSecundario
+                    color = colorSecundario,
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
