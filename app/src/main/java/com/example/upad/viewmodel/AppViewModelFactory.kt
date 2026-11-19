@@ -26,6 +26,10 @@ class AppViewModelFactory(private val container: AppContainer) : ViewModelProvid
             themePreferences = container.themePreferences,
             repository = container.firebaseRepository
         )
+        modelClass.isAssignableFrom(SensoryProfileViewModel::class.java) -> SensoryProfileViewModel(
+            parentProfileRepository = container.parentProfileRepository,
+            sessionRepository = container.sessionRepository
+        )
         modelClass.isAssignableFrom(AiViewModel::class.java) -> AiViewModel(
             aiService = container.aiRepository,
             languageFlow = container.languageDataStore.languageFlow
