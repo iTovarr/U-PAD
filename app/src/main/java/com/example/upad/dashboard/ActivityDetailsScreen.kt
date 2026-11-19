@@ -1,9 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.ColorAzulTEA
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
-import com.example.upad.ui.theme.TextoSecundarioClaro
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -38,8 +35,8 @@ fun ActivityDetailsScreen(
     viewModel: RoutineViewModel,
     onBack: () -> Unit
 ) {
-    val colorAzulTEA = ColorAzulTEA
-    val colorFondoBase = LightBackground
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     // Forzamos la recarga de las rutinas de la base de datos al abrir la pantalla
     LaunchedEffect(Unit) {
@@ -78,7 +75,7 @@ fun ActivityDetailsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(top = 40.dp, bottom = 24.dp, start = 16.dp, end = 24.dp)
         ) {
             IconButton(onClick = onBack) {
@@ -86,17 +83,15 @@ fun ActivityDetailsScreen(
             }
             Text(
                 text = stringResource(id = R.string.details_overline),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Black,
-                color = TextoTenueClaro,
-                modifier = Modifier.padding(start = 12.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 12.dp),
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
                 text = stringResource(id = R.string.details_title),
-                fontSize = 26.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = MaterialTheme.typography.headlineSmall
             )
         }
 
@@ -105,9 +100,8 @@ fun ActivityDetailsScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
                     text = stringResource(id = R.string.details_empty),
-                    color = TextoSecundarioClaro,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         } else {
@@ -120,10 +114,9 @@ fun ActivityDetailsScreen(
                 item {
                     Text(
                         text = "ESTADO DE LA AGENDA HOY (${diaActualTexto})",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextoSecundarioClaro,
-                        modifier = Modifier.padding(start = 8.dp)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 8.dp),
+                        style = MaterialTheme.typography.labelMedium
                     )
                 }
 
@@ -134,8 +127,8 @@ fun ActivityDetailsScreen(
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(modifier = Modifier.padding(20.dp)) {
                             Row(
@@ -145,10 +138,9 @@ fun ActivityDetailsScreen(
                             ) {
                                 Text(
                                     text = task.actividad.uppercase(),
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = Color.DarkGray,
-                                    modifier = Modifier.weight(1f)
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium
                                 )
 
                                 // Indicador visual de estado para el padre
@@ -157,8 +149,8 @@ fun ActivityDetailsScreen(
                                         onClick = {},
                                         label = { Text(stringResource(id = R.string.details_done), fontWeight = FontWeight.Bold) },
                                         colors = SuggestionChipDefaults.suggestionChipColors(
-                                            containerColor = Color(0xFFE8F5E9),
-                                            labelColor = Color(0xFF2E7D32)
+                                            containerColor = MaterialTheme.extendedColors.successContainer,
+                                            labelColor = MaterialTheme.extendedColors.onSuccessContainer
                                         )
                                     )
                                 } else {
@@ -166,8 +158,8 @@ fun ActivityDetailsScreen(
                                         onClick = {},
                                         label = { Text(stringResource(id = R.string.details_pending), fontWeight = FontWeight.Bold) },
                                         colors = SuggestionChipDefaults.suggestionChipColors(
-                                            containerColor = Color(0xFFFFF3E0),
-                                            labelColor = Color(0xFFE65100)
+                                            containerColor = MaterialTheme.extendedColors.turnoManana,
+                                            labelColor = MaterialTheme.extendedColors.onTurnoManana
                                         )
                                     )
                                 }
@@ -192,7 +184,7 @@ fun ActivityDetailsScreen(
                                 icon = if (estaCompletada) Icons.Default.CheckCircle else Icons.Default.PendingActions,
                                 label = stringResource(id = R.string.details_step_status),
                                 value = if (estaCompletada) "El niño completó la actividad con éxito" else "Esperando a que el niño termine",
-                                color = if (estaCompletada) Color(0xFF81C784) else Color(0xFFFFB74D)
+                                color = if (estaCompletada) MaterialTheme.extendedColors.success else MaterialTheme.extendedColors.premium
                             )
                         }
                     }
@@ -218,8 +210,8 @@ fun DetailRow(icon: ImageVector, label: String, value: String, color: Color) {
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(text = label, fontSize = 11.sp, color = TextoSecundarioClaro)
-            Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.DarkGray)
+            Text(text = label, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
+            Text(text = value, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleSmall)
         }
     }
 }
