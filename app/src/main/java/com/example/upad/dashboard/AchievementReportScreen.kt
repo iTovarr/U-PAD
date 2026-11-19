@@ -1,8 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.ColorAzulTEA
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -31,12 +29,12 @@ fun AchievementReportScreen(
     onNavigateToHelp: () -> Unit = {},
     onNavigateToProfile: () -> Unit = {}
 ) {
-    val colorAzulTEA = ColorAzulTEA
-    val colorFondoBase = LightBackground
-    val colorVerdeLogro = Color(0xFF81C784)
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorFondoBase = MaterialTheme.colorScheme.background
+val colorVerdeLogro = MaterialTheme.extendedColors.success
 
     // Lógica obligatoria para calcular el fondo sólido del componente
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
     Scaffold(
         topBar = {
@@ -65,8 +63,8 @@ fun AchievementReportScreen(
                     .fillMaxWidth()
                     .height(220.dp),
                 shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -80,7 +78,7 @@ fun AchievementReportScreen(
                         Text(
                             text = stringResource(id = R.string.report_weekly_activity),
                             fontWeight = FontWeight.Bold,
-                            color = Color.DarkGray
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Icon(Icons.Default.Insights, contentDescription = null, tint = colorAzulTEA)
                     }
@@ -92,9 +90,9 @@ fun AchievementReportScreen(
                         // Aquí integrarás tu librería de gráficos más adelante
                         Text(
                             stringResource(id = R.string.report_chart_placeholder),
-                            color = Color.LightGray,
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
 
@@ -103,7 +101,7 @@ fun AchievementReportScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         LegendItem(label = stringResource(id = R.string.report_autonomous), color = colorVerdeLogro)
-                        LegendItem(label = stringResource(id = R.string.report_with_help), color = Color(0xFFFFD54F))
+                        LegendItem(label = stringResource(id = R.string.report_with_help), color = MaterialTheme.extendedColors.premium)
                     }
                 }
             }
@@ -114,8 +112,7 @@ fun AchievementReportScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.cardColors(containerColor = colorVerdeLogro.copy(alpha = 0.1f)),
-                border = androidx.compose.foundation.BorderStroke(1.dp, colorVerdeLogro.copy(alpha = 0.3f))
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.extendedColors.successContainer)
             ) {
                 Row(
                     modifier = Modifier.padding(24.dp),
@@ -131,15 +128,13 @@ fun AchievementReportScreen(
                     Column {
                         Text(
                             text = stringResource(id = R.string.report_autonomy_sample),
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Black,
-                            color = Color(0xFF2E7D32)
+                            color = MaterialTheme.extendedColors.onSuccessContainer,
+                            style = MaterialTheme.typography.headlineSmall
                         )
                         Text(
                             text = stringResource(id = R.string.report_weekly_praise),
-                            fontSize = 14.sp,
-                            color = Color(0xFF455A64),
-                            lineHeight = 18.sp
+                            color = MaterialTheme.extendedColors.onSuccessContainer,
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
                 }
@@ -154,14 +149,13 @@ fun AchievementReportScreen(
                     .fillMaxWidth()
                     .height(65.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Text(
                     stringResource(id = R.string.report_details_button),
                     color = colorAzulTEA,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 15.sp
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -178,6 +172,6 @@ fun LegendItem(label: String, color: Color) {
                 .background(color, RoundedCornerShape(2.dp))
         )
         Spacer(modifier = Modifier.width(6.dp))
-        Text(text = label, fontSize = 11.sp, color = Color.Gray)
+        Text(text = label, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelSmall)
     }
 }
