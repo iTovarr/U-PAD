@@ -22,6 +22,10 @@ U-Pad incluye un plan Premium de pago. Mientras el pago sea simulado, como ahora
 2. Sustituir los pictogramas por un conjunto con licencia que permita el uso comercial.
 3. Mantener la app gratuita.
 
+## Fuente Atkinson Hyperlegible
+
+La tipografía de la app es [Atkinson Hyperlegible](https://www.brailleinstitute.org/freefont/), creada por el Braille Institute of America para que cada carácter sea fácil de distinguir. Se distribuye bajo la licencia [SIL Open Font License 1.1](licencias/OFL-AtkinsonHyperlegible.txt), que permite incluirla en la app y redistribuirla junto con el texto de la licencia. Los archivos están en `app/src/main/res/font/` y proceden del repositorio oficial de Google Fonts.
+
 ## Servicios externos
 
 | Servicio | Uso en la app | Condiciones |
