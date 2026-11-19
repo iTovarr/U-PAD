@@ -1,34 +1,66 @@
 package com.example.upad.child
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import com.example.upad.di.LocalAppContainer
-import com.example.upad.R
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.example.upad.R
+import com.example.upad.data.CelebrationStyle
+import com.example.upad.data.SensoryProfile
 import com.example.upad.data.TaskItemMapper
+import com.example.upad.di.LocalAppContainer
+import com.example.upad.ui.theme.extendedColors
+import com.example.upad.utils.RoutineProgressCalculator
+import com.example.upad.utils.Turnos
 import com.example.upad.viewmodel.RoutineViewModel
 import kotlinx.coroutines.delay
 import java.util.Locale
-import androidx.compose.ui.res.stringResource
 
+/**
+ * Pantalla en la que el niño realiza una tarea: pictograma grande, nombre de la
+ * tarea, temporizador como guía y un único botón para terminar, siempre abajo.
+ */
 @Composable
 fun TaskExecutionScreen(
     viewModel: RoutineViewModel,
@@ -37,30 +69,20 @@ fun TaskExecutionScreen(
     padreId: String,
     onFinishRoutine: (String) -> Unit
 ) {
-    val colorFondoNiño = Color(0xFFE1F5FE)
-    val colorVerdeExito = Color(0xFF4CAF50)
-    val colorGrisBloqueado = Color(0xFFB0BEC5)
-    val colorNaranjaPomodoro = Color(0xFFFF5722)
-
     val session = LocalAppContainer.current.sessionRepository
-    val currentUserId = remember {
-        padreId.ifEmpty {
-            session.currentUserId
-        }
-    }
+    val currentUserId = remember { padreId.ifEmpty { session.currentUserId } }
 
-    // Recolectamos las tareas del turno actual desde el ViewModel
+    // Tareas del turno de esta tarea
     val tasks by when (turn.uppercase()) {
-        "MAÑANA" -> viewModel.tasksManana.collectAsState()
-        "TARDE" -> viewModel.tasksTarde.collectAsState()
+        Turnos.MANANA -> viewModel.tasksManana.collectAsState()
+        Turnos.TARDE -> viewModel.tasksTarde.collectAsState()
         else -> viewModel.tasksNoche.collectAsState()
     }
-
     val currentTask = remember(tasks, activityName) {
         tasks.firstOrNull { it.actividad.uppercase().trim() == activityName.uppercase().trim() }
     }
 
-    var mostrandoCelebracionIdivual by remember { mutableStateOf(false) }
+    var tareaTerminada by remember { mutableStateOf(false) }
 
     // Voz y sonido según el perfil sensorial que eligió el tutor.
     val perfil = LocalSensoryProfile.current
@@ -69,220 +91,200 @@ fun TaskExecutionScreen(
         currentTask?.let { audio.leer(it.actividad, perfil) }
     }
 
-    // --- ⏱️ TEMPORIZADOR: dura lo que el tutor asignó a la tarea (en minutos) ---
+    // Temporizador: dura lo que el tutor asignó a la tarea (en minutos). Es una guía
+    // visual: el niño puede terminar cuando acabe la tarea.
     val tiempoInicialSegundos = remember(currentTask) {
         (currentTask?.duration ?: TaskItemMapper.DURACION_POR_DEFECTO).coerceAtLeast(1) * 60
     }
     var tiempoRestanteSegundos by remember(tiempoInicialSegundos) { mutableStateOf(tiempoInicialSegundos) }
-    var tiempoCumplido by remember(tiempoInicialSegundos) { mutableStateOf(false) }
-
-    // Corrutina que gestiona el paso de los segundos
-    // Corrutina que gestiona el paso de los segundos (Estructura corregida para Compose)
-    LaunchedEffect(currentTask, mostrandoCelebracionIdivual) {
-        if (currentTask != null && !mostrandoCelebracionIdivual) {
+    LaunchedEffect(currentTask, tareaTerminada) {
+        if (currentTask != null && !tareaTerminada) {
             while (tiempoRestanteSegundos > 0) {
                 delay(1000)
                 tiempoRestanteSegundos -= 1
             }
-            tiempoCumplido = true
         }
     }
+    val textoTemporizador = String.format(
+        Locale.getDefault(), "%02d:%02d", tiempoRestanteSegundos / 60, tiempoRestanteSegundos % 60
+    )
 
-    // Formateador visual para el reloj (MM:SS)
-    val textoTemporizador = remember(tiempoRestanteSegundos) {
-        val minutos = tiempoRestanteSegundos / 60
-        val segundos = tiempoRestanteSegundos % 60
-        String.format(Locale.getDefault(), "%02d:%02d", minutos, segundos)
-    }
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        when {
+            currentTask == null -> Cargando()
 
-    val diaActualTexto = remember {
-        when (java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_WEEK)) {
-            java.util.Calendar.MONDAY -> "LUN"
-            java.util.Calendar.TUESDAY -> "MAR"
-            java.util.Calendar.WEDNESDAY -> "MIÉ"
-            java.util.Calendar.THURSDAY -> "JUE"
-            java.util.Calendar.FRIDAY -> "VIE"
-            java.util.Calendar.SATURDAY -> "SÁB"
-            java.util.Calendar.SUNDAY -> "DOM"
-            else -> "LUN"
-        }
-    }
+            tareaTerminada -> Celebracion(
+                perfil = perfil,
+                onContinuar = { onFinishRoutine(activityName) }
+            )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(colorFondoNiño, Color.White))),
-        contentAlignment = Alignment.Center
-    ) {
-        if (currentTask == null) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator(color = Color(0xFF0288D1), strokeWidth = 5.dp)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(stringResource(R.string.loading_activity), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF01579B))
-            }
-        }
-        else if (mostrandoCelebracionIdivual) {
-            Column(
+            else -> Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .safeDrawingPadding()
+                    .padding(24.dp)
             ) {
-                Text(text = "✨ ⭐ 🏆 ⭐ ✨", fontSize = 60.sp, textAlign = TextAlign.Center)
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(text = stringResource(R.string.mission_accomplished), fontSize = 36.sp, fontWeight = FontWeight.Black, color = colorVerdeExito, textAlign = TextAlign.Center)
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(text = stringResource(R.string.focused_great_job), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0288D1), textAlign = TextAlign.Center)
-                Spacer(modifier = Modifier.height(40.dp))
-                // Nada avanza solo: el niño decide cuándo pasar a la siguiente pantalla.
-                ChildPrimaryButton(
-                    text = stringResource(R.string.child_mode_continue),
-                    onClick = { onFinishRoutine(activityName) },
-                    modifier = Modifier.padding(horizontal = 24.dp)
-                )
-            }
-        }
-        else {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxSize().padding(24.dp)
-            ) {
-                // Cabecera indicadora
-                Text(
-                    text = stringResource(R.string.active_focus),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color(0xFF0288D1),
-                    letterSpacing = 2.sp,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-
-                // 🖼️ CONTENEDOR CENTRAL DEL PICTOGRAMA
-                Card(
-                    shape = RoundedCornerShape(36.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-                    border = BorderStroke(4.dp, if (tiempoCumplido) colorVerdeExito else colorNaranjaPomodoro),
-                    modifier = Modifier.size(260.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                        if (currentTask.imageUrl.isNotEmpty()) {
-                            AsyncImage(
-                                model = currentTask.imageUrl,
-                                contentDescription = currentTask.actividad,
-                                modifier = Modifier.fillMaxSize().padding(24.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                        } else {
-                            Text(
-                                text = currentTask.actividad.take(1).uppercase(),
-                                fontSize = 100.sp,
-                                fontWeight = FontWeight.Black,
-                                color = Color(0xFFCFD8DC)
-                            )
-                        }
-                    }
-                }
-
-                // Nombre Gigante de la Actividad
-                Text(
-                    text = currentTask.actividad.uppercase(),
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color(0xFF01579B),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                )
-                if (perfil.voz) {
-                    TextButton(onClick = { audio.leer(currentTask.actividad, perfil) }) {
-                        Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.child_listen_again))
-                    }
-                }
-
-                // ⏱️ RELOJ VISUAL TIME TIMER (CIRCULO ROJO PASTEL DECRECIENTE) PARA NIÑOS CON TEA
-                val progreso = if (tiempoInicialSegundos > 0) tiempoRestanteSegundos.toFloat() / tiempoInicialSegundos else 0f
-                val colorRojoPastel = Color(0xFFFF8A80)
-                val colorVerdePastel = Color(0xFF81C784)
-                val colorFondoGris = Color(0xFFECEFF1)
-
+                // Contenido desplazable por si la pantalla es pequeña; el botón queda fijo abajo.
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.size(150.dp)
-                    ) {
-                        Canvas(modifier = Modifier.fillMaxSize()) {
-                            // Círculo de fondo gris
-                            drawCircle(
-                                color = colorFondoGris,
-                                radius = size.minDimension / 2
-                            )
-                            // Arco de tiempo restante (se reduce hacia 0)
-                            val sweepAngle = 360f * progreso
-                            drawArc(
-                                color = if (tiempoCumplido) colorVerdePastel else colorRojoPastel,
-                                startAngle = -90f,
-                                sweepAngle = sweepAngle,
-                                useCenter = true
-                            )
-                        }
+                    Pictograma(nombre = currentTask.actividad, imageUrl = currentTask.imageUrl)
 
-                        // Reloj digital o indicador en el centro
-                        Text(
-                            text = if (tiempoCumplido) "🎉" else textoTemporizador,
-                            fontSize = if (tiempoCumplido) 44.sp else 30.sp,
-                            fontWeight = FontWeight.Black,
-                            color = Color(0xFF37474F)
+                    Text(
+                        text = currentTask.actividad.uppercase(),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.semantics { heading() }
+                    )
+
+                    if (perfil.voz) {
+                        ChildSecondaryButton(
+                            text = stringResource(R.string.child_listen_again),
+                            onClick = { audio.leer(currentTask.actividad, perfil) },
+                            icon = Icons.AutoMirrored.Filled.VolumeUp
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = if (tiempoCumplido) stringResource(R.string.time_completed) else stringResource(R.string.watch_clock_run),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (tiempoCumplido) Color(0xFF2E7D32) else Color(0xFF546E7A)
+                    ChildTimer(
+                        estilo = perfil.temporizador,
+                        restante = tiempoRestanteSegundos.toFloat() / tiempoInicialSegundos,
+                        textoTiempo = textoTemporizador,
+                        terminado = tiempoRestanteSegundos == 0
                     )
                 }
 
-                // 🚨 BOTÓN DE FINALIZACIÓN CONTROLADO
-                // El temporizador es una guía visual: el niño puede terminar cuando acabe la tarea.
-                Button(
+                Spacer(modifier = Modifier.height(16.dp))
+                ChildPrimaryButton(
+                    text = stringResource(R.string.child_finished),
+                    icon = Icons.Default.Check,
                     onClick = {
                         audio.sonarTareaCompletada(perfil)
                         viewModel.completeTaskPorNombre(
                             userId = currentUserId,
                             turn = turn,
                             actividadTexto = currentTask.actividad,
-                            diaActual = diaActualTexto
+                            diaActual = RoutineProgressCalculator.obtenerDiaDeHoy()
                         )
-                        mostrandoCelebracionIdivual = true
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .height(75.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorVerdeExito,
-                        disabledContainerColor = colorGrisBloqueado.copy(alpha = 0.6f)
-                    ),
-                    shape = RoundedCornerShape(24.dp),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = if (tiempoCumplido) 6.dp else 0.dp)
+                        tareaTerminada = true
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun Cargando() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.loading_activity),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+/** Pictograma de la tarea, o su inicial si no tiene imagen. */
+@Composable
+private fun Pictograma(nombre: String, imageUrl: String) {
+    Surface(
+        shape = RoundedCornerShape(32.dp),
+        color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        modifier = Modifier.size(240.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            if (imageUrl.isNotEmpty()) {
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = nombre,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize().padding(24.dp)
+                )
+            } else {
+                Text(
+                    text = nombre.take(1).uppercase(),
+                    style = MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Felicitación al terminar la tarea. Discreta: un visto y un texto. Normal: además
+ * la ilustración de celebración. Solo se anima si el tutor dejó activadas las
+ * animaciones, y no avanza sola: el niño pulsa Continuar.
+ */
+@Composable
+private fun Celebracion(perfil: SensoryProfile, onContinuar: () -> Unit) {
+    val visible = remember { MutableTransitionState(!perfil.animaciones).apply { targetState = true } }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .safeDrawingPadding()
+            .padding(24.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.weight(1f).fillMaxWidth()
+        ) {
+            AnimatedVisibility(visibleState = visible, enter = fadeIn() + scaleIn(initialScale = 0.9f)) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    if (perfil.celebracion == CelebrationStyle.NORMAL) {
+                        Image(
+                            painter = painterResource(id = R.drawable.celebracion),
+                            contentDescription = stringResource(R.string.cd_celebration),
+                            modifier = Modifier.size(180.dp)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.extendedColors.success,
+                            modifier = Modifier.size(96.dp)
+                        )
+                    }
                     Text(
-                        text = stringResource(R.string.child_finished),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Black,
-                        color = Color.White,
+                        text = stringResource(R.string.child_well_done),
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.semantics { heading() }
+                    )
+                    Text(
+                        text = stringResource(R.string.focused_great_job),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center
                     )
                 }
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        ChildPrimaryButton(
+            text = stringResource(R.string.child_mode_continue),
+            onClick = onContinuar
+        )
     }
 }
