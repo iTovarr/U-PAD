@@ -83,12 +83,12 @@ fun AnalyticsScreen(
     // Superficie de tarjetas purificada: Translúcidas en Premium, sólidas en Básico
     val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
-// Un color de la paleta por turno para las barras del gráfico.
+    // Un color de la paleta por turno para las barras del gráfico.
     val colorTurnoManana = MaterialTheme.extendedColors.premium
     val colorTurnoTarde = MaterialTheme.colorScheme.secondary
     val colorTurnoNoche = MaterialTheme.colorScheme.tertiary
 
-val colorFondoIAActiva = MaterialTheme.colorScheme.secondaryContainer
+    val colorFondoIAActiva = MaterialTheme.colorScheme.secondaryContainer
     val colorTextoIAActiva = MaterialTheme.colorScheme.onSecondaryContainer
 
     val tasksManana by routineViewModel.tasksManana.collectAsState()

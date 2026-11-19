@@ -81,8 +81,8 @@ fun ConnectionScreen(
     val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     // Colores de estado fijos que combinan bien en ambos modos
-val colorVerdePremium = MaterialTheme.colorScheme.primary
-val colorRojoSuave = MaterialTheme.colorScheme.error
+    val colorVerdePremium = MaterialTheme.colorScheme.primary
+    val colorRojoSuave = MaterialTheme.colorScheme.error
 
     val idPadre = remember { session.currentUserId }
     var codigoIngresado by remember { mutableStateOf("") }

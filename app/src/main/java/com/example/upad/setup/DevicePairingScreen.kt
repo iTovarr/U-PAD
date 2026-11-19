@@ -66,15 +66,15 @@ fun DevicePairingScreen(
     val pantallaPequeña = configuration.screenHeightDp < 650
 
     // --- PALETA DE COLORES ADAPTATIVA MULTI-TEMA ---
-val colorAzulTEA = MaterialTheme.colorScheme.primary
-val colorVerdeExito = MaterialTheme.extendedColors.success
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorVerdeExito = MaterialTheme.extendedColors.success
 
     // Asignación según la personalización previa del usuario
-val colorFondoBase = MaterialTheme.colorScheme.background
-val colorSuperficie = MaterialTheme.colorScheme.surfaceContainerLowest
-val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
-val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
-val colorBordeInput = MaterialTheme.colorScheme.outline
+    val colorFondoBase = MaterialTheme.colorScheme.background
+    val colorSuperficie = MaterialTheme.colorScheme.surfaceContainerLowest
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
+    val colorBordeInput = MaterialTheme.colorScheme.outline
 
     Column(
         modifier = Modifier

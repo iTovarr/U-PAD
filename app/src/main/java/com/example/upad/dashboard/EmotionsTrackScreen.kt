@@ -227,7 +227,7 @@ fun TurnEmotionsBlock(
 @Composable
 fun EmotionBadge(emocion: String) {
     val config = when (emocion.lowercase().trim()) {
-// Colores suaves de la paleta, los mismos que ve el niño al elegir la emoción.
+        // Colores suaves de la paleta, los mismos que ve el niño al elegir la emoción.
         "feliz" -> BadgeConfig("😊 " + stringResource(R.string.feedback_happy), MaterialTheme.extendedColors.emocionFeliz, MaterialTheme.extendedColors.onEmocion)
         "neutral" -> BadgeConfig("😐 " + stringResource(R.string.feedback_neutral), MaterialTheme.extendedColors.emocionNeutral, MaterialTheme.extendedColors.onEmocion)
         "triste" -> BadgeConfig("🙁 " + stringResource(R.string.feedback_sad), MaterialTheme.extendedColors.emocionTriste, MaterialTheme.extendedColors.onEmocion)

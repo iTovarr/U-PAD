@@ -35,13 +35,13 @@ fun ChangePlanScreen(
 
     val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
     val colorFondoBase = MaterialTheme.colorScheme.background
-val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
     val colorTextoPrincipal = MaterialTheme.colorScheme.onBackground
-val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-val colorOroBanner = MaterialTheme.extendedColors.premiumContainer
+    val colorOroBanner = MaterialTheme.extendedColors.premiumContainer
     val colorTextoOro = MaterialTheme.extendedColors.onPremiumContainer
-val colorVerdeExito = MaterialTheme.extendedColors.success
+    val colorVerdeExito = MaterialTheme.extendedColors.success
 
     Scaffold(
         topBar = {

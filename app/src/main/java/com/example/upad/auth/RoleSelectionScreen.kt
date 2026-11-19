@@ -39,8 +39,8 @@ fun RoleSelectionScreen(
     onRoleSelected: (String) -> Unit
 ) {
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-val colorFondoBase = MaterialTheme.colorScheme.background
-val colorMoradoTutor = MaterialTheme.colorScheme.tertiary
+    val colorFondoBase = MaterialTheme.colorScheme.background
+    val colorMoradoTutor = MaterialTheme.colorScheme.tertiary
 
     val context = LocalContext.current
     val activity = context as? androidx.fragment.app.FragmentActivity

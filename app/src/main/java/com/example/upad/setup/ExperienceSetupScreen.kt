@@ -58,13 +58,13 @@ fun ExperienceSetupScreen(
     var audioVolume by remember { mutableFloatStateOf(SensoryProfile.VOLUMEN_POR_DEFECTO) }
     var voiceEnabled by remember { mutableStateOf(true) }
 
-// --- Colores de la paleta activa ---
+    // --- Colores de la paleta activa ---
     val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
     val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
-val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
     val colorSuperficieSeleccionada = MaterialTheme.colorScheme.secondaryContainer
 
     UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {

@@ -85,16 +85,16 @@ fun ChildProfileSetupScreen(
     }
 
     // --- CONFIGURACIÓN DE COLORES MULTI-TEMA ---
-val colorAzulTEA = MaterialTheme.colorScheme.primary
-val colorAmarilloTEA = MaterialTheme.colorScheme.tertiaryContainer
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorAmarilloTEA = MaterialTheme.colorScheme.tertiaryContainer
 
-val colorFondoBase = MaterialTheme.colorScheme.background
-val colorSuperficie = MaterialTheme.colorScheme.surfaceContainerLowest
-val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
-val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
-val colorBordeInput = MaterialTheme.colorScheme.outline
-val colorFondoIconoDefecto = MaterialTheme.colorScheme.surfaceVariant
-val colorDivisor = MaterialTheme.colorScheme.outlineVariant
+    val colorFondoBase = MaterialTheme.colorScheme.background
+    val colorSuperficie = MaterialTheme.colorScheme.surfaceContainerLowest
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
+    val colorBordeInput = MaterialTheme.colorScheme.outline
+    val colorFondoIconoDefecto = MaterialTheme.colorScheme.surfaceVariant
+    val colorDivisor = MaterialTheme.colorScheme.outlineVariant
 
     Column(
         modifier = Modifier

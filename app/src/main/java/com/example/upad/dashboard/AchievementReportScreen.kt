@@ -31,7 +31,7 @@ fun AchievementReportScreen(
 ) {
     val colorAzulTEA = MaterialTheme.colorScheme.primary
     val colorFondoBase = MaterialTheme.colorScheme.background
-val colorVerdeLogro = MaterialTheme.extendedColors.success
+    val colorVerdeLogro = MaterialTheme.extendedColors.success
 
     // Lógica obligatoria para calcular el fondo sólido del componente
     val colorFondoSolido = MaterialTheme.colorScheme.background
