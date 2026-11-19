@@ -1,7 +1,5 @@
 package com.example.upad.auth
 
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -54,7 +52,7 @@ fun RegisterScreen(
     val focusManager = LocalFocusManager.current
 
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = LightBackground
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     Column(
         modifier = Modifier
@@ -65,7 +63,7 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(start = 24.dp, top = 40.dp, end = 24.dp, bottom = 32.dp)
         ) {
             IconButton(onClick = onBackClick) {
@@ -73,17 +71,15 @@ fun RegisterScreen(
             }
             Text(
                 text = stringResource(id = R.string.register_overline),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Black,
-                color = TextoTenueClaro,
-                modifier = Modifier.padding(start = 12.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 12.dp),
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
                 text = stringResource(id = R.string.register_title),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = MaterialTheme.typography.headlineLarge
             )
         }
 
@@ -103,8 +99,8 @@ fun RegisterScreen(
                 enabled = !isLoading,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorAzulTEA,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                 ),
                 singleLine = true
             )
@@ -121,8 +117,8 @@ fun RegisterScreen(
                 enabled = !isLoading,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorAzulTEA,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                 ),
                 singleLine = true
             )
@@ -140,8 +136,8 @@ fun RegisterScreen(
                 enabled = !isLoading,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorAzulTEA,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                 ),
                 singleLine = true
             )
@@ -194,22 +190,21 @@ fun RegisterScreen(
                     .height(65.dp),
                 shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isLoading) Color.Gray else colorAzulTEA
+                    containerColor = colorAzulTEA
                 ),
                 enabled = !isLoading,
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(24.dp),
                         strokeWidth = 2.dp
                     )
                 } else {
                     Text(
                         text = stringResource(id = R.string.register_button),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Black
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
