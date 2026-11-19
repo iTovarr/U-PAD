@@ -1,9 +1,6 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.ColorAzulTEA
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
-import com.example.upad.ui.theme.TextoSecundarioClaro
+import com.example.upad.ui.theme.extendedColors
 import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,9 +33,8 @@ fun SubscriptionPlansScreen(
     onDirectToProfile: () -> Unit      // 🚀 Te lleva directo a ChildProfileSetupScreen (Plan Básico)
 
 ) {
-    val colorAzulTEA = ColorAzulTEA
-    val colorAmarilloTEA = Color(0xFFFFD54F)
-    val colorFondoBase = LightBackground
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     val container = LocalAppContainer.current
     val session = container.sessionRepository
@@ -62,24 +58,22 @@ fun SubscriptionPlansScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(top = 60.dp, bottom = 30.dp, start = 24.dp, end = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.choose_a_plan),
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.choose_a_plan_desc),
-                fontSize = 16.sp,
-                color = TextoSecundarioClaro,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                lineHeight = 20.sp
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -97,7 +91,7 @@ fun SubscriptionPlansScreen(
                 price = stringResource(id = R.string.free_price),
                 imageRes = R.drawable.plan_basico,
                 isSelected = selectedPlan == "basico",
-                colorTheme = Color.Gray,
+                colorTheme = MaterialTheme.colorScheme.onSurfaceVariant,
                 onClick = { selectedPlan = "basico" }
             )
 
@@ -108,7 +102,7 @@ fun SubscriptionPlansScreen(
                 price = stringResource(id = R.string.premium_price),
                 imageRes = R.drawable.plan_premium,
                 isSelected = selectedPlan == "premium",
-                colorTheme = colorAmarilloTEA,
+                colorTheme = MaterialTheme.extendedColors.premium,
                 onClick = { selectedPlan = "premium" }
             )
         }
@@ -118,7 +112,7 @@ fun SubscriptionPlansScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -138,7 +132,7 @@ fun SubscriptionPlansScreen(
                 shape = RoundedCornerShape(20.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA)
             ) {
-                Text(stringResource(id = R.string.choose_plan_btn), fontSize = 20.sp, fontWeight = FontWeight.Black)
+                Text(stringResource(id = R.string.choose_plan_btn), style = MaterialTheme.typography.titleLarge)
             }
 
             TextButton(
@@ -149,7 +143,7 @@ fun SubscriptionPlansScreen(
                 },
                 modifier = Modifier.padding(top = 8.dp)
             ) {
-                Text(stringResource(id = R.string.other_moment), color = TextoTenueClaro, fontWeight = FontWeight.Bold)
+                Text(stringResource(id = R.string.other_moment), color = MaterialTheme.colorScheme.onSurfaceVariant, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -165,7 +159,7 @@ fun PlanCard(
     colorTheme: Color,
     onClick: () -> Unit
 ) {
-    val colorAzulTEA = ColorAzulTEA
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
 
     Card(
         modifier = Modifier
@@ -173,9 +167,12 @@ fun PlanCard(
             .height(160.dp)
             .clickable(role = Role.Button) { onClick() },
         shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 12.dp else 2.dp),
-        border = if (isSelected) androidx.compose.foundation.BorderStroke(3.dp, colorAzulTEA) else null
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+border = androidx.compose.foundation.BorderStroke(
+            if (isSelected) 2.dp else 1.dp,
+            if (isSelected) colorAzulTEA else MaterialTheme.colorScheme.outlineVariant
+        )
     ) {
         Row(
             modifier = Modifier
@@ -195,21 +192,19 @@ fun PlanCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Black,
-                    color = if (isSelected) colorAzulTEA else Color.DarkGray
+                    color = if (isSelected) colorAzulTEA else MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleMedium
                 )
                 Text(
                     text = price,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colorTheme
+                    color = colorTheme,
+                    style = MaterialTheme.typography.titleSmall
                 )
                 if (title.contains("PREMIUM") || title.contains(stringResource(id = R.string.plan_premium_title))) {
                     Text(
                         text = stringResource(id = R.string.unlimited_pictograms),
-                        fontSize = 12.sp,
-                        color = TextoSecundarioClaro
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
