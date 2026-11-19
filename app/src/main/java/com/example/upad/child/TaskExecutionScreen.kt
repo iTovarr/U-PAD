@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.upad.di.LocalAppContainer
 import com.example.upad.R
+import com.example.upad.data.TaskItemMapper
 import com.example.upad.viewmodel.RoutineViewModel
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -59,10 +60,12 @@ fun TaskExecutionScreen(
 
     var mostrandoCelebracionIdivual by remember { mutableStateOf(false) }
 
-    // --- ⏱️ CONFIGURACIÓN DEL TEMPORIZADOR POMODORO (5 MINUTOS = 300 SEGUNDOS) ---
-    val tiempoInicialSegundos = remember(currentTask) { 1 * 60 }
-    var tiempoRestanteSegundos by remember { mutableStateOf(tiempoInicialSegundos) }
-    var tiempoCumplido by remember { mutableStateOf(false) }
+    // --- ⏱️ TEMPORIZADOR: dura lo que el tutor asignó a la tarea (en minutos) ---
+    val tiempoInicialSegundos = remember(currentTask) {
+        (currentTask?.duration ?: TaskItemMapper.DURACION_POR_DEFECTO).coerceAtLeast(1) * 60
+    }
+    var tiempoRestanteSegundos by remember(tiempoInicialSegundos) { mutableStateOf(tiempoInicialSegundos) }
+    var tiempoCumplido by remember(tiempoInicialSegundos) { mutableStateOf(false) }
 
     // Corrutina que gestiona el paso de los segundos
     // Corrutina que gestiona el paso de los segundos (Estructura corregida para Compose)
@@ -235,20 +238,17 @@ fun TaskExecutionScreen(
                 }
 
                 // 🚨 BOTÓN DE FINALIZACIÓN CONTROLADO
+                // El temporizador es una guía visual: el niño puede terminar cuando acabe la tarea.
                 Button(
                     onClick = {
-                        if (tiempoCumplido) {
-                            viewModel.completeTaskPorNombre(
-                                userId = currentUserId,
-                                turn = turn,
-                                actividadTexto = currentTask.actividad,
-                                diaActual = diaActualTexto
-                            )
-                            mostrandoCelebracionIdivual = true
-                        }
+                        viewModel.completeTaskPorNombre(
+                            userId = currentUserId,
+                            turn = turn,
+                            actividadTexto = currentTask.actividad,
+                            diaActual = diaActualTexto
+                        )
+                        mostrandoCelebracionIdivual = true
                     },
-                    // Deshabilitado por completo a nivel de interacción si no han pasado los 5 minutos
-                    enabled = tiempoCumplido,
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .height(75.dp),
@@ -260,10 +260,10 @@ fun TaskExecutionScreen(
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = if (tiempoCumplido) 6.dp else 0.dp)
                 ) {
                     Text(
-                        text = if (tiempoCumplido) stringResource(R.string.finish_btn) else stringResource(R.string.wait_clock),
-                        fontSize = if (tiempoCumplido) 24.sp else 16.sp,
+                        text = stringResource(R.string.child_finished),
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Black,
-                        color = if (tiempoCumplido) Color.White else Color(0xFF546E7A),
+                        color = Color.White,
                         textAlign = TextAlign.Center
                     )
                 }
