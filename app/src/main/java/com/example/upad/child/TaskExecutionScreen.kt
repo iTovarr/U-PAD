@@ -86,15 +86,6 @@ fun TaskExecutionScreen(
         String.format(Locale.getDefault(), "%02d:%02d", minutos, segundos)
     }
 
-    // --- MANEJADOR DE TRANSICIÓN INTEGRADO ---
-    if (mostrandoCelebracionIdivual) {
-        LaunchedEffect(Unit) {
-            delay(2500)
-            mostrandoCelebracionIdivual = false
-            onFinishRoutine(activityName)
-        }
-    }
-
     val diaActualTexto = remember {
         when (java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_WEEK)) {
             java.util.Calendar.MONDAY -> "LUN"
@@ -132,6 +123,13 @@ fun TaskExecutionScreen(
                 Text(text = stringResource(R.string.mission_accomplished), fontSize = 36.sp, fontWeight = FontWeight.Black, color = colorVerdeExito, textAlign = TextAlign.Center)
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(text = stringResource(R.string.focused_great_job), fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color(0xFF0288D1), textAlign = TextAlign.Center)
+                Spacer(modifier = Modifier.height(40.dp))
+                // Nada avanza solo: el niño decide cuándo pasar a la siguiente pantalla.
+                ChildPrimaryButton(
+                    text = stringResource(R.string.child_mode_continue),
+                    onClick = { onFinishRoutine(activityName) },
+                    modifier = Modifier.padding(horizontal = 24.dp)
+                )
             }
         }
         else {
