@@ -1,8 +1,5 @@
 package com.example.upad.auth
 
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
-import com.example.upad.ui.theme.TextoSecundarioClaro
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -49,7 +46,7 @@ fun LoginScreen(
     val focusManager = LocalFocusManager.current
 
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = LightBackground
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     Column(
         modifier = Modifier
@@ -60,7 +57,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(
                     top = 60.dp,
                     bottom = 40.dp,
@@ -70,20 +67,18 @@ fun LoginScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.login_overline),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Black,
-                color = TextoTenueClaro
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelMedium
             )
             Text(
                 text = stringResource(id = R.string.login_title),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Black,
-                color = colorAzulTEA
+                color = colorAzulTEA,
+                style = MaterialTheme.typography.headlineLarge
             )
             Text(
                 text = stringResource(id = R.string.login_subtitle),
-                fontSize = 16.sp,
-                color = TextoSecundarioClaro
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -103,8 +98,8 @@ fun LoginScreen(
                 enabled = !isLoading,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorAzulTEA,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                 ),
                 singleLine = true
             )
@@ -122,8 +117,8 @@ fun LoginScreen(
                 enabled = !isLoading,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = colorAzulTEA,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerLowest
                 ),
                 singleLine = true
             )
@@ -135,9 +130,8 @@ fun LoginScreen(
             ) {
                 Text(
                     stringResource(id = R.string.forgot_password_question),
-                    color = TextoSecundarioClaro,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
 
@@ -181,22 +175,21 @@ fun LoginScreen(
                     .height(65.dp),
                 shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isLoading) Color.Gray else colorAzulTEA
+                    containerColor = colorAzulTEA
                 ),
                 enabled = !isLoading,
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(24.dp),
                         strokeWidth = 2.dp
                     )
                 } else {
                     Text(
                         text = stringResource(id = R.string.login_button),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Black
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
@@ -212,8 +205,7 @@ fun LoginScreen(
             Text(
                 stringResource(id = R.string.login_back_to_start),
                 color = colorAzulTEA.copy(alpha = 0.6f),
-                fontWeight = FontWeight.Black,
-                fontSize = 13.sp
+                style = MaterialTheme.typography.labelMedium
             )
         }
     }
