@@ -1,8 +1,5 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.ColorAzulTEA
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.Image
@@ -30,8 +27,8 @@ fun TrialDisclaimerScreen(
     onStartTrialClick: () -> Unit,
     onMoreInfoClick: () -> Unit
 ) {
-    val colorAzulTEA = ColorAzulTEA
-    val colorFondoBase = LightBackground
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorFondoBase = MaterialTheme.colorScheme.background
 
     Column(
         modifier = Modifier
@@ -43,23 +40,21 @@ fun TrialDisclaimerScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(top = 60.dp, bottom = 40.dp, start = 24.dp, end = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.trial_overline),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(id = R.string.trial_title),
-                fontSize = 16.sp,
-                color = TextoSecundarioClaro,
-                fontWeight = FontWeight.Medium
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -91,10 +86,8 @@ fun TrialDisclaimerScreen(
             Text(
                 text = stringResource(id = R.string.trial_description),
                 textAlign = TextAlign.Center,
-                fontSize = 18.sp,
-                color = Color(0xFF555555),
-                lineHeight = 26.sp,
-                fontWeight = FontWeight.Medium
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyLarge
             )
         }
 
@@ -103,7 +96,7 @@ fun TrialDisclaimerScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -118,9 +111,8 @@ fun TrialDisclaimerScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.trial_start),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Black,
-                    color = Color.White
+color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
 
@@ -129,12 +121,11 @@ fun TrialDisclaimerScreen(
             Text(
                 text = stringResource(id = R.string.trial_more_info),
                 color = colorAzulTEA,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
                 textDecoration = TextDecoration.Underline,
                 modifier = Modifier
                     .clickable(role = Role.Button) { onMoreInfoClick() }
-                    .padding(8.dp)
+                    .padding(8.dp),
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
