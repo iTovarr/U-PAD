@@ -1,7 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.DarkSurface
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.util.Log
@@ -94,17 +93,12 @@ fun NotificationsScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorSuperficieTarjetas = if (isPremiumUser) {
-        if (isDarkMode) Color.White.copy(alpha = 0.06f) else Color.White.copy(alpha = 0.7f)
-    } else {
-        if (isDarkMode) DarkSurface else Color.White
-    }
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     val padreId = remember { session.currentUserId }
     val parentProfileRepository = LocalAppContainer.current.parentProfileRepository
@@ -170,9 +164,9 @@ fun NotificationsScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.alerts_subtitle),
-                    fontSize = 14.sp,
                     color = colorTextoSecundario,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    style = MaterialTheme.typography.bodyMedium
                 )
 
                 if (loadingNotifications) {
@@ -203,7 +197,7 @@ fun NotificationsScreen(
                             Text(
                                 text = stringResource(id = R.string.alerts_empty),
                                 color = colorTextoSecundario,
-                                fontSize = 15.sp
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
                     }
@@ -239,9 +233,9 @@ fun NotificationCard(
     subTextColor: Color
 ) {
     val (icon, iconColor) = when (notification.type) {
-        NotificationType.SUCCESS -> Icons.Default.CheckCircle to Color(0xFF4CAF50)
-        NotificationType.WARNING -> Icons.Default.Warning to Color(0xFFFF9800)
-        NotificationType.INFO -> Icons.Default.DeviceUnknown to Color(0xFF2196F3)
+        NotificationType.SUCCESS -> Icons.Default.CheckCircle to MaterialTheme.extendedColors.success
+        NotificationType.WARNING -> Icons.Default.Warning to MaterialTheme.extendedColors.premium
+        NotificationType.INFO -> Icons.Default.DeviceUnknown to MaterialTheme.colorScheme.primary
     }
 
     Surface(
@@ -284,23 +278,21 @@ fun NotificationCard(
                 ) {
                     Text(
                         text = notification.title,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
                         color = textColor,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.titleSmall
                     )
                     Text(
                         text = notification.time,
-                        fontSize = 11.sp,
                         color = subTextColor.copy(alpha = 0.8f),
-                        modifier = Modifier.padding(end = 4.dp)
+                        modifier = Modifier.padding(end = 4.dp),
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
                 Text(
                     text = notification.description,
-                    fontSize = 13.sp,
                     color = subTextColor,
-                    lineHeight = 18.sp
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }
