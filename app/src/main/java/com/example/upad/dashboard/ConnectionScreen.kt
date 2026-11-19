@@ -1,7 +1,5 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.DarkSurface
-import com.example.upad.ui.theme.UPadColors
 import android.content.Context
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -72,24 +70,19 @@ fun ConnectionScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
     // 🎨 CONFIGURACIÓN DE PALETA ADAPTATIVA EQUILIBRADA
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
     // Configuración estructural para tarjetas: Translúcidas (Premium) o Sólidas (Básico)
-    val colorSuperficieTarjetas = if (isPremiumUser) {
-        if (isDarkMode) Color.White.copy(alpha = 0.1f) else Color.White.copy(alpha = 0.7f)
-    } else {
-        if (isDarkMode) DarkSurface else Color(0xFFF7F7F7)
-    }
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     // Colores de estado fijos que combinan bien en ambos modos
-    val colorVerdePremium = Color(0xFF2E7D32)
-    val colorRojoSuave = Color(0xFFEF5350)
+val colorVerdePremium = MaterialTheme.colorScheme.primary
+val colorRojoSuave = MaterialTheme.colorScheme.error
 
     val idPadre = remember { session.currentUserId }
     var codigoIngresado by remember { mutableStateOf("") }
@@ -160,13 +153,8 @@ fun ConnectionScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(72.dp)
-                                        .background(
-                                            brush = Brush.linearGradient(
-                                                colors = listOf(
-                                                    colorAcabadoPrincipal.copy(alpha = 0.2f),
-                                                    colorAcabadoPrincipal.copy(alpha = 0.05f)
-                                                )
-                                            ),
+.background(
+                                            color = MaterialTheme.colorScheme.primaryContainer,
                                             shape = RoundedCornerShape(24.dp)
                                         ),
                                     contentAlignment = Alignment.Center
@@ -181,18 +169,17 @@ fun ConnectionScreen(
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Text(
                                     text = stringResource(id = R.string.device_management_title),
-                                    fontSize = 24.sp,
-                                    fontWeight = FontWeight.Black,
                                     color = colorTextoPrincipal,
-                                    textAlign = TextAlign.Center
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.headlineSmall
                                 )
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = stringResource(id = R.string.device_management_desc),
-                                    fontSize = 14.sp,
                                     color = colorTextoSecundario,
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier.padding(horizontal = 12.dp)
+                                    modifier = Modifier.padding(horizontal = 12.dp),
+                                    style = MaterialTheme.typography.bodyMedium
                                 )
                             }
                         }
@@ -203,16 +190,14 @@ fun ConnectionScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas),
-                                border = if (isPremiumUser) BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.3f)) else BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.12f)),
-                                elevation = CardDefaults.cardElevation(defaultElevation = if (isPremiumUser) 0.dp else 2.dp)
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                             ) {
                                 Column(modifier = Modifier.padding(20.dp)) {
                                     Text(
                                         text = stringResource(id = R.string.connect_new_device),
-                                        fontSize = 11.sp,
-                                        fontWeight = FontWeight.Bold,
                                         color = colorAcabadoPrincipal,
-                                        letterSpacing = 1.sp
+                                        style = MaterialTheme.typography.labelSmall
                                     )
                                     Spacer(modifier = Modifier.height(14.dp))
 
@@ -238,8 +223,7 @@ fun ConnectionScreen(
                                         Text(
                                             text = mensajeError,
                                             color = colorRojoSuave,
-                                            fontSize = 13.sp,
-                                            fontWeight = FontWeight.Medium
+                                            style = MaterialTheme.typography.bodySmall
                                         )
                                     }
 
@@ -275,7 +259,7 @@ fun ConnectionScreen(
                                             .fillMaxWidth()
                                             .height(50.dp)
                                     ) {
-                                        Text(stringResource(id = R.string.link_device_btn), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                                        Text(stringResource(id = R.string.link_device_btn), color = MaterialTheme.colorScheme.onPrimary, style = MaterialTheme.typography.titleSmall)
                                     }
                                 }
                             }
@@ -285,11 +269,9 @@ fun ConnectionScreen(
                         item {
                             Text(
                                 text = stringResource(id = R.string.linked_devices_count, listaDispositivos.size),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Black,
                                 color = colorTextoSecundario,
-                                letterSpacing = 1.sp,
-                                modifier = Modifier.padding(start = 4.dp, top = 8.dp)
+                                modifier = Modifier.padding(start = 4.dp, top = 8.dp),
+                                style = MaterialTheme.typography.labelSmall
                             )
                         }
 
@@ -304,12 +286,12 @@ fun ConnectionScreen(
                                 ) {
                                     Text(
                                         text = stringResource(id = R.string.no_devices_linked),
-                                        fontSize = 14.sp,
                                         color = colorTextoSecundario,
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(24.dp)
+                                            .padding(24.dp),
+                                        style = MaterialTheme.typography.bodyMedium
                                     )
                                 }
                             }
@@ -318,8 +300,8 @@ fun ConnectionScreen(
                                 Card(
                                     shape = RoundedCornerShape(18.dp),
                                     colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas),
-                                    elevation = CardDefaults.cardElevation(defaultElevation = if (isPremiumUser) 0.dp else 1.dp),
-                                    border = if (isPremiumUser) BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.2f)) else BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.12f)),
+                                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     Row(
@@ -359,15 +341,14 @@ fun ConnectionScreen(
                                             }
                                             Text(
                                                 text = displayModelo,
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 15.sp,
-                                                color = colorTextoPrincipal
+                                                color = colorTextoPrincipal,
+                                                style = MaterialTheme.typography.titleSmall
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
                                             Text(
                                                 text = "ID: ${dispositivo.id.take(8).uppercase()}...",
-                                                fontSize = 12.sp,
-                                                color = colorTextoSecundario
+                                                color = colorTextoSecundario,
+                                                style = MaterialTheme.typography.bodySmall
                                             )
                                         }
 
