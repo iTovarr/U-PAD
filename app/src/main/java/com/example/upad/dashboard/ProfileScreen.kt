@@ -1,6 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import androidx.compose.ui.semantics.Role
 import android.util.Log
 import android.content.Context
@@ -109,14 +109,13 @@ fun ProfileScreen(
     }
 
     // 🎨 PALETA ADAPTATIVA
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
-    val fuentePremium = FontFamily.SansSerif
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
-    val colorSuperficieTarjetas = UPadColors.superficieTarjetas(isPremiumUser, isDarkMode)
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
 
     UPADBackgroundWrapper(isPremium = isPremiumUser, isDarkMode = isDarkMode) {
         Scaffold(
@@ -193,7 +192,7 @@ fun ProfileScreen(
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
                                 contentDescription = stringResource(id = R.string.change_photo),
-                                tint = if (isPremiumUser && !isDarkMode) Color(0xFF111111) else Color.White,
+                                tint = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier.size(14.dp)
                             )
                         }
@@ -206,23 +205,21 @@ fun ProfileScreen(
 
                     Text(
                         text = nameInput,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorTextoPrincipal
+                        color = colorTextoPrincipal,
+                        style = MaterialTheme.typography.titleLarge
                     )
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Surface(
-                        color = Color(0xFFE8F5E9),
+color = MaterialTheme.extendedColors.successContainer,
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
                             text = stringResource(id = R.string.active),
-                            color = Color(0xFF2E7D32),
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp)
+color = MaterialTheme.extendedColors.onSuccessContainer,
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 4.dp),
+                            style = MaterialTheme.typography.labelSmall
                         )
                     }
 
@@ -251,8 +248,8 @@ fun ProfileScreen(
                                 }
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
-                                    Text(stringResource(id = R.string.name_label), fontSize = 11.sp, color = colorTextoSecundario, fontWeight = FontWeight.Medium)
-                                    Text(nameInput, fontSize = 15.sp, color = colorTextoPrincipal, fontWeight = FontWeight.Bold)
+                                    Text(stringResource(id = R.string.name_label), color = colorTextoSecundario, style = MaterialTheme.typography.labelSmall)
+                                    Text(nameInput, color = colorTextoPrincipal, style = MaterialTheme.typography.titleSmall)
                                 }
                             }
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -266,8 +263,8 @@ fun ProfileScreen(
                                 }
                                 Spacer(modifier = Modifier.width(12.dp))
                                 Column {
-                                    Text(stringResource(id = R.string.email_label), fontSize = 11.sp, color = colorTextoSecundario, fontWeight = FontWeight.Medium)
-                                    Text(emailInput, fontSize = 15.sp, color = colorTextoPrincipal, fontWeight = FontWeight.Bold)
+                                    Text(stringResource(id = R.string.email_label), color = colorTextoSecundario, style = MaterialTheme.typography.labelSmall)
+                                    Text(emailInput, color = colorTextoPrincipal, style = MaterialTheme.typography.titleSmall)
                                 }
                             }
                         }
@@ -293,11 +290,11 @@ fun ProfileScreen(
                     MenuOptionRow(
                         icon = Icons.Default.ExitToApp,
                         title = stringResource(id = R.string.logout),
-                        colorSuperficie = Color(0xFFFEEBEE),
+colorSuperficie = MaterialTheme.colorScheme.errorContainer,
                         isPremium = false,
-                        colorPrincipal = Color(0xFFEF5350),
-                        colorTexto = Color(0xFFC62828),
-                        colorTextoSec = Color(0xFFEF5350),
+                        colorPrincipal = MaterialTheme.colorScheme.error,
+                        colorTexto = MaterialTheme.colorScheme.onErrorContainer,
+                        colorTextoSec = MaterialTheme.colorScheme.onErrorContainer,
                         onClick = {
                             val uid = session.currentUserId
                             scope.launch {
@@ -324,7 +321,7 @@ fun ProfileScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Column {
-                            Text(stringResource(id = R.string.username_label), fontSize = 13.sp, color = colorTextoSecundario, fontWeight = FontWeight.Bold)
+                            Text(stringResource(id = R.string.username_label), color = colorTextoSecundario, style = MaterialTheme.typography.labelMedium)
                             Spacer(modifier = Modifier.height(6.dp))
                             TextField(
                                 value = nameInput,
@@ -345,7 +342,7 @@ fun ProfileScreen(
                         }
 
                         Column {
-                            Text(stringResource(id = R.string.email_label), fontSize = 13.sp, color = colorTextoSecundario, fontWeight = FontWeight.Bold)
+                            Text(stringResource(id = R.string.email_label), color = colorTextoSecundario, style = MaterialTheme.typography.labelMedium)
                             Spacer(modifier = Modifier.height(6.dp))
                             TextField(
                                 value = emailInput,
@@ -380,7 +377,7 @@ fun ProfileScreen(
                             shape = RoundedCornerShape(24.dp),
                             border = BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.4f))
                         ) {
-                            Text(stringResource(id = R.string.cancel), color = colorTextoPrincipal, fontWeight = FontWeight.Medium)
+                            Text(stringResource(id = R.string.cancel), color = colorTextoPrincipal, style = MaterialTheme.typography.labelLarge)
                         }
 
                         Button(
@@ -408,8 +405,8 @@ fun ProfileScreen(
                         ) {
                             Text(
                                 text = stringResource(id = R.string.save_action),
-                                color = if (isPremiumUser && !isDarkMode) Color(0xFF111111) else Color.White,
-                                fontWeight = FontWeight.Bold
+color = MaterialTheme.colorScheme.onPrimary,
+                                style = MaterialTheme.typography.labelLarge
                             )
                         }
                     }
@@ -462,9 +459,8 @@ fun MenuOptionRow(
                 Spacer(modifier = Modifier.width(14.dp))
                 Text(
                     text = title,
-                    fontSize = 15.sp,
                     color = colorTexto,
-                    fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
             Icon(
