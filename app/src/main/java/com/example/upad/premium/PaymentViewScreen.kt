@@ -1,5 +1,6 @@
 package com.example.upad.premium
 
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.background
@@ -39,7 +40,7 @@ fun PaymentViewScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121214))
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -48,44 +49,43 @@ fun PaymentViewScreen(
             Icon(
                 imageVector = Icons.Default.WorkspacePremium,
                 contentDescription = null,
-                tint = Color(0xFFD4AF37),
+                tint = MaterialTheme.extendedColors.premium,
                 modifier = Modifier.size(80.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = stringResource(id = R.string.payment_title),
-                color = Color.White,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.headlineSmall
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = stringResource(id = R.string.payment_subtitle),
-                color = Color.LightGray,
-                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E24)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.CreditCard, contentDescription = null, tint = Color.White)
+                    Icon(Icons.Default.CreditCard, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
-                        Text(stringResource(id = R.string.payment_card), color = Color.White, fontWeight = FontWeight.Bold)
-                        Text("•••• •••• •••• 4321", color = Color.Gray, fontSize = 12.sp)
+                        Text(stringResource(id = R.string.payment_card), color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.titleSmall)
+                        Text("•••• •••• •••• 4321", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
@@ -114,16 +114,19 @@ fun PaymentViewScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD4AF37)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.extendedColors.premiumContainer,
+                    contentColor = MaterialTheme.extendedColors.onPremiumContainer
+                ),
                 shape = RoundedCornerShape(28.dp)
             ) {
-                Text(stringResource(id = R.string.payment_confirm_simulated), color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(stringResource(id = R.string.payment_confirm_simulated), style = MaterialTheme.typography.titleSmall)
             }
         } else {
-            CircularProgressIndicator(color = Color(0xFFD4AF37))
+            CircularProgressIndicator(color = MaterialTheme.extendedColors.premium)
             Spacer(modifier = Modifier.height(16.dp))
-            Text(stringResource(id = R.string.payment_processing), color = Color.White, fontWeight = FontWeight.Medium)
-            Text(stringResource(id = R.string.payment_setting_up), color = Color.Gray, fontSize = 12.sp)
+            Text(stringResource(id = R.string.payment_processing), color = MaterialTheme.colorScheme.onBackground, style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(id = R.string.payment_setting_up), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
         }
     }
 }
