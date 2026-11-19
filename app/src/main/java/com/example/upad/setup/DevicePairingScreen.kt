@@ -1,6 +1,6 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.ColorAzulTEA
+import com.example.upad.ui.theme.extendedColors
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
 import android.content.Context
@@ -42,7 +42,6 @@ fun DevicePairingScreen(
     val prefs = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
  
     // 🎨 DETECCIÓN DE TEMA REMOTO/LOCAL (Por defecto es falso -> Modo Claro)
-    val esTemaOscuro = remember { prefs.getBoolean("TEMA_OSCURO", false) }
  
     // Extraemos variables guardadas en los pasos previos del Setup
     val childName = remember { prefs.getString("CHILD_NAME", "tu pequeño") ?: "tu pequeño" }
@@ -67,15 +66,15 @@ fun DevicePairingScreen(
     val pantallaPequeña = configuration.screenHeightDp < 650
 
     // --- PALETA DE COLORES ADAPTATIVA MULTI-TEMA ---
-    val colorAzulTEA = ColorAzulTEA
-    val colorVerdeExito = Color(0xFF4CAF50)
+val colorAzulTEA = MaterialTheme.colorScheme.primary
+val colorVerdeExito = MaterialTheme.extendedColors.success
 
     // Asignación según la personalización previa del usuario
-    val colorFondoBase = if (esTemaOscuro) Color(0xFF0F172A) else Color(0xFFF8FAFC)
-    val colorSuperficie = if (esTemaOscuro) Color(0xFF1E293B) else Color.White
-    val colorTextoPrincipal = if (esTemaOscuro) Color(0xFFF1F5F9) else Color(0xFF1E293B)
-    val colorTextoSecundario = if (esTemaOscuro) Color(0xFF94A3B8) else Color(0xFF64748B)
-    val colorBordeInput = if (esTemaOscuro) Color(0xFF334155) else Color(0xFFCBD5E1)
+val colorFondoBase = MaterialTheme.colorScheme.background
+val colorSuperficie = MaterialTheme.colorScheme.surfaceContainerLowest
+val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
+val colorBordeInput = MaterialTheme.colorScheme.outline
 
     Column(
         modifier = Modifier
@@ -97,16 +96,13 @@ fun DevicePairingScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.pairing_overline),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Black,
-                color = Color.LightGray,
-                letterSpacing = 1.5.sp
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelSmall
             )
             Text(
                 text = if (!isPaired) "Enlaza tu cuenta" else "¡Sincronizado con éxito!",
-                fontSize = if (pantallaPequeña) 24.sp else 28.sp,
-                fontWeight = FontWeight.Black,
-                color = if (!isPaired) colorTextoPrincipal else colorVerdeExito
+                color = if (!isPaired) colorTextoPrincipal else colorVerdeExito,
+                style = MaterialTheme.typography.headlineMedium
             )
         }
 
@@ -147,10 +143,9 @@ fun DevicePairingScreen(
 
                     Text(
                         text = "Digita el código de vinculación de 6 dígitos activo en el dispositivo de $childName.",
-                        fontSize = 15.sp,
                         color = colorTextoSecundario,
                         textAlign = TextAlign.Center,
-                        lineHeight = 22.sp
+                        style = MaterialTheme.typography.bodyMedium
                     )
 
                     Spacer(modifier = Modifier.height(28.dp))
@@ -187,9 +182,8 @@ fun DevicePairingScreen(
                         Text(
                             text = mensajeError,
                             color = MaterialTheme.colorScheme.error,
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.padding(top = 8.dp)
+                            modifier = Modifier.padding(top = 8.dp),
+                            style = MaterialTheme.typography.bodySmall
                         )
                     }
                 }
@@ -215,20 +209,18 @@ fun DevicePairingScreen(
 
                     Text(
                         text = stringResource(id = R.string.pairing_done),
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Black,
-                        color = colorTextoPrincipal
+                        color = colorTextoPrincipal,
+                        style = MaterialTheme.typography.titleLarge
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
                         text = "Firebase ha enlazado las cuentas con éxito. Las rutinas creadas se sincronizarán inmediatamente con la tablet de $childName.",
-                        fontSize = 15.sp,
                         color = colorTextoSecundario,
                         textAlign = TextAlign.Center,
-                        lineHeight = 22.sp,
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }
@@ -276,10 +268,10 @@ fun DevicePairingScreen(
                     .height(if (pantallaPequeña) 54.dp else 60.dp),
                 shape = RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (!isPaired) colorAzulTEA else colorVerdeExito,
-                    disabledContainerColor = Color.Gray
+containerColor = colorAzulTEA,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
             ) {
                 Text(
                     text = if (estaConectando) {
@@ -289,9 +281,8 @@ fun DevicePairingScreen(
                     } else {
                         "CONTINUAR AL DASHBOARD 🚀"
                     },
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Black,
-                    color = if (esTemaOscuro && !isPaired) Color.Black else Color.White
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleSmall
                 )
             }
 
@@ -305,8 +296,7 @@ fun DevicePairingScreen(
                     Text(
                         text = stringResource(id = R.string.pairing_skip),
                         color = colorTextoSecundario,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
