@@ -25,8 +25,9 @@ data class ParentNotification(
 )
 
 /**
- * Datos del tutor: plan de suscripción, perfil del hijo, ajustes de experiencia
- * (colección `usuarios`) y avisos recibidos (`users/{uid}/notifications`).
+ * Datos del tutor: plan de suscripción y perfil del hijo (colección `usuarios`),
+ * perfil sensorial del modo niño (`users/{uid}.perfilSensorial`) y avisos
+ * recibidos (`users/{uid}/notifications`).
  */
 class ParentProfileRepository(
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance(),
