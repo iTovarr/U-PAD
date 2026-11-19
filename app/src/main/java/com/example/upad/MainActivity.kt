@@ -578,7 +578,6 @@ fun UPadNavigation(
                 // ✅ FIX: settings recibe onNavigateToHelp si tu SettingsScreen lo tiene
                 composable(Routes.SETTINGS) {
                     SettingsScreen(
-                        routineViewModel = routineViewModel,
                         settingsViewModel = settingsViewModel,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToHelp = { navController.navigate(Routes.HELP_TUTORIAL) },
