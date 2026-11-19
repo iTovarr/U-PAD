@@ -1,7 +1,6 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.DarkSurface
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -83,20 +82,15 @@ fun HijoTrackingScreen(
         }
     }
 
-    val fuentePremium = FontFamily.SansSerif
-    val colorFondoSolido = UPadColors.fondoSolido(isPremiumUser, isDarkMode)
+    val colorFondoSolido = MaterialTheme.colorScheme.background
 
     // 🎨 PALETA DE COLORES ADAPTATIVA EN BASE AL ESTADO PREMIUM Y MODO VISUAL
-    val colorAcabadoPrincipal = UPadColors.acabadoPrincipal(isPremiumUser)
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = UPadColors.textoSecundario(isDarkMode)
+    val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
     // Configuración para tarjetas flotantes y TopBar: Translúcido en Premium o sólido en Básico
-    val colorSuperficieFlotante = if (isPremiumUser) {
-        if (isDarkMode) Color.Black.copy(alpha = 0.65f) else Color.White.copy(alpha = 0.75f)
-    } else {
-        if (isDarkMode) DarkSurface else Color.White
-    }
+    val colorSuperficieFlotante = MaterialTheme.colorScheme.surfaceContainerLow
 
     val idPadre = remember { session.currentUserId }
 
@@ -244,17 +238,17 @@ fun HijoTrackingScreen(
                             Box(
                                 modifier = Modifier
                                     .size(45.dp)
-                                    .background(Color(0xFF007AFF), CircleShape)
+                                    .background(MaterialTheme.colorScheme.primary, CircleShape)
                                     .padding(2.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                        .background(Color.White, CircleShape),
+                                        .background(MaterialTheme.colorScheme.surfaceContainerLowest, CircleShape),
                                     contentAlignment = Alignment.Center
                                 ) {
-                                    Text("👨‍🦰", fontSize = 22.sp)
+                                    Text("👨‍🦰", style = MaterialTheme.typography.titleLarge)
                                 }
                             }
                         }
@@ -271,17 +265,17 @@ fun HijoTrackingScreen(
                                 Box(
                                     modifier = Modifier
                                         .size(45.dp)
-                                        .background(Color(0xFF4CAF50), CircleShape)
+                                        .background(MaterialTheme.extendedColors.success, CircleShape)
                                         .padding(2.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Box(
                                         modifier = Modifier
                                             .fillMaxSize()
-                                            .background(Color.White, CircleShape),
+                                            .background(MaterialTheme.colorScheme.surfaceContainerLowest, CircleShape),
                                         contentAlignment = Alignment.Center
                                     ) {
-                                        Text("👦", fontSize = 22.sp)
+                                        Text("👦", style = MaterialTheme.typography.titleLarge)
                                     }
                                 }
                             }
@@ -308,8 +302,8 @@ fun HijoTrackingScreen(
                                 colors = CardDefaults.cardColors(
                                     containerColor = if (esElSeleccionado) colorAcabadoPrincipal else colorSuperficieFlotante
                                 ),
-                                border = if (isPremiumUser && !esElSeleccionado) androidx.compose.foundation.BorderStroke(1.dp, colorAcabadoPrincipal.copy(alpha = 0.25f)) else null,
-                                elevation = CardDefaults.cardElevation(defaultElevation = if (isPremiumUser) 0.dp else 6.dp),
+                                border = if (!esElSeleccionado) androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null,
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 modifier = Modifier.clickable(role = Role.Button) { dispositivoSeleccionado = dispositivo }
                             ) {
                                 Row(
@@ -319,13 +313,12 @@ fun HijoTrackingScreen(
                                 ) {
                                     Text(
                                         text = if (esElSeleccionado) "🎯" else "📱",
-                                        fontSize = 16.sp
+                                        style = MaterialTheme.typography.bodyMedium
                                     )
                                     Text(
                                         text = dispositivo.modelo,
-                                        color = if (esElSeleccionado) Color.White else colorTextoPrincipal,
-                                        fontWeight = FontWeight.ExtraBold,
-                                        fontSize = 14.sp
+                                        color = if (esElSeleccionado) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
+                                        style = MaterialTheme.typography.titleSmall
                                     )
                                 }
                             }
