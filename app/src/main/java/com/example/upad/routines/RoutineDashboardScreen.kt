@@ -1,7 +1,7 @@
 package com.example.upad.dashboard
 
-import com.example.upad.ui.theme.DarkBackground
-import com.example.upad.ui.theme.UPadColors
+import com.example.upad.ui.theme.extendedColors
+import com.example.upad.ui.theme.AtkinsonHyperlegible
 import androidx.compose.ui.semantics.Role
 import com.example.upad.viewmodel.SettingsViewModel
 import android.content.Context
@@ -22,7 +22,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -78,27 +77,14 @@ fun RoutineDashboardScreen(
     val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
     // ── PALETA DE COLORES ADAPTATIVA ─────────────────────────────────────────
-    val colorTextoPrincipal = UPadColors.textoPrincipal(isDarkMode)
-    val colorTextoSecundario = if (isDarkMode) Color(0xFFB0B0B0) else Color(0xFF444444)
-    val fuentePremium = FontFamily.SansSerif
+    // Fuente de la app; los componentes de esta pantalla la reciben por parámetro.
+    val fuentePremium = AtkinsonHyperlegible
+    val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
+    val colorTextoSecundario = MaterialTheme.colorScheme.onSurfaceVariant
 
-    val gradienteFondoPremium = if (isDarkMode) {
-        Brush.verticalGradient(
-            colors = listOf(Color(0xFF0F0C29), Color(0xFF302B63), DarkBackground)
-        )
-    } else {
-        Brush.verticalGradient(
-            colors = listOf(Color(0xFFFBE9E7), Color(0xFFF3E5F5), Color(0xFFE8EAF6))
-        )
-    }
-
-    val colorFondoBase = if (isDarkMode) DarkBackground else MaterialTheme.colorScheme.background
-    val colorSuperficieTarjetas = if (esPremium) {
-        if (isDarkMode) Color.White.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.85f)
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
-    val colorDinamicoSuscripcion = UPadColors.acabadoPrincipal(esPremium)
+    val colorFondoBase = MaterialTheme.colorScheme.background
+    val colorSuperficieTarjetas = MaterialTheme.colorScheme.surfaceContainerLow
+    val colorDinamicoSuscripcion = MaterialTheme.colorScheme.primary
 
     // ── DATOS DEL USUARIO ────────────────────────────────────────────────────
     val hijoVinculadoId = remember(currentUser) {
@@ -185,9 +171,10 @@ fun RoutineDashboardScreen(
     val porcentajeGlobal = if (totalTareasDia > 0) (completadasTareasDia.toFloat() / totalTareasDia * 100).toInt() else 0
 
     val routines = listOf(
-        RoutineItem("MAÑANA", Icons.Default.LightMode, progresoManana.first, progresoManana.second, Color(0xFFFFB74D)),
-        RoutineItem("TARDE", Icons.Default.WbTwilight, progresoTarde.first, progresoTarde.second, Color(0xFF81C784)),
-        RoutineItem("NOCHE", Icons.Default.NightsStay, progresoNoche.first, progresoNoche.second, Color(0xFF9575CD))
+    // Un color de la paleta por turno, los mismos que en la analítica.
+        RoutineItem("MAÑANA", Icons.Default.LightMode, progresoManana.first, progresoManana.second, MaterialTheme.extendedColors.premium),
+        RoutineItem("TARDE", Icons.Default.WbTwilight, progresoTarde.first, progresoTarde.second, MaterialTheme.colorScheme.secondary),
+        RoutineItem("NOCHE", Icons.Default.NightsStay, progresoNoche.first, progresoNoche.second, MaterialTheme.colorScheme.tertiary)
     )
 
     // ════════════════════════════════════════════════════════════════════════
@@ -206,7 +193,6 @@ fun RoutineDashboardScreen(
                 colorTextoPrincipal = colorTextoPrincipal,
                 colorTextoSecundario = colorTextoSecundario,
                 colorDinamicoSuscripcion = colorDinamicoSuscripcion,
-                gradienteFondoPremium = gradienteFondoPremium,
                 fuentePremium = fuentePremium,
                 onChangePlan = { scope.launch { drawerState.close() }; onNavigateToChangePlan() },
                 onCancelPremium = { scope.launch { drawerState.close() }; settingsViewModel.cancelPremium(currentUser?.uid ?: "") },
@@ -222,8 +208,7 @@ fun RoutineDashboardScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(if (esPremium) Color.Transparent else colorFondoBase)
-                .then(if (esPremium) Modifier.background(gradienteFondoPremium) else Modifier)
+.background(colorFondoBase)
         ) {
             Scaffold(
                 containerColor = Color.Transparent,
@@ -245,8 +230,8 @@ fun RoutineDashboardScreen(
                             if (esPremium) onUbicarHijoAccionUnificada()
                             else showTurnSelectionDialog = true
                         },
-                        containerColor = if (isDarkMode) Color.White else Color.Black,
-                        contentColor = if (isDarkMode) Color.Black else Color.White,
+containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                         shape = CircleShape
                     ) {
                         if (esPremium) {
@@ -275,16 +260,13 @@ fun RoutineDashboardScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.hello_parent, parentName),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Black,
-                                color = colorTextoSecundario.copy(alpha = 0.6f)
+                                color = colorTextoSecundario.copy(alpha = 0.6f),
+                                style = MaterialTheme.typography.titleSmall
                             )
                             Text(
                                 text = stringResource(R.string.child_routines),
-                                fontSize = 28.sp,
-                                fontWeight = FontWeight.Black,
                                 color = colorTextoPrincipal,
-                                fontFamily = fuentePremium
+                                style = MaterialTheme.typography.headlineMedium
                             )
                         }
                     }
@@ -298,17 +280,15 @@ fun RoutineDashboardScreen(
                                     .padding(horizontal = 20.dp),
                                 shape = RoundedCornerShape(28.dp),
                                 colors = CardDefaults.cardColors(
-                                    containerColor = if (isDarkMode) Color(0xFF1F1F1F) else Color(0xFF1E222B)
+containerColor = MaterialTheme.colorScheme.primaryContainer
                                 ),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                             ) {
                                 Column(modifier = Modifier.padding(24.dp)) {
                                     Text(
                                         text = stringResource(R.string.todays_progress),
-                                        color = Color.White,
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        fontFamily = fuentePremium
+                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        style = MaterialTheme.typography.titleMedium
                                     )
                                     Spacer(modifier = Modifier.height(20.dp))
                                     Row(
@@ -320,25 +300,23 @@ fun RoutineDashboardScreen(
                                             CircularProgressIndicator(
                                                 progress = { if (totalTareasDia > 0) completadasTareasDia.toFloat() / totalTareasDia else 0f },
                                                 modifier = Modifier.fillMaxSize(),
-                                                color = Color(0xFF9CCC65),
+                                                color = MaterialTheme.colorScheme.primary,
                                                 strokeWidth = 10.dp,
-                                                trackColor = Color.White.copy(alpha = 0.12f)
+                                                trackColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f)
                                             )
                                             Text(
                                                 text = "$porcentajeGlobal%",
-                                                color = Color.White,
-                                                fontSize = 20.sp,
-                                                fontWeight = FontWeight.Black,
-                                                fontFamily = fuentePremium
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                style = MaterialTheme.typography.titleLarge
                                             )
                                         }
                                         Column(
                                             verticalArrangement = Arrangement.spacedBy(10.dp),
                                             modifier = Modifier.padding(start = 16.dp)
                                         ) {
-                                            ProgressStatRow(icon = Icons.Default.Assignment, iconTint = Color.White, value = "$totalTareasDia", label = stringResource(R.string.total_tasks), fuentePremium = fuentePremium)
-                                            ProgressStatRow(icon = Icons.Default.Assignment, iconTint = Color(0xFF9CCC65), value = "$completadasTareasDia", label = stringResource(R.string.completed_tasks), fuentePremium = fuentePremium)
-                                            ProgressStatRow(icon = Icons.Default.Assignment, iconTint = Color(0xFFE57373), value = "$pendientesTareasDia", label = stringResource(R.string.pending_tasks), fuentePremium = fuentePremium)
+                                            ProgressStatRow(icon = Icons.Default.Assignment, iconTint = MaterialTheme.colorScheme.onPrimaryContainer, value = "$totalTareasDia", label = stringResource(R.string.total_tasks), fuentePremium = fuentePremium)
+                                            ProgressStatRow(icon = Icons.Default.Assignment, iconTint = MaterialTheme.extendedColors.success, value = "$completadasTareasDia", label = stringResource(R.string.completed_tasks), fuentePremium = fuentePremium)
+                                            ProgressStatRow(icon = Icons.Default.Assignment, iconTint = MaterialTheme.extendedColors.premium, value = "$pendientesTareasDia", label = stringResource(R.string.pending_tasks), fuentePremium = fuentePremium)
                                         }
                                     }
                                 }
@@ -363,10 +341,8 @@ fun RoutineDashboardScreen(
                                         stringResource(R.string.program_of) + " ${getLocalizedDayName(diaSeleccionado)}" +
                                                 if (diaNumeroSeleccionado > 0) " $diaNumeroSeleccionado" else ""
                                     },
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Black,
                                     color = colorTextoPrincipal,
-                                    fontFamily = fuentePremium
+                                    style = MaterialTheme.typography.labelMedium
                                 )
                                 IconButton(
                                     onClick = { mostrarCalendarioCompleto = !mostrarCalendarioCompleto },
@@ -395,8 +371,8 @@ fun RoutineDashboardScreen(
                                         modifier = Modifier
                                             .clip(RoundedCornerShape(16.dp))
                                             .background(
-                                                if (esElSeleccionado) colorTextoPrincipal
-                                                else if (esHoyReal) colorTextoPrincipal.copy(alpha = 0.12f)
+if (esElSeleccionado) MaterialTheme.colorScheme.primary
+                                                else if (esHoyReal) MaterialTheme.colorScheme.primaryContainer
                                                 else colorSuperficieTarjetas
                                             )
                                             .clickable(role = Role.Button) {
@@ -408,12 +384,9 @@ fun RoutineDashboardScreen(
                                     ) {
                                         Text(
                                             text = getLocalizedDayName(dia),
-                                            color = if (esElSeleccionado) {
-                                                if (isDarkMode) Color.Black else Color.White
-                                            } else colorTextoPrincipal,
+color = if (esElSeleccionado) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
                                             fontWeight = if (esElSeleccionado || esHoyReal) FontWeight.Black else FontWeight.Bold,
-                                            fontSize = 13.sp,
-                                            fontFamily = fuentePremium
+                                            style = MaterialTheme.typography.bodySmall
                                         )
                                     }
                                 }
@@ -430,7 +403,7 @@ fun RoutineDashboardScreen(
                                     .padding(horizontal = 20.dp, vertical = 4.dp),
                                 shape = RoundedCornerShape(24.dp),
                                 colors = CardDefaults.cardColors(containerColor = colorSuperficieTarjetas),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                                 border = BorderStroke(1.dp, colorTextoSecundario.copy(alpha = 0.15f))
                             ) {
                                 Column(modifier = Modifier.padding(16.dp)) {
@@ -441,17 +414,13 @@ fun RoutineDashboardScreen(
                                     ) {
                                         Text(
                                             text = tituloMes,
-                                            fontSize = 14.sp,
-                                            fontWeight = FontWeight.Black,
                                             color = colorTextoPrincipal,
-                                            letterSpacing = 0.5.sp,
-                                            fontFamily = fuentePremium
+                                            style = MaterialTheme.typography.titleSmall
                                         )
                                         Text(
                                             text = stringResource(R.string.monthly_view),
-                                            fontSize = 10.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = colorTextoSecundario.copy(alpha = 0.6f)
+                                            color = colorTextoSecundario.copy(alpha = 0.6f),
+                                            style = MaterialTheme.typography.labelSmall
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(14.dp))
@@ -473,10 +442,8 @@ fun RoutineDashboardScreen(
                                                 text = letra,
                                                 modifier = Modifier.weight(1f),
                                                 textAlign = TextAlign.Center,
-                                                fontSize = 11.sp,
-                                                fontWeight = FontWeight.Bold,
                                                 color = colorTextoSecundario.copy(alpha = 0.6f),
-                                                fontFamily = fuentePremium
+                                                style = MaterialTheme.typography.labelSmall
                                             )
                                         }
                                     }
@@ -509,8 +476,8 @@ fun RoutineDashboardScreen(
                                                                 .clip(CircleShape)
                                                                 .background(
                                                                     when {
-                                                                        esElSeleccionadoHoy -> colorTextoPrincipal
-                                                                        esDiaActualDelMes -> colorTextoPrincipal.copy(alpha = 0.15f)
+esElSeleccionadoHoy -> MaterialTheme.colorScheme.primary
+                                                                        esDiaActualDelMes -> MaterialTheme.colorScheme.primaryContainer
                                                                         else -> Color.Transparent
                                                                     }
                                                                 )
@@ -523,12 +490,9 @@ fun RoutineDashboardScreen(
                                                         ) {
                                                             Text(
                                                                 text = numeroDia.toString(),
-                                                                fontSize = 13.sp,
                                                                 fontWeight = if (esElSeleccionadoHoy || esDiaActualDelMes) FontWeight.Black else FontWeight.Medium,
-                                                                color = if (esElSeleccionadoHoy) {
-                                                                    if (isDarkMode) Color.Black else Color.White
-                                                                } else colorTextoPrincipal,
-                                                                fontFamily = fuentePremium
+color = if (esElSeleccionadoHoy) MaterialTheme.colorScheme.onPrimary else colorTextoPrincipal,
+                                                                style = MaterialTheme.typography.bodySmall
                                                             )
                                                         }
                                                         diaProcesadoIndex++
@@ -550,11 +514,9 @@ fun RoutineDashboardScreen(
                             } else {
                                 stringResource(R.string.activity_blocks) + " - ${getLocalizedDayName(diaSeleccionado)}"
                             },
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
                             color = colorTextoPrincipal,
-                            fontFamily = fuentePremium,
-                            modifier = Modifier.padding(start = 24.dp, top = 8.dp, end = 24.dp)
+                            modifier = Modifier.padding(start = 24.dp, top = 8.dp, end = 24.dp),
+                            style = MaterialTheme.typography.labelMedium
                         )
                     }
 
@@ -583,39 +545,47 @@ fun RoutineDashboardScreen(
             title = {
                 Text(
                     text = stringResource(R.string.select_turn),
-                    fontWeight = FontWeight.Black,
-                    fontSize = 18.sp,
-                    color = colorTextoPrincipal
+                    color = colorTextoPrincipal,
+                    style = MaterialTheme.typography.titleMedium
                 )
             },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     Text(
                         text = stringResource(R.string.choose_time_block, getLocalizedDayName(diaSeleccionado)),
-                        fontSize = 14.sp,
-                        color = colorTextoSecundario
+                        color = colorTextoSecundario,
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
                         onClick = { showTurnSelectionDialog = false; onNavigateToCreateRoutine("MAÑANA", diaSeleccionado) },
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFB74D))
-                    ) { Text("☀️ " + stringResource(R.string.morning), fontWeight = FontWeight.Bold, color = Color.White) }
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.extendedColors.turnoManana,
+                            contentColor = MaterialTheme.extendedColors.onTurnoManana
+                        )
+                    ) { Text("☀️ " + stringResource(R.string.morning), style = MaterialTheme.typography.labelLarge) }
 
                     Button(
                         onClick = { showTurnSelectionDialog = false; onNavigateToCreateRoutine("TARDE", diaSeleccionado) },
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF81C784))
-                    ) { Text("⛅ " + stringResource(R.string.afternoon), fontWeight = FontWeight.Bold, color = Color.White) }
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.extendedColors.turnoTarde,
+                            contentColor = MaterialTheme.extendedColors.onTurnoTarde
+                        )
+                    ) { Text("⛅ " + stringResource(R.string.afternoon), style = MaterialTheme.typography.labelLarge) }
 
                     Button(
                         onClick = { showTurnSelectionDialog = false; onNavigateToCreateRoutine("NOCHE", diaSeleccionado) },
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9575CD))
-                    ) { Text("🌙 " + stringResource(R.string.evening), fontWeight = FontWeight.Bold, color = Color.White) }
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.extendedColors.turnoNoche,
+                            contentColor = MaterialTheme.extendedColors.onTurnoNoche
+                        )
+                    ) { Text("🌙 " + stringResource(R.string.evening), style = MaterialTheme.typography.labelLarge) }
                 }
             },
             confirmButton = {},
@@ -648,15 +618,15 @@ private fun ProgressStatRow(
             modifier = Modifier
                 .size(28.dp)
                 .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.1f)),
+.background(MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.08f)),
             contentAlignment = Alignment.Center
         ) {
             Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(14.dp))
         }
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-            Text(text = value, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold, fontFamily = fuentePremium)
-            Text(text = label, color = Color.Gray, fontSize = 11.sp, fontFamily = fuentePremium)
+Text(text = value, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.titleSmall)
+Text(text = label, color = MaterialTheme.colorScheme.onPrimaryContainer, style = MaterialTheme.typography.labelSmall)
         }
     }
 }
@@ -709,24 +679,19 @@ fun RoutineProgressCard(
                         Text(
                             text = getLocalizedTurnName(routine.name),
                             color = colorTexto,
-                            fontWeight = FontWeight.Black,
-                            fontSize = 16.sp,
-                            fontFamily = fuente
+                            style = MaterialTheme.typography.titleSmall
                         )
                         Text(
                             text = stringResource(R.string.tasks_completed, routine.completedTasks, routine.totalTasks),
                             color = colorTextoSec.copy(alpha = 0.7f),
-                            fontSize = 12.sp,
-                            fontFamily = fuente
+                            style = MaterialTheme.typography.bodySmall
                         )
                     }
                 }
                 Text(
                     text = "$porcentajeTexto%",
                     color = colorTexto,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Black,
-                    fontFamily = fuente
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
