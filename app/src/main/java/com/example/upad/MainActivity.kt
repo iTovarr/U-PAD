@@ -791,9 +791,20 @@ fun UPadNavigation(
 
                 composable(Routes.CHILD_ROUTINE_COMPLETED) {
                     val reinforcementMessages by routineViewModel.reinforcementMessages.collectAsState()
+                    // Siguiente tarea pendiente del turno en curso, para decirle al niño qué viene después.
+                    val turnoActual = remember { com.example.upad.utils.Turnos.actual() }
+                    val tareasDelTurno by when (turnoActual) {
+                        com.example.upad.utils.Turnos.MANANA -> routineViewModel.tasksManana.collectAsState()
+                        com.example.upad.utils.Turnos.TARDE -> routineViewModel.tasksTarde.collectAsState()
+                        else -> routineViewModel.tasksNoche.collectAsState()
+                    }
+                    val siguienteActividad = com.example.upad.utils.RoutineProgressCalculator.siguientePendiente(
+                        tareasDelTurno,
+                        com.example.upad.utils.RoutineProgressCalculator.obtenerDiaDeHoy()
+                    )?.actividad.orEmpty()
                     ChildTheme(perfil = perfilNino) {
                         RoutineCompletedScreen(
-                            nextActivityPreview = "",
+                            nextActivityPreview = siguienteActividad,
                             reinforcementMessages = reinforcementMessages,
                             onFinishClick = {
                                 navController.navigate(Routes.CHILD_START) {
