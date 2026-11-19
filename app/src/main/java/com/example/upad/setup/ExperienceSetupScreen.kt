@@ -1,5 +1,8 @@
 package com.example.upad.setup
 
+import androidx.compose.foundation.selection.selectable
+import com.example.upad.ui.theme.AppPalette
+import com.example.upad.data.SensoryProfile
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -40,7 +43,6 @@ fun ExperienceSetupScreen(
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val prefs = remember { context.getSharedPreferences("UPAD_PREFS", Context.MODE_PRIVATE) }
     val container = LocalAppContainer.current
     val session = container.sessionRepository
     val parentProfileRepository = container.parentProfileRepository
@@ -51,10 +53,10 @@ fun ExperienceSetupScreen(
     val isPremiumUser by settingsViewModel.isUserPremium.collectAsState(initial = false)
     val isDarkMode by settingsViewModel.isDarkMode.collectAsState()
 
-    // --- CARGA DE ESTADOS CON PERSISTENCIA ---
-    var selectedTheme by remember { mutableStateOf(prefs.getString("APP_THEME", "Modo claro") ?: "Modo claro") }
-    var audioVolume by remember { mutableFloatStateOf(prefs.getFloat("AUDIO_VOLUME", 0.7f)) }
-    var voiceEnabled by remember { mutableStateOf(prefs.getBoolean("VOICE_ENABLED", true)) }
+    // --- Elecciones del tutor; se guardan en el perfil sensorial al continuar ---
+    val paletaActual by settingsViewModel.palette.collectAsState()
+    var audioVolume by remember { mutableFloatStateOf(SensoryProfile.VOLUMEN_POR_DEFECTO) }
+    var voiceEnabled by remember { mutableStateOf(true) }
 
 // --- Colores de la paleta activa ---
     val colorTextoPrincipal = MaterialTheme.colorScheme.onSurface
@@ -134,9 +136,13 @@ val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
                     tonalElevation = 0.dp
                 ) {
                     Column(modifier = Modifier.padding(12.dp)) {
-                        val themes = listOf("Modo claro", "Modo oscuro", "Según sistema")
-                        themes.forEach { theme ->
-                            val estaSeleccionado = selectedTheme == theme
+                        // La paleta se aplica al momento, para que el tutor vea cómo queda.
+                        AppPalette.entries.forEach { paleta ->
+                            val estaSeleccionado = paletaActual == paleta
+                            val (nombre, descripcion) = when (paleta) {
+                                AppPalette.CALMA -> R.string.palette_calma to R.string.palette_calma_desc
+                                AppPalette.TIERRA -> R.string.palette_tierra to R.string.palette_tierra_desc
+                            }
 
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
@@ -145,31 +151,27 @@ val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
                                     .padding(vertical = 4.dp)
                                     .clip(RoundedCornerShape(14.dp))
                                     .background(if (estaSeleccionado) colorSuperficieSeleccionada else Color.Transparent)
-                                    .clickable(role = Role.Button) {
-                                        selectedTheme = theme
-                                        val cambiarAOscuro = theme == "Modo oscuro"
-                                        settingsViewModel.setDarkMode(cambiarAOscuro)
-                                    }
+                                    .selectable(
+                                        selected = estaSeleccionado,
+                                        role = Role.RadioButton,
+                                        onClick = { settingsViewModel.setPalette(paleta) }
+                                    )
                                     .padding(horizontal = 12.dp, vertical = 8.dp)
                             ) {
-                                RadioButton(
-                                    selected = estaSeleccionado,
-                                    onClick = {
-                                        selectedTheme = theme
-                                        settingsViewModel.setDarkMode(theme == "Modo oscuro")
-                                    },
-                                    colors = RadioButtonDefaults.colors(
-                                        selectedColor = colorAcabadoPrincipal,
-                                        unselectedColor = colorTextoSecundario
-                                    )
-                                )
+                                RadioButton(selected = estaSeleccionado, onClick = null)
                                 Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    text = theme,
-                                    color = colorTextoPrincipal,
-                                    fontWeight = if (estaSeleccionado) FontWeight.Bold else FontWeight.Medium,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
+                                Column {
+                                    Text(
+                                        text = stringResource(nombre),
+                                        color = colorTextoPrincipal,
+                                        style = MaterialTheme.typography.titleSmall
+                                    )
+                                    Text(
+                                        text = stringResource(descripcion),
+                                        color = colorTextoSecundario,
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
+                                }
                             }
                         }
                     }
@@ -262,20 +264,12 @@ val colorAcabadoPrincipal = MaterialTheme.colorScheme.primary
                 ) {
                     Button(
                         onClick = {
-                            prefs.edit().apply {
-                                putString("APP_THEME", selectedTheme)
-                                putFloat("AUDIO_VOLUME", audioVolume)
-                                putBoolean("VOICE_ENABLED", voiceEnabled)
-                                apply()
-                            }
-
+                            // Se guarda en el perfil sensorial, que es lo que lee el dispositivo del niño.
                             val uid = session.currentUser?.uid
                             if (uid != null) {
-                                parentProfileRepository.saveExperienceSettings(
-                                    uid = uid,
-                                    tema = selectedTheme,
-                                    volumenAudio = audioVolume.toDouble(),
-                                    vozHabilitada = voiceEnabled
+                                parentProfileRepository.saveSensoryProfile(
+                                    uid,
+                                    SensoryProfile(paleta = paletaActual, voz = voiceEnabled, volumen = audioVolume)
                                 )
                             }
 
