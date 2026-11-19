@@ -1,5 +1,6 @@
 package com.example.upad.dashboard
 
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -272,11 +273,15 @@ private fun <T> OptionGroup(
             SegmentedButton(
                 selected = opcion == selected,
                 onClick = { onSelect(opcion) },
-                shape = SegmentedButtonDefaults.itemShape(index = indice, count = options.size)
+                shape = SegmentedButtonDefaults.itemShape(index = indice, count = options.size),
+                // Con tres opciones el visto de selección no cabe junto al texto: la opción
+                // elegida ya se distingue por su color de fondo.
+                icon = if (options.size > 2) ({}) else ({ SegmentedButtonDefaults.Icon(opcion == selected) })
             ) {
                 Text(
                     text = label(opcion),
                     style = MaterialTheme.typography.labelMedium,
+                    textAlign = TextAlign.Center,
                     maxLines = 2
                 )
             }
