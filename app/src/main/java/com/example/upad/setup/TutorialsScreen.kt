@@ -1,9 +1,6 @@
 package com.example.upad.setup
 
-import com.example.upad.ui.theme.ColorAzulTEA
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoTenueClaro
-import com.example.upad.ui.theme.TextoSecundarioClaro
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.ui.semantics.Role
 import com.example.upad.R
 import androidx.compose.ui.res.stringResource
@@ -32,8 +29,8 @@ fun TutorialsScreen(
     onBackClick: () -> Unit,
     onFinishSetupClick: () -> Unit
 ) {
-    val colorAzulTEA = ColorAzulTEA
-    val colorFondoBase = LightBackground
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
+    val colorFondoBase = MaterialTheme.colorScheme.background
     val uriHandler = LocalUriHandler.current // Manejador para abrir YouTube
 
     Column(
@@ -46,7 +43,7 @@ fun TutorialsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(top = 40.dp, bottom = 30.dp, start = 16.dp, end = 24.dp)
         ) {
             IconButton(onClick = onBackClick) {
@@ -54,17 +51,15 @@ fun TutorialsScreen(
             }
             Text(
                 text = stringResource(id = R.string.tutorials_overline),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Black,
-                color = TextoTenueClaro,
-                modifier = Modifier.padding(start = 12.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 12.dp),
+                style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = stringResource(id = R.string.tutorials_title),
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Black,
                 color = colorAzulTEA,
-                modifier = Modifier.padding(horizontal = 12.dp)
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = MaterialTheme.typography.headlineMedium
             )
         }
 
@@ -95,7 +90,7 @@ fun TutorialsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp))
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 .padding(30.dp)
         ) {
             Button(
@@ -106,7 +101,7 @@ fun TutorialsScreen(
                 shape = RoundedCornerShape(22.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = colorAzulTEA)
             ) {
-                Text(stringResource(id = R.string.tutorials_finish), fontSize = 18.sp, fontWeight = FontWeight.Black)
+                Text(stringResource(id = R.string.tutorials_finish), style = MaterialTheme.typography.titleMedium)
             }
         }
     }
@@ -118,13 +113,14 @@ fun TutorialCard(
     description: String,
     onWatchClick: () -> Unit
 ) {
-    val colorAzulTEA = ColorAzulTEA
+    val colorAzulTEA = MaterialTheme.colorScheme.primary
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(2.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest),
+        elevation = CardDefaults.cardElevation(0.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier
@@ -154,21 +150,19 @@ fun TutorialCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.DarkGray
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.titleSmall
                 )
                 Text(
                     text = description,
-                    fontSize = 12.sp,
-                    color = TextoSecundarioClaro,
-                    lineHeight = 16.sp
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodySmall
                 )
                 TextButton(
                     onClick = onWatchClick,
                     contentPadding = PaddingValues(0.dp)
                 ) {
-                    Text(stringResource(id = R.string.tutorials_watch_video), color = colorAzulTEA, fontWeight = FontWeight.Black, fontSize = 12.sp)
+                    Text(stringResource(id = R.string.tutorials_watch_video), color = colorAzulTEA, style = MaterialTheme.typography.labelMedium)
                 }
             }
         }
