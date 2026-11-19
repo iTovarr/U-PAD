@@ -1,12 +1,11 @@
 package com.example.upad.auth
 
-import com.example.upad.ui.theme.LightBackground
-import com.example.upad.ui.theme.TextoSecundarioClaro
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.res.stringResource
 import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,8 +39,8 @@ fun RoleSelectionScreen(
     onRoleSelected: (String) -> Unit
 ) {
     val colorAzulTEA = MaterialTheme.colorScheme.primary
-    val colorFondoBase = LightBackground
-    val colorMoradoTutor = Color(0xFF9575CD)
+val colorFondoBase = MaterialTheme.colorScheme.background
+val colorMoradoTutor = MaterialTheme.colorScheme.tertiary
 
     val context = LocalContext.current
     val activity = context as? androidx.fragment.app.FragmentActivity
@@ -69,7 +68,7 @@ fun RoleSelectionScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(bottomStart = 45.dp, bottomEnd = 45.dp))
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                     .padding(
                         top = if (isLandscape) 24.dp else 60.dp, // Volvemos a tus 60.dp originales en vertical
                         bottom = if (isLandscape) 20.dp else 40.dp, // Volvemos a tus 40.dp originales en vertical
@@ -80,19 +79,16 @@ fun RoleSelectionScreen(
             ) {
                 Text(
                     text = stringResource(id = R.string.welcome_title),
-                    fontSize = if (isLandscape) 24.sp else 28.sp,
-                    fontWeight = FontWeight.Black,
                     color = colorAzulTEA,
                     textAlign = TextAlign.Center,
-                    letterSpacing = 0.5.sp
+                    style = MaterialTheme.typography.headlineMedium
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(id = R.string.role_question),
-                    fontSize = if (isLandscape) 15.sp else 18.sp,
-                    color = TextoSecundarioClaro,
-                    fontWeight = FontWeight.Medium,
-                    textAlign = TextAlign.Center
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }
 
@@ -139,7 +135,7 @@ fun RoleSelectionScreen(
                         .fillMaxWidth()
                         .height(60.dp) // Volvemos a tus 60.dp originales
                         .clip(RoundedCornerShape(topStart = 45.dp, topEnd = 45.dp))
-                        .background(Color.White)
+                        .background(MaterialTheme.colorScheme.surfaceContainerLowest)
                 )
             }
         }
@@ -225,8 +221,8 @@ fun RoleOptionCard(
                 indication = null
             ) { onClick() },
         shape = RoundedCornerShape(32.dp), // Tus 32.dp originales
-        color = Color.White,
-        shadowElevation = 6.dp // Tus 6.dp originales
+color = MaterialTheme.colorScheme.surfaceContainerLowest,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Column(
             modifier = Modifier
@@ -257,12 +253,9 @@ fun RoleOptionCard(
 
             Text(
                 text = title,
-                fontSize = 15.sp, // Tus 15.sp originales
-                fontWeight = FontWeight.Black,
                 color = colorTheme,
                 textAlign = TextAlign.Center,
-                lineHeight = 18.sp, // Tus 18.sp originales
-                letterSpacing = 0.2.sp
+                style = MaterialTheme.typography.titleSmall
             )
         }
     }
