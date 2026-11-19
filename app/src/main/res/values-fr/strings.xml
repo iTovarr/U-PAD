@@ -448,4 +448,5 @@
     <string name="child_task_time">Temps de la tâche</string>
     <string name="child_time_left">Il reste %1$s</string>
     <string name="child_well_done">Très bien !</string>
+    <string name="emotion_not_recorded">Non enregistrée</string>
 </resources>

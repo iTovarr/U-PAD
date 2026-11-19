@@ -448,4 +448,5 @@
     <string name="child_task_time">Время задания</string>
     <string name="child_time_left">Осталось %1$s</string>
     <string name="child_well_done">Молодец!</string>
+    <string name="emotion_not_recorded">Не отмечено</string>
 </resources>
