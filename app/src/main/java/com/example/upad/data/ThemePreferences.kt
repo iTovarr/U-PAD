@@ -2,8 +2,9 @@ package com.example.upad.data
 
 import android.content.Context
 import android.content.res.Configuration
+import com.example.upad.ui.theme.AppPalette
 
-/** Guarda en el dispositivo si el usuario eligió el tema oscuro. */
+/** Guarda en el dispositivo la apariencia elegida: tema oscuro y paleta de colores. */
 class ThemePreferences(context: Context) {
 
     private val appContext = context.applicationContext
@@ -25,9 +26,17 @@ class ThemePreferences(context: Context) {
         prefs.edit().putBoolean(KEY_DARK_MODE, enabled).apply()
     }
 
+    /** Paleta elegida; Calma si todavía no se ha elegido ninguna. */
+    fun palette(): AppPalette = AppPalette.desdeClave(prefs.getString(KEY_PALETTE, null))
+
+    fun setPalette(palette: AppPalette) {
+        prefs.edit().putString(KEY_PALETTE, palette.name).apply()
+    }
+
     private companion object {
         // Mismo archivo y clave que borra el cierre de sesión en MainActivity.
         const val PREFS_NAME = "UPadPrefs"
         const val KEY_DARK_MODE = "pref_tema_oscuro"
+        const val KEY_PALETTE = "pref_paleta"
     }
 }
